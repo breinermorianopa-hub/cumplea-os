@@ -1,0 +1,120 @@
+
+/* ========================================
+   UN PEQUEÑO UNIVERSO PARA TI
+   Diseño adaptable: móvil, tablet y PC
+======================================== */
+
+/* 1. Pantallas pequeñas: celulares */
+
+@media (max-width: 480px) {
+  .screen {
+    padding: 1.25rem;
+  }
+
+  .welcome-content {
+    gap: 1.25rem;
+  }
+
+  .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    line-height: 1.7;
+  }
+
+  .welcome-content h1 {
+    font-size: clamp(2.2rem, 10vw, 3.2rem);
+    line-height: 1.15;
+  }
+
+  .welcome-message {
+    max-width: 330px;
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  #start-button {
+    width: 100%;
+    max-width: 300px;
+    min-height: 52px;
+    padding: 0.9rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* 2. Celulares en horizontal y tabletas pequeñas */
+
+@media (min-width: 481px) and (max-width: 768px) {
+  .screen {
+    padding: 2rem;
+  }
+
+  .welcome-content {
+    max-width: 600px;
+  }
+
+  .welcome-content h1 {
+    font-size: clamp(2.8rem, 7vw, 4rem);
+  }
+
+  .welcome-message {
+    max-width: 480px;
+    font-size: 1.1rem;
+  }
+}
+
+/* 3. Computadores y pantallas grandes */
+
+@media (min-width: 769px) {
+  .screen {
+    padding: 3rem;
+  }
+
+  .welcome-content {
+    max-width: 800px;
+  }
+
+  .welcome-message {
+    max-width: 540px;
+  }
+
+  #start-button {
+    min-width: 230px;
+  }
+}
+
+/* 4. Pantallas de poca altura */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .screen {
+    padding: 1rem;
+    overflow-y: auto;
+  }
+
+  .welcome-content {
+    gap: 0.75rem;
+  }
+
+  .welcome-content h1 {
+    font-size: clamp(2rem, 6vh, 3rem);
+  }
+
+  .welcome-message {
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  #start-button {
+    min-height: 46px;
+    padding: 0.7rem 1.5rem;
+  }
+}
+
+/* 5. Dispositivos con poca precisión de puntero */
+
+@media (hover: none) {
+  #start-button:hover {
+    transform: none;
+    filter: none;
+  }
+}
+

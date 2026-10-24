@@ -1,0 +1,704 @@
+
+/* ========================================
+   UN PEQUEÑO UNIVERSO PARA TI
+   Estructura y diseño general
+======================================== */
+
+/* 1. Reinicio de estilos */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 2. Configuración general */
+
+html {
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  font-family: var(--font-body);
+  color: var(--text-primary);
+  background: var(--background-main);
+  overflow-x: hidden;
+}
+
+/* 3. Contenedor principal */
+
+#app {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  isolation: isolate;
+}
+
+/* 4. Pantallas */
+
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  padding: var(--space-lg);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* 5. Primera pantalla */
+
+#welcome {
+  background: var(--gradient-main);
+  text-align: center;
+}
+
+.welcome-content {
+  width: 100%;
+  max-width: 800px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+/* 6. Texto pequeño superior */
+
+.eyebrow {
+  color: var(--color-pink);
+  font-size: var(--text-small);
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  line-height: 1.8;
+  text-transform: uppercase;
+}
+
+/* 7. Título principal */
+
+.welcome-content h1 {
+  max-width: 750px;
+  font-family: var(--font-title);
+  font-size: var(--text-title);
+  font-weight: 400;
+  line-height: 1.15;
+  text-wrap: balance;
+  color: var(--color-pink-light);
+  text-shadow: var(--shadow-glow);
+}
+
+/* 8. Mensaje de bienvenida */
+
+.welcome-message {
+  max-width: 540px;
+  color: var(--text-secondary);
+  font-size: var(--text-large);
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+
+/* 9. Botón principal */
+
+#start-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+
+  min-height: 54px;
+  padding: 1rem 2rem;
+
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: var(--radius-pill);
+
+  background: var(--gradient-romantic);
+  color: var(--color-white);
+
+  font-family: inherit;
+  font-size: var(--text-normal);
+  font-weight: 700;
+
+  cursor: pointer;
+  box-shadow: var(--shadow-glow);
+
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    filter var(--transition-fast);
+}
+
+/* Efecto al pasar el cursor */
+
+#start-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0 35px rgb(244 167 197 / 45%);
+  filter: brightness(1.08);
+}
+
+/* Efecto al presionar */
+
+#start-button:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* Accesibilidad: navegación con teclado */
+
+#start-button:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 5px;
+}
+
+/* 10. Selección de texto */
+
+::selection {
+  background: var(--color-pink);
+  color: var(--color-purple-dark);
+}
+
+
+/* Universo mágico */
+
+#universe {
+  background:
+    radial-gradient(
+      circle at 20% 20%,
+      rgb(196 167 255 / 18%),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 80% 75%,
+      rgb(244 167 197 / 16%),
+      transparent 35%
+    ),
+    var(--gradient-main);
+  text-align: center;
+}
+
+.universe-content {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.universe-content h2 {
+  font-family: var(--font-title);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-pink-light);
+  text-shadow: var(--shadow-glow);
+}
+
+.universe-content > p:not(.eyebrow) {
+  max-width: 540px;
+  color: var(--text-secondary);
+  font-size: var(--text-large);
+  line-height: 1.8;
+}
+
+#continue-to-letter {
+  margin-top: var(--space-sm);
+  padding: 1rem 1.75rem;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: var(--radius-pill);
+  background: var(--gradient-romantic);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+#continue-to-letter:hover {
+  transform: translateY(-3px);
+}
+
+#continue-to-letter:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 5px;
+}
+
+
+/* Carta especial */
+
+#letter {
+  background:
+    radial-gradient(
+      circle at 15% 15%,
+      rgb(196 167 255 / 18%),
+      transparent 35%
+    ),
+    var(--gradient-main);
+  overflow-y: auto;
+}
+
+.letter-container {
+  width: 100%;
+  max-width: 760px;
+  margin: auto;
+  padding-block: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.letter-decoration {
+  font-size: 3rem;
+  animation: gentle-float 3s ease-in-out infinite;
+}
+
+.letter-card {
+  width: 100%;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: var(--radius-large);
+  background: rgb(255 240 246 / 8%);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+}
+
+.letter-card h2 {
+  margin-bottom: var(--space-md);
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 400;
+  color: var(--color-pink-light);
+}
+
+.letter-card p {
+  color: var(--text-secondary);
+  font-size: var(--text-normal);
+  line-height: 1.9;
+}
+
+#letter-greeting {
+  margin-bottom: var(--space-md);
+  color: var(--color-pink) !important;
+  font-weight: 700;
+}
+
+#letter-paragraphs p + p {
+  margin-top: var(--space-sm);
+}
+
+#letter-closing {
+  margin-top: var(--space-lg);
+  color: var(--color-pink) !important;
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-style: italic;
+}
+
+#continue-to-messages {
+  padding: 1rem 1.5rem;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: var(--radius-pill);
+  background: var(--gradient-romantic);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+#continue-to-messages:hover {
+  transform: translateY(-3px);
+}
+
+#continue-to-messages:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 5px;
+}
+
+
+/* Mensajes secretos */
+
+#messages {
+  background:
+    radial-gradient(circle at 15% 20%,
+      rgb(196 167 255 / 18%), transparent 35%),
+    radial-gradient(circle at 85% 80%,
+      rgb(244 167 197 / 15%), transparent 35%),
+    var(--gradient-main);
+  overflow-y: auto;
+}
+
+.messages-container {
+  width: 100%;
+  max-width: 950px;
+  margin: auto;
+  padding-block: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.messages-container h2 {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 400;
+  color: var(--color-pink-light);
+}
+
+.messages-intro {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.envelopes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-md);
+  width: 100%;
+  margin-block: var(--space-sm);
+}
+
+.secret-envelope {
+  min-width: 0;
+  min-height: 190px;
+  padding: 1.25rem 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: var(--radius-large);
+  background: rgb(255 240 246 / 9%);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    transform var(--transition-fast),
+    background var(--transition-fast);
+}
+
+.secret-envelope:hover {
+  transform: translateY(-6px);
+  background: rgb(255 240 246 / 16%);
+}
+
+.secret-envelope:focus-visible,
+#close-secret-message:focus-visible,
+#continue-to-birthday:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 4px;
+}
+
+.envelope-icon {
+  font-size: 2.8rem;
+}
+
+.envelope-label {
+  font-weight: 700;
+}
+
+.envelope-hint {
+  color: var(--color-pink);
+  font-size: var(--text-small);
+}
+
+.secret-message {
+  width: 100%;
+  max-width: 600px;
+  padding: var(--space-lg);
+  border: 1px solid rgb(244 167 197 / 35%);
+  border-radius: var(--radius-large);
+  background: rgb(36 17 63 / 65%);
+  box-shadow: var(--shadow-glow);
+}
+
+.secret-message p {
+  margin-bottom: var(--space-md);
+  font-size: var(--text-large);
+  line-height: 1.8;
+}
+
+#close-secret-message,
+#continue-to-birthday {
+  padding: 0.9rem 1.4rem;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: var(--radius-pill);
+  background: var(--gradient-romantic);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#continue-to-birthday {
+  margin-top: var(--space-sm);
+}
+
+@media (max-width: 600px) {
+  .envelopes-grid {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+  }
+
+  .secret-envelope {
+    min-height: 140px;
+  }
+}
+
+
+/* Pastel de cumpleaños */
+
+#birthday {
+  background:
+    radial-gradient(circle at 50% 35%,
+      rgb(196 167 255 / 20%), transparent 45%),
+    var(--gradient-main);
+  overflow-y: auto;
+}
+
+.birthday-container {
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  padding-block: var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.birthday-container h2 {
+  font-family: var(--font-title);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 400;
+  color: var(--color-pink-light);
+}
+
+.birthday-message {
+  max-width: 500px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+
+.cake-scene {
+  width: 100%;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 25px;
+}
+
+.cake-candles {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 22px;
+  height: 70px;
+  z-index: 2;
+}
+
+.candle {
+  width: 12px;
+  height: 55px;
+  position: relative;
+  border: 0;
+  border-radius: 4px 4px 0 0;
+  background: repeating-linear-gradient(
+    135deg,
+    #FFF0F6 0 5px,
+    #F4A7C5 5px 10px
+  );
+  cursor: pointer;
+}
+
+.flame {
+  position: absolute;
+  width: 14px;
+  height: 22px;
+  left: 50%;
+  top: -25px;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 45% 45%;
+  background: var(--color-gold);
+  box-shadow: 0 0 18px rgb(246 217 139 / 75%);
+  animation: gentle-float 1.2s ease-in-out infinite;
+}
+
+.candle.is-out .flame {
+  display: none;
+}
+
+.cake {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: min(300px, 85vw);
+}
+
+.cake-top {
+  width: 100%;
+  height: 30px;
+  border-radius: 50%;
+  background: #FAD4E5;
+  border: 3px solid #EAA1C6;
+  z-index: 1;
+}
+
+.cake-body {
+  width: 95%;
+  min-height: 95px;
+  margin-top: -8px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  border-radius: 0 0 20px 20px;
+  background: linear-gradient(135deg, #E9A5FF, #A879D8);
+  border-bottom: 8px solid #8757B3;
+  color: var(--color-pink-light);
+  font-size: 1.5rem;
+}
+
+.cake-plate {
+  width: 110%;
+  height: 14px;
+  margin-top: 3px;
+  border-radius: 50%;
+  background: #E5D8F7;
+  box-shadow: var(--shadow-soft);
+}
+
+#wish-feedback {
+  color: var(--color-pink-light);
+  line-height: 1.7;
+}
+
+#blow-candles,
+#continue-to-final {
+  padding: 1rem 1.5rem;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: var(--radius-pill);
+  background: var(--gradient-romantic);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#blow-candles:focus-visible,
+#continue-to-final:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 4px;
+}
+
+
+/* Felicitación final */
+
+#final {
+  background:
+    radial-gradient(circle at 50% 20%,
+      rgb(244 167 197 / 20%), transparent 40%),
+    radial-gradient(circle at 15% 85%,
+      rgb(196 167 255 / 18%), transparent 35%),
+    var(--gradient-main);
+  overflow-y: auto;
+}
+
+.final-container {
+  width: 100%;
+  max-width: 760px;
+  margin: auto;
+  padding-block: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-md);
+  text-align: center;
+}
+
+.final-decoration {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  animation: gentle-float 3s ease-in-out infinite;
+}
+
+.final-container h2 {
+  font-family: var(--font-title);
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--color-pink-light);
+  text-shadow: var(--shadow-glow);
+}
+
+#final-name {
+  color: var(--color-pink);
+  font-size: var(--text-large);
+  font-weight: 700;
+}
+
+.final-card {
+  width: 100%;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: var(--radius-large);
+  background: rgb(255 240 246 / 8%);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(12px);
+}
+
+#final-message {
+  color: var(--text-primary);
+  font-size: var(--text-large);
+  line-height: 1.9;
+}
+
+#final-closing {
+  margin-top: var(--space-lg);
+  color: var(--color-pink);
+  font-family: var(--font-title);
+  font-size: 1.4rem;
+  font-style: italic;
+}
+
+.final-signature {
+  color: var(--text-secondary);
+  font-size: var(--text-small);
+  line-height: 1.7;
+}
+
+#replay-surprise {
+  padding: 1rem 1.5rem;
+  border: 1px solid rgb(255 255 255 / 25%);
+  border-radius: var(--radius-pill);
+  background: var(--gradient-romantic);
+  color: var(--color-white);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+}
+
+#replay-surprise:hover {
+  transform: translateY(-3px);
+}
+
+#replay-surprise:focus-visible {
+  outline: 3px solid var(--color-gold);
+  outline-offset: 5px;
+}
+

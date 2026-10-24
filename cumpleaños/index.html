@@ -1,0 +1,246 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="theme-color"
+    content="#24113F"
+  >
+
+  <meta
+    name="description"
+    content="Una sorpresa especial creada con mucho cariño."
+  >
+
+  <title>Un pequeño universo para ti 💜</title>
+
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/animations.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+
+<body>
+  <main id="app">
+
+    <!-- Pantalla 1: Bienvenida -->
+    <section id="welcome" class="screen active">
+      <div class="welcome-content">
+        <p class="eyebrow">UNA SORPRESA PARA ALGUIEN ESPECIAL</p>
+
+        <h1>Un pequeño universo para ti</h1>
+
+        <p class="welcome-message">
+          Hay personas que merecen algo más que un simple feliz cumpleaños...
+        </p>
+
+        <button id="start-button" type="button">
+          Descubre tu sorpresa ✨
+        </button>
+      </div>
+    </section>
+
+    <!-- Las siguientes pantallas las construiremos paso a paso -->
+
+   
+<section id="universe" class="screen" aria-label="Universo mágico">
+  <div class="universe-content">
+    <p class="eyebrow">UN LUGAR HECHO PARA TI</p>
+
+    <h2 id="universe-title">
+      Hoy el universo tiene algo especial para ti
+    </h2>
+
+    <p id="universe-message">
+      Entre tantas estrellas, hoy quiero que la tuya
+      brille un poquito más. 💜
+    </p>
+
+    <button id="continue-to-letter" type="button">
+      Hay algo más para ti ✨
+    </button>
+  </div>
+</section>
+
+
+
+   
+<section id="letter" class="screen" aria-label="Carta especial">
+  <div class="letter-container">
+    <div class="letter-decoration" aria-hidden="true">💌</div>
+
+    <p class="eyebrow">UNAS PALABRAS PARA TI</p>
+
+    <article class="letter-card">
+      <h2 id="letter-title">Unas palabras para ti</h2>
+
+      <p id="letter-greeting">Querida persona especial:</p>
+
+      <div id="letter-paragraphs">
+        <p>
+          Hoy es un día especial porque celebramos tu vida.
+        </p>
+
+        <p>
+          Quiero que recuerdes lo valiosa que eres y todo lo bonito que mereces.
+        </p>
+
+        <p>
+          Que nunca te falten razones para sonreír, sueños por cumplir
+          y personas que te quieran de verdad.
+        </p>
+      </div>
+
+      <p id="letter-closing">Con mucho cariño 💜</p>
+    </article>
+
+    <button id="continue-to-messages" type="button">
+      Descubre unos mensajes secretos ✨
+    </button>
+  </div>
+</section>
+
+
+    
+<section id="messages" class="screen" aria-label="Mensajes secretos">
+  <div class="messages-container">
+    <p class="eyebrow">PEQUEÑOS SECRETOS PARA TI</p>
+
+    <h2>Hay algo bonito en cada sobre</h2>
+
+    <p class="messages-intro">
+      Toca cada uno y descubre lo que guarda para ti. 💜
+    </p>
+
+    <div class="envelopes-grid">
+      <button class="secret-envelope" type="button"
+        data-message="Nunca olvides lo especial que eres y la luz que aportas a quienes te rodean.">
+        <span class="envelope-icon" aria-hidden="true">💌</span>
+        <span class="envelope-label">Un recordatorio</span>
+        <span class="envelope-hint">Toca para abrir</span>
+      </button>
+
+      <button class="secret-envelope" type="button"
+        data-message="Deseo que este nuevo año de vida te acerque a tus sueños y te regale momentos inolvidables.">
+        <span class="envelope-icon" aria-hidden="true">💌</span>
+        <span class="envelope-label">Un deseo</span>
+        <span class="envelope-hint">Toca para abrir</span>
+      </button>
+
+      <button class="secret-envelope" type="button"
+        data-message="Que nunca te falten motivos para sonreír, personas que te quieran y razones para creer en lo bonito de la vida.">
+        <span class="envelope-icon" aria-hidden="true">💌</span>
+        <span class="envelope-label">Un mensaje especial</span>
+        <span class="envelope-hint">Toca para abrir</span>
+      </button>
+    </div>
+
+    <div id="secret-message" class="secret-message" hidden>
+      <p id="secret-message-text"></p>
+      <button id="close-secret-message" type="button">
+        Guardar mensaje 💜
+      </button>
+    </div>
+
+    <button id="continue-to-birthday" type="button">
+      Continuar con la sorpresa ✨
+    </button>
+  </div>
+</section>
+
+
+    
+<section id="birthday" class="screen" aria-label="Pastel de cumpleaños">
+  <div class="birthday-container">
+    <p class="eyebrow">UN DESEO SOLO PARA TI</p>
+
+    <h2>¡Es tu momento especial!</h2>
+
+    <p class="birthday-message">
+      Cierra los ojos, pide un deseo y prepárate para algo bonito. 💜
+    </p>
+
+    <div class="cake-scene">
+      <div class="cake-candles" aria-label="Velas de cumpleaños">
+        <button class="candle" type="button" aria-label="Apagar vela 1">
+          <span class="flame"></span>
+        </button>
+        <button class="candle" type="button" aria-label="Apagar vela 2">
+          <span class="flame"></span>
+        </button>
+        <button class="candle" type="button" aria-label="Apagar vela 3">
+          <span class="flame"></span>
+        </button>
+      </div>
+
+      <div class="cake">
+        <div class="cake-top"></div>
+        <div class="cake-body">
+          <span class="cake-decoration">♥</span>
+          <span class="cake-decoration">✦</span>
+          <span class="cake-decoration">♥</span>
+        </div>
+        <div class="cake-plate"></div>
+      </div>
+    </div>
+
+    <p id="wish-feedback" aria-live="polite">
+      Puedes tocar las velitas para apagarlas.
+    </p>
+
+    <button id="blow-candles" type="button">
+      Apagar todas las velas ✨
+    </button>
+
+    <button id="continue-to-final" type="button" hidden>
+      Tu último mensajito 💌
+    </button>
+  </div>
+</section>
+
+
+   
+<section id="final" class="screen" aria-label="Felicitación final">
+  <div class="final-container">
+    <div class="final-decoration" aria-hidden="true">💜 ✨ 🌸</div>
+
+    <p class="eyebrow">UN DÍA TAN ESPECIAL COMO TÚ</p>
+
+    <h2 id="final-title">¡Feliz cumpleaños!</h2>
+
+    <p id="final-name">Para alguien muy especial</p>
+
+    <div class="final-card">
+      <p id="final-message">
+        Que este nuevo año de vida te regale motivos para sonreír,
+        sueños que se cumplan y recuerdos que quieras conservar
+        para siempre.
+      </p>
+
+      <p id="final-closing">Con cariño, para ti 💜</p>
+    </div>
+
+    <p class="final-signature">
+      Hecho con cariño, especialmente para ti.
+    </p>
+
+    <button id="replay-surprise" type="button">
+      Volver a vivir la sorpresa ↻
+    </button>
+  </div>
+</section>
+
+
+  </main>
+
+  <script src="js/content.js"></script>
+  <script src="js/music.js"></script>
+  <script src="js/effects.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,77 @@
+
+/* ========================================
+   UN PEQUEÑO UNIVERSO PARA TI 💜
+   Variables globales del proyecto
+======================================== */
+
+:root {
+  /* Colores principales */
+  --color-purple-dark: #24113F;
+  --color-purple: #8B5CF6;
+  --color-purple-light: #C4A7FF;
+
+  /* Tonos rosas */
+  --color-pink: #F4A7C5;
+  --color-pink-light: #FFF0F6;
+  --color-pink-strong: #EC78AC;
+
+  /* Detalles especiales */
+  --color-gold: #F6D98B;
+  --color-white: #FFFFFF;
+
+  /* Fondos */
+  --background-main: #24113F;
+  --background-soft: #382052;
+
+  /* Textos */
+  --text-primary: #FFF0F6;
+  --text-secondary: #E1D3F5;
+
+  /* Degradados */
+  --gradient-main: linear-gradient(
+    135deg,
+    #24113F 0%,
+    #492568 50%,
+    #713F83 100%
+  );
+
+  --gradient-romantic: linear-gradient(
+    135deg,
+    #8B5CF6 0%,
+    #C084FC 45%,
+    #F4A7C5 100%
+  );
+
+  /* Tipografía */
+  --font-title: Georgia, "Times New Roman", serif;
+  --font-body: Arial, Helvetica, sans-serif;
+
+  /* Tamaños de texto */
+  --text-small: 0.875rem;
+  --text-normal: 1rem;
+  --text-large: 1.25rem;
+  --text-title: clamp(2.5rem, 7vw, 5rem);
+
+  /* Espaciado */
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+
+  /* Bordes y formas */
+  --radius-small: 0.5rem;
+  --radius-medium: 1rem;
+  --radius-large: 2rem;
+  --radius-pill: 999px;
+
+  /* Efectos */
+  --shadow-soft: 0 8px 30px rgb(0 0 0 / 20%);
+
+  --shadow-glow: 0 0 25px rgb(196 167 255 / 35%);
+
+  /* Animaciones */
+  --transition-fast: 0.25s ease;
+  --transition-normal: 0.5s ease;
+}
+
