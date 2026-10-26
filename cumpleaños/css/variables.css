@@ -2,6 +2,7 @@
 /* ========================================
    UN PEQUEÑO UNIVERSO PARA TI 💜
    Variables globales del proyecto
+   Paleta romántica: morado, rosa y dorado
 ======================================== */
 
 :root {
@@ -12,7 +13,7 @@
 
   /* Tonos rosas */
   --color-pink: #F4A7C5;
-  --color-pink-light: #FFF0F6;
+  --color-pink-light: #FFE0EC;
   --color-pink-strong: #EC78AC;
 
   /* Detalles especiales */
@@ -21,25 +22,34 @@
 
   /* Fondos */
   --background-main: #24113F;
-  --background-soft: #382052;
+  --background-soft: #3B1F5E;
 
   /* Textos */
   --text-primary: #FFF0F6;
   --text-secondary: #E1D3F5;
 
-  /* Degradados */
+  /* Degradado principal: morado profundo y violeta */
   --gradient-main: linear-gradient(
     135deg,
     #24113F 0%,
-    #492568 50%,
-    #713F83 100%
+    #3B1F5E 45%,
+    #8B5CF6 100%
   );
 
+  /* Degradado romántico: morado, violeta y rosa */
   --gradient-romantic: linear-gradient(
     135deg,
-    #8B5CF6 0%,
-    #C084FC 45%,
+    #24113F 0%,
+    #5A2A72 50%,
     #F4A7C5 100%
+  );
+
+  /* Degradado luminoso para detalles especiales */
+  --gradient-glow: linear-gradient(
+    135deg,
+    #C4A7FF 0%,
+    #F4A7C5 55%,
+    #F6D98B 100%
   );
 
   /* Tipografía */
@@ -65,10 +75,17 @@
   --radius-large: 2rem;
   --radius-pill: 999px;
 
-  /* Efectos */
-  --shadow-soft: 0 8px 30px rgb(0 0 0 / 20%);
+  /* Sombras */
+  --shadow-soft: 0 8px 30px rgb(0 0 0 / 25%);
 
-  --shadow-glow: 0 0 25px rgb(196 167 255 / 35%);
+  /* Resplandor violeta */
+  --shadow-glow: 0 0 25px rgb(196 167 255 / 40%);
+
+  /* Resplandor rosa */
+  --shadow-pink-glow: 0 0 30px rgb(244 167 197 / 30%);
+
+  /* Resplandor dorado */
+  --shadow-gold-glow: 0 0 22px rgb(246 217 139 / 35%);
 
   /* Animaciones */
   --transition-fast: 0.25s ease;

@@ -39,7 +39,9 @@
   }
 
   50% {
-    box-shadow: 0 0 32px rgb(244 167 197 / 40%);
+    box-shadow:
+      0 0 32px rgb(244 167 197 / 40%),
+      0 0 45px rgb(196 167 255 / 15%);
   }
 }
 
@@ -68,7 +70,7 @@
   }
 }
 
-/* 6. Aplicar animaciones a la bienvenida */
+/* 6. Entrada del contenido de bienvenida */
 
 #welcome.active .welcome-content {
   animation: rise-in 1s ease-out both;
@@ -86,20 +88,24 @@
   animation: rise-in 1.2s ease-out 0.3s both;
 }
 
+/* 7. Brillo del botón */
+
 #welcome.active #start-button {
   animation:
     rise-in 1.2s ease-out 0.45s both,
     soft-glow 3s ease-in-out 1.7s infinite;
 }
 
-/* 7. Preparación para las siguientes pantallas */
+/* 8. La estrella fugaz y la luna se controlan
+   desde layout.css. */
+
+/* 9. Entrada suave de las pantallas */
 
 .screen.active {
   animation: fade-in 0.7s ease-out both;
 }
 
-/* 8. Accesibilidad: respetar la preferencia
-   del usuario de reducir el movimiento */
+/* 10. Accesibilidad */
 
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -110,5 +116,15 @@
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
   }
-}
 
+  #welcome .welcome-shooting-star {
+    animation: none !important;
+    opacity: 1;
+    left: 20%;
+    top: 20%;
+  }
+
+  #welcome .welcome-moon {
+    animation: none !important;
+  }
+}

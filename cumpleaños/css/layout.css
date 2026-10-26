@@ -1,18 +1,16 @@
 
 /* ========================================
    UN PEQUEÑO UNIVERSO PARA TI
-   Estructura y diseño general
+   Diseño general integrado
 ======================================== */
 
-/* 1. Reinicio de estilos */
+/* 1. Reinicio */
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-/* 2. Configuración general */
 
 html {
   min-height: 100%;
@@ -28,25 +26,23 @@ body {
   overflow-x: hidden;
 }
 
-/* 3. Contenedor principal */
-
 #app {
   position: relative;
+  isolation: isolate;
   width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  isolation: isolate;
 }
 
-/* 4. Pantallas */
+/* 2. Pantallas */
 
 .screen {
   position: absolute;
   inset: 0;
   display: none;
+  width: 100%;
   min-height: 100vh;
   min-height: 100dvh;
-  width: 100%;
   padding: var(--space-lg);
   align-items: center;
   justify-content: center;
@@ -57,24 +53,104 @@ body {
   display: flex;
 }
 
-/* 5. Primera pantalla */
+/* ========================================
+   3. BIENVENIDA CELESTIAL
+======================================== */
 
 #welcome {
-  background: var(--gradient-main);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   text-align: center;
+
+  background:
+    radial-gradient(
+      ellipse at 15% 20%,
+      rgb(139 92 246 / 30%),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 85% 75%,
+      rgb(244 167 197 / 20%),
+      transparent 38%
+    ),
+    linear-gradient(
+      135deg,
+      #24113F 0%,
+      #35204F 48%,
+      #24113F 100%
+    );
 }
 
+/* Capa de estrellas */
+
+#welcome::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(circle, #FFF0C2 1px, transparent 1.8px),
+    radial-gradient(circle, #F4A7C5 1px, transparent 2px),
+    radial-gradient(circle, #FFFFFF 1px, transparent 1.8px);
+
+  background-size:
+    83px 97px,
+    127px 139px,
+    173px 181px;
+
+  background-position:
+    0 0,
+    35px 52px,
+    70px 20px;
+
+  opacity: 0.48;
+  animation: welcome-stars 9s ease-in-out infinite alternate;
+}
+
+/* Luz ambiental */
+
+#welcome::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      circle at 50% 15%,
+      rgb(196 167 255 / 15%),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 50% 90%,
+      rgb(246 217 139 / 10%),
+      transparent 30%
+    );
+
+  animation: welcome-glow 7s ease-in-out infinite alternate;
+}
+
+/* Contenido de bienvenida */
+
 .welcome-content {
+  position: relative;
+  z-index: 3;
+
   width: 100%;
   max-width: 800px;
   margin-inline: auto;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
-}
 
-/* 6. Texto pequeño superior */
+  text-align: center;
+}
 
 .eyebrow {
   color: var(--color-pink);
@@ -85,36 +161,70 @@ body {
   text-transform: uppercase;
 }
 
-/* 7. Título principal */
+#welcome .eyebrow {
+  color: var(--color-gold);
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  line-height: 1.8;
+}
 
-.welcome-content h1 {
-  max-width: 750px;
+.welcome-intro {
+  color: var(--text-secondary);
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
+  line-height: 1.6;
+}
+
+#welcome h1 {
+  max-width: 760px;
   font-family: var(--font-title);
-  font-size: var(--text-title);
+  font-size: clamp(2.4rem, 6.5vw, 4.8rem);
   font-weight: 400;
-  line-height: 1.15;
-  text-wrap: balance;
+  line-height: 1.18;
   color: var(--color-pink-light);
   text-shadow: var(--shadow-glow);
+  text-wrap: balance;
 }
 
-/* 8. Mensaje de bienvenida */
+.welcome-name {
+  display: block;
+  margin-top: 0.15em;
+  color: var(--color-pink);
+}
+
+.welcome-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.2rem;
+  color: var(--color-gold);
+  font-size: 1.25rem;
+}
+
+.welcome-heart {
+  color: var(--color-pink);
+  animation: soft-glow 3s ease-in-out infinite;
+}
 
 .welcome-message {
-  max-width: 540px;
+  max-width: 520px;
   color: var(--text-secondary);
-  font-size: var(--text-large);
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
   line-height: 1.8;
-  text-wrap: pretty;
+  text-wrap: balance;
 }
 
-/* 9. Botón principal */
+.welcome-birthday {
+  color: var(--color-gold);
+  font-size: clamp(0.8rem, 2vw, 0.95rem);
+  line-height: 1.7;
+}
+
+/* Botón principal */
 
 #start-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-xs);
 
   min-height: 54px;
   padding: 1rem 2rem;
@@ -138,7 +248,10 @@ body {
     filter var(--transition-fast);
 }
 
-/* Efecto al pasar el cursor */
+#welcome #start-button {
+  min-height: 52px;
+  padding: 0.95rem 1.8rem;
+}
 
 #start-button:hover {
   transform: translateY(-3px);
@@ -146,28 +259,201 @@ body {
   filter: brightness(1.08);
 }
 
-/* Efecto al presionar */
-
 #start-button:active {
   transform: translateY(0) scale(0.98);
 }
-
-/* Accesibilidad: navegación con teclado */
 
 #start-button:focus-visible {
   outline: 3px solid var(--color-gold);
   outline-offset: 5px;
 }
 
-/* 10. Selección de texto */
+/* Rosas */
 
-::selection {
-  background: var(--color-pink);
-  color: var(--color-purple-dark);
+.welcome-roses {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-height: 42px;
+  margin-top: -0.35rem;
+  pointer-events: none;
 }
 
+.welcome-roses span {
+  display: inline-block;
+  font-size: clamp(1.25rem, 4vw, 1.8rem);
+  filter: drop-shadow(0 0 10px rgb(244 167 197 / 40%));
+  animation: rose-float 3s ease-in-out infinite;
+}
 
-/* Universo mágico */
+.welcome-roses span:nth-child(1) {
+  rotate: -15deg;
+  scale: 0.88;
+  animation-delay: -0.7s;
+}
+
+.welcome-roses span:nth-child(2) {
+  scale: 1.12;
+  animation-delay: -1.5s;
+}
+
+.welcome-roses span:nth-child(3) {
+  rotate: 15deg;
+  scale: 0.88;
+  animation-delay: -2.2s;
+}
+
+.welcome-footer {
+  color: var(--color-purple-light);
+  font-size: 0.83rem;
+  line-height: 1.7;
+}
+
+/* ========================================
+   4. LUNA
+======================================== */
+
+#welcome .welcome-moon {
+  position: absolute;
+  top: 7%;
+  right: 12%;
+  z-index: 2;
+
+  display: block;
+  color: #FFE8A3;
+  font-family: Georgia, serif;
+  font-size: clamp(4rem, 8vw, 5.4rem);
+  line-height: 1;
+
+  opacity: 1;
+  pointer-events: none;
+
+  text-shadow:
+    0 0 10px #FFE8A3,
+    0 0 22px rgb(246 217 139 / 95%),
+    0 0 38px rgb(246 217 139 / 75%),
+    0 0 58px rgb(196 167 255 / 35%);
+
+  animation: welcome-moon-pulse 4s ease-in-out infinite;
+}
+
+/* ========================================
+   5. ESTRELLA FUGAZ
+======================================== */
+
+#welcome .welcome-shooting-star {
+  position: absolute;
+  top: 17%;
+  left: -220px;
+  z-index: 2;
+
+  display: block;
+  width: 190px;
+  height: 3px;
+
+  border: 0;
+  border-radius: 50%;
+  opacity: 0;
+  visibility: visible;
+  pointer-events: none;
+
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(196 167 255 / 20%) 20%,
+    rgb(255 255 255 / 90%) 72%,
+    #FFFFFF 100%
+  );
+
+  box-shadow:
+    0 0 7px rgb(255 255 255 / 95%),
+    0 0 16px rgb(246 217 139 / 90%),
+    0 0 28px rgb(196 167 255 / 45%);
+
+  transform: rotate(-25deg);
+  transform-origin: center;
+
+  animation: welcome-star-flight 5s linear 0.8s infinite;
+}
+
+/* Punta luminosa */
+
+#welcome .welcome-shooting-star::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: -2px;
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+  background: #FFFFFF;
+  transform: translateY(-50%);
+
+  box-shadow:
+    0 0 8px #FFFFFF,
+    0 0 17px #FFE8A3,
+    0 0 28px rgb(246 217 139 / 95%);
+}
+
+/* Trayectoria diagonal */
+
+@keyframes welcome-star-flight {
+  0% {
+    left: -220px;
+    top: 17%;
+    opacity: 0;
+  }
+
+  10% {
+    left: 0%;
+    top: 23%;
+    opacity: 1;
+  }
+
+  65% {
+    left: 75%;
+    top: 42%;
+    opacity: 1;
+  }
+
+  85% {
+    left: 110%;
+    top: 52%;
+    opacity: 0;
+  }
+
+  100% {
+    left: 110%;
+    top: 52%;
+    opacity: 0;
+  }
+}
+
+@keyframes welcome-moon-pulse {
+  0%, 100% {
+    filter: brightness(1);
+    text-shadow:
+      0 0 10px #FFE8A3,
+      0 0 22px rgb(246 217 139 / 85%),
+      0 0 38px rgb(246 217 139 / 65%);
+  }
+
+  50% {
+    filter: brightness(1.18);
+    text-shadow:
+      0 0 15px #FFF2C7,
+      0 0 30px #FFE8A3,
+      0 0 48px rgb(246 217 139 / 85%),
+      0 0 65px rgb(196 167 255 / 40%);
+  }
+}
+
+/* ========================================
+   6. UNIVERSO MÁGICO
+======================================== */
 
 #universe {
   background:
@@ -182,16 +468,18 @@ body {
       transparent 35%
     ),
     var(--gradient-main);
+
   text-align: center;
 }
 
 .universe-content {
-  width: 100%;
-  max-width: 720px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+
+  width: 100%;
+  max-width: 720px;
 }
 
 .universe-content h2 {
@@ -210,9 +498,14 @@ body {
   line-height: 1.8;
 }
 
-#continue-to-letter {
-  margin-top: var(--space-sm);
-  padding: 1rem 1.75rem;
+#continue-to-letter,
+#continue-to-messages,
+#close-secret-message,
+#continue-to-birthday,
+#blow-candles,
+#continue-to-final,
+#replay-surprise {
+  padding: 1rem 1.5rem;
   border: 1px solid rgb(255 255 255 / 25%);
   border-radius: var(--radius-pill);
   background: var(--gradient-romantic);
@@ -223,17 +516,30 @@ body {
   transition: transform var(--transition-fast);
 }
 
-#continue-to-letter:hover {
+#continue-to-letter:hover,
+#continue-to-messages:hover,
+#close-secret-message:hover,
+#continue-to-birthday:hover,
+#blow-candles:hover,
+#continue-to-final:hover,
+#replay-surprise:hover {
   transform: translateY(-3px);
 }
 
-#continue-to-letter:focus-visible {
+#continue-to-letter:focus-visible,
+#continue-to-messages:focus-visible,
+#close-secret-message:focus-visible,
+#continue-to-birthday:focus-visible,
+#blow-candles:focus-visible,
+#continue-to-final:focus-visible,
+#replay-surprise:focus-visible {
   outline: 3px solid var(--color-gold);
   outline-offset: 5px;
 }
 
-
-/* Carta especial */
+/* ========================================
+   7. CARTA ESPECIAL
+======================================== */
 
 #letter {
   background:
@@ -243,18 +549,20 @@ body {
       transparent 35%
     ),
     var(--gradient-main);
+
   overflow-y: auto;
 }
 
 .letter-container {
-  width: 100%;
-  max-width: 760px;
-  margin: auto;
-  padding-block: var(--space-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+
+  width: 100%;
+  max-width: 760px;
+  margin: auto;
+  padding-block: var(--space-lg);
   text-align: center;
 }
 
@@ -266,8 +574,10 @@ body {
 .letter-card {
   width: 100%;
   padding: clamp(1.5rem, 5vw, 3rem);
+
   border: 1px solid rgb(255 255 255 / 20%);
   border-radius: var(--radius-large);
+
   background: rgb(255 240 246 / 8%);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(12px);
@@ -305,49 +615,37 @@ body {
   font-style: italic;
 }
 
-#continue-to-messages {
-  padding: 1rem 1.5rem;
-  border: 1px solid rgb(255 255 255 / 25%);
-  border-radius: var(--radius-pill);
-  background: var(--gradient-romantic);
-  color: var(--color-white);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform var(--transition-fast);
-}
-
-#continue-to-messages:hover {
-  transform: translateY(-3px);
-}
-
-#continue-to-messages:focus-visible {
-  outline: 3px solid var(--color-gold);
-  outline-offset: 5px;
-}
-
-
-/* Mensajes secretos */
+/* ========================================
+   8. MENSAJES SECRETOS
+======================================== */
 
 #messages {
   background:
-    radial-gradient(circle at 15% 20%,
-      rgb(196 167 255 / 18%), transparent 35%),
-    radial-gradient(circle at 85% 80%,
-      rgb(244 167 197 / 15%), transparent 35%),
+    radial-gradient(
+      circle at 15% 20%,
+      rgb(196 167 255 / 18%),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 85% 80%,
+      rgb(244 167 197 / 15%),
+      transparent 35%
+    ),
     var(--gradient-main);
+
   overflow-y: auto;
 }
 
 .messages-container {
-  width: 100%;
-  max-width: 950px;
-  margin: auto;
-  padding-block: var(--space-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+
+  width: 100%;
+  max-width: 950px;
+  margin: auto;
+  padding-block: var(--space-lg);
   text-align: center;
 }
 
@@ -367,23 +665,28 @@ body {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-md);
+
   width: 100%;
   margin-block: var(--space-sm);
 }
 
 .secret-envelope {
-  min-width: 0;
-  min-height: 190px;
-  padding: 1.25rem 0.75rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
+
+  min-width: 0;
+  min-height: 190px;
+  padding: 1.25rem 0.75rem;
+
   border: 1px solid rgb(255 255 255 / 22%);
   border-radius: var(--radius-large);
+
   background: rgb(255 240 246 / 9%);
   color: var(--text-primary);
+
   cursor: pointer;
   transition:
     transform var(--transition-fast),
@@ -395,9 +698,7 @@ body {
   background: rgb(255 240 246 / 16%);
 }
 
-.secret-envelope:focus-visible,
-#close-secret-message:focus-visible,
-#continue-to-birthday:focus-visible {
+.secret-envelope:focus-visible {
   outline: 3px solid var(--color-gold);
   outline-offset: 4px;
 }
@@ -419,8 +720,10 @@ body {
   width: 100%;
   max-width: 600px;
   padding: var(--space-lg);
+
   border: 1px solid rgb(244 167 197 / 35%);
   border-radius: var(--radius-large);
+
   background: rgb(36 17 63 / 65%);
   box-shadow: var(--shadow-glow);
 }
@@ -431,53 +734,32 @@ body {
   line-height: 1.8;
 }
 
-#close-secret-message,
-#continue-to-birthday {
-  padding: 0.9rem 1.4rem;
-  border: 1px solid rgb(255 255 255 / 25%);
-  border-radius: var(--radius-pill);
-  background: var(--gradient-romantic);
-  color: var(--color-white);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-#continue-to-birthday {
-  margin-top: var(--space-sm);
-}
-
-@media (max-width: 600px) {
-  .envelopes-grid {
-    grid-template-columns: 1fr;
-    max-width: 360px;
-  }
-
-  .secret-envelope {
-    min-height: 140px;
-  }
-}
-
-
-/* Pastel de cumpleaños */
+/* ========================================
+   9. PASTEL DE CUMPLEAÑOS
+======================================== */
 
 #birthday {
   background:
-    radial-gradient(circle at 50% 35%,
-      rgb(196 167 255 / 20%), transparent 45%),
+    radial-gradient(
+      circle at 50% 35%,
+      rgb(196 167 255 / 20%),
+      transparent 45%
+    ),
     var(--gradient-main);
+
   overflow-y: auto;
 }
 
 .birthday-container {
-  width: 100%;
-  max-width: 700px;
-  margin: auto;
-  padding-block: var(--space-lg);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+
+  width: 100%;
+  max-width: 700px;
+  margin: auto;
+  padding-block: var(--space-lg);
   text-align: center;
 }
 
@@ -495,48 +777,57 @@ body {
 }
 
 .cake-scene {
-  width: 100%;
-  min-height: 260px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+
+  width: 100%;
+  min-height: 260px;
   padding-top: 25px;
 }
 
 .cake-candles {
   display: flex;
-  justify-content: center;
   align-items: flex-end;
+  justify-content: center;
   gap: 22px;
+
   height: 70px;
   z-index: 2;
 }
 
 .candle {
+  position: relative;
   width: 12px;
   height: 55px;
-  position: relative;
+
   border: 0;
   border-radius: 4px 4px 0 0;
+
   background: repeating-linear-gradient(
     135deg,
     #FFF0F6 0 5px,
     #F4A7C5 5px 10px
   );
+
   cursor: pointer;
 }
 
 .flame {
   position: absolute;
+  top: -25px;
+  left: 50%;
+
   width: 14px;
   height: 22px;
-  left: 50%;
-  top: -25px;
+
   transform: translateX(-50%);
   border-radius: 50% 50% 45% 45%;
+
   background: var(--color-gold);
   box-shadow: 0 0 18px rgb(246 217 139 / 75%);
+
   animation: gentle-float 1.2s ease-in-out infinite;
 }
 
@@ -554,22 +845,25 @@ body {
 .cake-top {
   width: 100%;
   height: 30px;
+  border: 3px solid #EAA1C6;
   border-radius: 50%;
   background: #FAD4E5;
-  border: 3px solid #EAA1C6;
   z-index: 1;
 }
 
 .cake-body {
-  width: 95%;
-  min-height: 95px;
-  margin-top: -8px;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
+
+  width: 95%;
+  min-height: 95px;
+  margin-top: -8px;
+
   border-radius: 0 0 20px 20px;
-  background: linear-gradient(135deg, #E9A5FF, #A879D8);
   border-bottom: 8px solid #8757B3;
+
+  background: linear-gradient(135deg, #E9A5FF, #A879D8);
   color: var(--color-pink-light);
   font-size: 1.5rem;
 }
@@ -578,6 +872,7 @@ body {
   width: 110%;
   height: 14px;
   margin-top: 3px;
+
   border-radius: 50%;
   background: #E5D8F7;
   box-shadow: var(--shadow-soft);
@@ -588,46 +883,37 @@ body {
   line-height: 1.7;
 }
 
-#blow-candles,
-#continue-to-final {
-  padding: 1rem 1.5rem;
-  border: 1px solid rgb(255 255 255 / 25%);
-  border-radius: var(--radius-pill);
-  background: var(--gradient-romantic);
-  color: var(--color-white);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-#blow-candles:focus-visible,
-#continue-to-final:focus-visible {
-  outline: 3px solid var(--color-gold);
-  outline-offset: 4px;
-}
-
-
-/* Felicitación final */
+/* ========================================
+   10. FELICITACIÓN FINAL
+======================================== */
 
 #final {
   background:
-    radial-gradient(circle at 50% 20%,
-      rgb(244 167 197 / 20%), transparent 40%),
-    radial-gradient(circle at 15% 85%,
-      rgb(196 167 255 / 18%), transparent 35%),
+    radial-gradient(
+      circle at 50% 20%,
+      rgb(244 167 197 / 20%),
+      transparent 40%
+    ),
+    radial-gradient(
+      circle at 15% 85%,
+      rgb(196 167 255 / 18%),
+      transparent 35%
+    ),
     var(--gradient-main);
+
   overflow-y: auto;
 }
 
 .final-container {
-  width: 100%;
-  max-width: 760px;
-  margin: auto;
-  padding-block: var(--space-xl);
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
+
+  width: 100%;
+  max-width: 760px;
+  margin: auto;
+  padding-block: var(--space-xl);
   text-align: center;
 }
 
@@ -654,8 +940,10 @@ body {
 .final-card {
   width: 100%;
   padding: clamp(1.5rem, 5vw, 3rem);
+
   border: 1px solid rgb(255 255 255 / 22%);
   border-radius: var(--radius-large);
+
   background: rgb(255 240 246 / 8%);
   box-shadow: var(--shadow-soft);
   backdrop-filter: blur(12px);
@@ -681,24 +969,110 @@ body {
   line-height: 1.7;
 }
 
-#replay-surprise {
-  padding: 1rem 1.5rem;
-  border: 1px solid rgb(255 255 255 / 25%);
-  border-radius: var(--radius-pill);
-  background: var(--gradient-romantic);
-  color: var(--color-white);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-  transition: transform var(--transition-fast);
+/* ========================================
+   11. ANIMACIONES DEL DISEÑO
+======================================== */
+
+@keyframes welcome-stars {
+  from {
+    opacity: 0.30;
+    transform: scale(1);
+  }
+
+  to {
+    opacity: 0.65;
+    transform: scale(1.015);
+  }
 }
 
-#replay-surprise:hover {
-  transform: translateY(-3px);
+@keyframes welcome-glow {
+  from {
+    opacity: 0.65;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
-#replay-surprise:focus-visible {
-  outline: 3px solid var(--color-gold);
-  outline-offset: 5px;
+@keyframes rose-float {
+  0%, 100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -4px;
+  }
+}
+
+/* ========================================
+   12. ADAPTACIÓN A MÓVILES
+======================================== */
+
+@media (max-width: 600px) {
+  .envelopes-grid {
+    grid-template-columns: 1fr;
+    max-width: 360px;
+  }
+
+  .secret-envelope {
+    min-height: 140px;
+  }
+}
+
+@media (max-width: 480px) {
+  #welcome {
+    padding: 1.25rem;
+  }
+
+  .welcome-content {
+    gap: 1rem;
+  }
+
+  #welcome h1 {
+    font-size: clamp(2.15rem, 9vw, 3rem);
+  }
+
+  #welcome .eyebrow {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+  }
+
+  .welcome-birthday {
+    max-width: 290px;
+  }
+
+  .welcome-footer {
+    max-width: 300px;
+  }
+
+  #welcome .welcome-moon {
+    top: 3%;
+    right: 6%;
+    font-size: 3.2rem;
+  }
+
+  #welcome .welcome-shooting-star {
+    width: 140px;
+    height: 3px;
+  }
+
+  .welcome-roses {
+    gap: 0.25rem;
+  }
+}
+
+/* ========================================
+   13. ACCESIBILIDAD
+======================================== */
+
+/* La regla de movimiento reducido se gestiona
+   en animations.css para evitar duplicaciones. */
+
+/* Selección de texto */
+
+::selection {
+  background: var(--color-pink);
+  color: var(--color-purple-dark);
 }
 

@@ -6,68 +6,66 @@
 
 "use strict";
 
-// 1. Esperar a que el HTML esté preparado
 document.addEventListener("DOMContentLoaded", () => {
 
-  // 2. Obtener todas las pantallas
+  // 1. Obtener todas las pantallas
   const screens = document.querySelectorAll(".screen");
 
-  // 3. Obtener el botón de bienvenida
-  const startButton = document.getElementById("start-button");
-
-  // 4. Función para mostrar una pantalla
+  // 2. Función para cambiar de pantalla
   function showScreen(screenId) {
     const targetScreen = document.getElementById(screenId);
 
-    // Comprobar que la pantalla exista
     if (!targetScreen || !targetScreen.classList.contains("screen")) {
       console.warn(`No se encontró la pantalla: ${screenId}`);
       return;
     }
 
-    // Ocultar todas las pantallas
+    // Ocultar las pantallas
     screens.forEach((screen) => {
       screen.classList.remove("active");
       screen.setAttribute("aria-hidden", "true");
     });
 
-    // Mostrar la pantalla solicitada
+    // Mostrar la pantalla elegida
     targetScreen.classList.add("active");
     targetScreen.setAttribute("aria-hidden", "false");
+
+    // Volver al inicio del contenido
+    targetScreen.scrollTop = 0;
+    window.scrollTo(0, 0);
   }
 
-  // 5. Conectar el botón de bienvenida
-  if (startButton) {
-    startButton.addEventListener("click", () => {
-      showScreen("universe");
-    });
-    
-const messagesButton = document.getElementById("continue-to-messages");
+  // 3. Conectar los botones de navegación
+  const navigation = [
+    ["start-button", "universe"],
+    ["continue-to-letter", "letter"],
+    ["continue-to-messages", "messages"],
+    ["continue-to-birthday", "birthday"],
+    ["continue-to-final", "final"],
+    ["replay-surprise", "welcome"]
+  ];
 
-if (messagesButton) {
-  messagesButton.addEventListener("click", () => {
-    showScreen("messages");
+  navigation.forEach(([buttonId, screenId]) => {
+    const button = document.getElementById(buttonId);
+
+    if (button) {
+      button.addEventListener("click", () => {
+        showScreen(screenId);
+      });
+    } else {
+      console.warn(`No se encontró el botón: ${buttonId}`);
+    }
   });
-}
 
-  }
-
-const continueButton = document.getElementById("continue-to-letter");
-
-if (continueButton) {
-  continueButton.addEventListener("click", () => {
-    showScreen("letter");
-  });
-}
-
-  // 6. Dejar visible únicamente la bienvenida al iniciar
+  // 4. Estado inicial: mostrar únicamente la bienvenida
   showScreen("welcome");
 
-  // 7. Permitir que otros archivos utilicen esta función
+  // 5. Compartir la navegación con otros archivos
   window.birthdayApp = {
     showScreen
   };
 
   console.log("💜 La aplicación de cumpleaños está lista.");
+
 });
 
