@@ -1076,3 +1076,595 @@ body {
   color: var(--color-purple-dark);
 }
 
+
+
+
+/* ========================================
+   14. UNIVERSO INTERACTIVO DE DIEZ PLANETAS
+   Estilo cinematográfico, cósmico y romántico
+======================================== */
+
+#universe {
+  position: relative;
+  isolation: isolate;
+  overflow-x: hidden;
+  overflow-y: auto;
+  min-height: 100vh;
+  min-height: 100dvh;
+  color: var(--color-white);
+  text-align: center;
+
+  background:
+    radial-gradient(ellipse at 18% 28%, rgb(120 55 200 / 20%), transparent 43%),
+    radial-gradient(ellipse at 82% 60%, rgb(48 82 170 / 17%), transparent 42%),
+    radial-gradient(ellipse at 50% 85%, rgb(155 68 190 / 12%), transparent 45%),
+    linear-gradient(180deg, #03030b 0%, #0b071a 55%, #04030c 100%);
+}
+
+/* Capa de estrellas */
+#universe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(circle, #fff 0.8px, transparent 1.4px),
+    radial-gradient(circle, #b9c9ff 1px, transparent 1.8px),
+    radial-gradient(circle, #e8caff 1.2px, transparent 2px),
+    radial-gradient(circle, rgb(255 255 255 / 75%) 1.5px, transparent 2.4px);
+
+  background-size: 67px 79px, 113px 127px, 173px 157px, 239px 211px;
+  background-position: 12px 8px, 44px 32px, 91px 63px, 19px 83px;
+  opacity: 0.7;
+
+  animation: universe-stars-twinkle 8s ease-in-out infinite alternate;
+}
+
+/* Nebulosas violetas y azules */
+#universe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(ellipse at 18% 34%, rgb(112 47 190 / 16%), transparent 48%),
+    radial-gradient(ellipse at 82% 52%, rgb(53 91 184 / 14%), transparent 50%),
+    radial-gradient(ellipse at 48% 85%, rgb(146 58 177 / 11%), transparent 42%);
+
+  filter: blur(18px);
+}
+
+/* Contenido por encima del fondo */
+#universe .universe-content {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  width: 100%;
+  max-width: 1000px;
+  margin-inline: auto;
+  padding: 32px 16px 40px;
+  text-align: center;
+}
+
+#universe .universe-content h2 {
+  font-family: var(--font-title);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-pink-light);
+  text-shadow:
+    0 0 12px rgb(202 151 255 / 45%),
+    0 0 30px rgb(154 90 255 / 22%);
+}
+
+#universe .universe-content > p:not(.eyebrow) {
+  max-width: 540px;
+  color: var(--text-secondary);
+  font-size: var(--text-large);
+  line-height: 1.8;
+}
+
+/* ========================================
+   SISTEMA PLANETARIO
+======================================== */
+
+#universe .solar-system {
+  position: relative;
+  isolation: isolate;
+
+  width: min(88vw, 540px);
+  aspect-ratio: 1 / 1;
+  flex: 0 0 auto;
+  margin: 12px auto 4px;
+  overflow: visible;
+    
+}
+
+/* Resplandor detrás del sol */
+#universe .solar-system::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+
+  width: 72%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+
+  background: radial-gradient(
+    circle,
+    rgb(255 151 81 / 15%) 0%,
+    rgb(172 78 230 / 12%) 28%,
+    rgb(90 70 185 / 8%) 48%,
+    transparent 72%
+  );
+
+  filter: blur(12px);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+/* Escena 3D de los planetas */
+#universe #universe-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Órbitas */
+#universe .solar-orbit {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  aspect-ratio: 1;
+  border: 1px solid rgb(220 193 255 / 24%);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+#universe .orbit-one {
+  width: 28%;
+  border-color: rgb(255 220 174 / 28%);
+}
+
+#universe .orbit-two {
+  width: 48%;
+  border-color: rgb(202 175 255 / 24%);
+}
+
+#universe .orbit-three {
+  width: 70%;
+  border-color: rgb(156 184 255 / 22%);
+}
+
+#universe .orbit-four {
+  width: 94%;
+  border-color: rgb(201 185 255 / 18%);
+}
+
+/* Sol central */
+#universe .solar-sun {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 2;
+
+  width: 15%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+
+  background: radial-gradient(
+    circle at 34% 28%,
+    #fffde7 0%,
+    #fff0ad 13%,
+    #ffc45f 31%,
+    #ff8b43 54%,
+    #f34e58 76%,
+    #8d2b79 100%
+  );
+
+  box-shadow:
+    0 0 10px rgb(255 224 148 / 100%),
+    0 0 23px rgb(255 164 74 / 90%),
+    0 0 48px rgb(255 104 76 / 58%),
+    0 0 85px rgb(186 77 255 / 30%),
+    0 0 135px rgb(126 62 216 / 16%);
+
+  animation: universe-sun-pulse 4s ease-in-out infinite;
+}
+
+#universe .solar-sun span {
+  position: absolute;
+  inset: -38%;
+  border: 1px solid rgb(255 201 135 / 22%);
+  border-radius: 50%;
+  box-shadow: 0 0 18px rgb(255 147 94 / 13%);
+  pointer-events: none;
+}
+
+/* ========================================
+   PLANETAS INTERACTIVOS
+   Se conservan las clases originales
+======================================== */
+
+#universe .universe-planet {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 3;
+
+  display: block;
+  width: clamp(30px, 7.2vw, 43px);
+  aspect-ratio: 1;
+  padding: 0;
+
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgb(255 255 255 / 23%);
+  border-radius: 50%;
+
+  transform:
+    translate(-50%, -50%)
+    translate(var(--orbit-x, 0px), var(--orbit-y, 0px))
+    scale(var(--planet-scale, 1));
+
+  box-shadow:
+    inset -7px -5px 10px rgb(0 0 0 / 65%),
+    inset 2px 2px 4px rgb(255 255 255 / 24%),
+    0 0 8px rgb(150 132 255 / 16%);
+
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+
+  transition: box-shadow 250ms ease, filter 250ms ease;
+  will-change: transform;
+}
+
+/* Iluminación y sombras de los planetas */
+#universe .universe-planet::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 27% 22%,
+      rgb(255 255 255 / 68%) 0%,
+      rgb(255 255 255 / 22%) 13%,
+      transparent 38%
+    ),
+    linear-gradient(
+      115deg,
+      transparent 25%,
+      rgb(255 255 255 / 9%) 42%,
+      transparent 58%
+    ),
+    linear-gradient(
+      135deg,
+      transparent 35%,
+      rgb(0 0 0 / 8%) 53%,
+      rgb(0 0 0 / 66%) 100%
+    );
+}
+
+/* Borde atmosférico general */
+#universe .universe-planet::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 1px solid rgb(255 255 255 / 12%);
+  border-radius: inherit;
+  box-shadow: inset 0 0 5px rgb(255 255 255 / 9%);
+  pointer-events: none;
+}
+
+/* Mercurio */
+#universe .planet-one {
+  background:
+    radial-gradient(ellipse at 35% 36%, transparent 0 8%, rgb(65 60 66 / 35%) 9% 13%, transparent 14%),
+    radial-gradient(circle at 68% 65%, #4c4850 0 8%, transparent 9%),
+    radial-gradient(circle at 35% 30%, #b8afb0 0%, #827b82 36%, #514c57 72%, #282531 100%);
+}
+
+/* Venus */
+#universe .planet-two {
+  background:
+    repeating-linear-gradient(165deg, transparent 0 5px, rgb(255 244 184 / 22%) 6px 8px, transparent 9px 13px),
+    radial-gradient(circle at 32% 25%, #fff0b6 0%, #e9b86e 34%, #bc774c 68%, #653a4b 100%);
+}
+
+/* Tierra */
+#universe .planet-three {
+  background:
+    radial-gradient(ellipse at 62% 31%, rgb(255 255 255 / 80%) 0 5%, transparent 6%),
+    radial-gradient(ellipse at 38% 45%, #7fbd71 0 10%, transparent 11%),
+    radial-gradient(ellipse at 65% 62%, #5e9b59 0 12%, transparent 13%),
+    radial-gradient(ellipse at 25% 66%, #8cc66c 0 8%, transparent 9%),
+    radial-gradient(circle at 30% 28%, #72d6ff 0%, #1479ca 43%, #084078 75%, #06142f 100%);
+}
+
+/* Marte */
+#universe .planet-four {
+  background:
+    radial-gradient(circle at 62% 34%, #73342b 0 8%, transparent 9%),
+    radial-gradient(ellipse at 36% 65%, #d68b69 0 12%, transparent 13%),
+    radial-gradient(circle at 30% 25%, #f4b08a 0%, #c65f45 39%, #8c382f 72%, #431e2c 100%);
+}
+
+/* Júpiter */
+#universe .planet-five {
+  background:
+    radial-gradient(ellipse at 64% 63%, #a74d37 0 7%, #d48a66 8% 11%, transparent 12%),
+    repeating-linear-gradient(
+      175deg,
+      #ead4b2 0 4px,
+      #a96d53 5px 8px,
+      #d8b18a 9px 12px,
+      #795044 13px 16px,
+      #e8cfad 17px 21px
+    );
+}
+
+/* Saturno */
+#universe .planet-six {
+  background:
+    repeating-linear-gradient(170deg, transparent 0 5px, rgb(255 242 205 / 28%) 6px 8px, transparent 9px 13px),
+    radial-gradient(circle at 34% 28%, #fff0bd 0%, #d8b77f 40%, #ad825c 72%, #59445a 100%);
+}
+
+/* Anillo de Saturno */
+#universe .planet-six::after {
+  inset: 29% -40%;
+  z-index: 3;
+  border: 3px solid rgb(239 218 173 / 82%);
+  border-left-color: rgb(239 218 173 / 30%);
+  border-right-color: rgb(255 239 198 / 92%);
+  border-radius: 50%;
+  box-shadow: 0 0 5px rgb(245 215 163 / 32%);
+  transform: rotate(-24deg) scaleY(0.42);
+}
+
+/* Urano */
+#universe .planet-seven {
+  background:
+    radial-gradient(ellipse at 30% 22%, rgb(255 255 255 / 45%), transparent 38%),
+    radial-gradient(circle at 34% 28%, #c9ffff 0%, #7be0e8 42%, #3a9dbb 76%, #173e70 100%);
+}
+
+/* Neptuno */
+#universe .planet-eight {
+  background:
+    radial-gradient(ellipse at 60% 58%, rgb(15 30 105 / 72%) 0 9%, transparent 10%),
+    radial-gradient(circle at 30% 24%, #80d7ff 0%, #2877e8 35%, #1740a3 70%, #09143e 100%);
+}
+
+/* Plutón */
+#universe .planet-nine {
+  background:
+    radial-gradient(ellipse at 62% 62%, #b6a9a0 0 10%, transparent 11%),
+    radial-gradient(circle at 32% 26%, #e9d8c7 0%, #b9a7a0 42%, #81717c 75%, #3d3449 100%);
+}
+
+/* Décimo planeta: mundo violeta imaginario */
+#universe .planet-ten {
+  background:
+    radial-gradient(ellipse at 62% 38%, rgb(255 211 255 / 65%) 0 7%, transparent 8%),
+    radial-gradient(ellipse at 35% 68%, #b65cff 0 12%, transparent 13%),
+    radial-gradient(circle at 30% 24%, #f1c4ff 0%, #ad70ed 36%, #6338b6 68%, #211443 100%);
+}
+
+/* Interacciones y accesibilidad */
+#universe .universe-planet:hover {
+  filter: brightness(1.18);
+  box-shadow:
+    inset -6px -4px 9px rgb(0 0 0 / 55%),
+    inset 2px 2px 5px rgb(255 255 255 / 28%),
+    0 0 13px rgb(192 160 255 / 60%);
+}
+
+#universe .universe-planet:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 5px;
+}
+
+#universe .universe-planet:active {
+  filter: brightness(1.25);
+}
+
+/* ========================================
+   MENSAJES DE LOS PLANETAS
+======================================== */
+
+#universe .planet-message {
+  position: relative;
+  width: min(100%, 560px);
+  margin: 12px auto;
+  padding: 24px 20px;
+
+  border: 1px solid rgb(211 180 255 / 32%);
+  border-radius: 22px;
+
+  background:
+    radial-gradient(ellipse at top, rgb(128 79 180 / 20%), transparent 70%),
+    rgb(13 9 32 / 92%);
+
+  box-shadow:
+    0 0 30px rgb(120 73 199 / 16%),
+    inset 0 1px rgb(255 255 255 / 6%);
+
+  backdrop-filter: blur(12px);
+  animation: universe-message-appear 350ms ease both;
+}
+
+#universe .planet-message[hidden] {
+  display: none !important;
+}
+
+#universe .planet-message-label {
+  margin: 0 0 8px;
+  color: #d5b8ff;
+  font-size: 0.78rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+#universe #planet-message-title {
+  margin: 0 0 12px;
+  color: #fff3c9;
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
+  text-shadow: 0 0 16px rgb(216 177 255 / 30%);
+}
+
+#universe #planet-message-text {
+  max-width: 46ch;
+  margin: 0 auto 18px;
+  color: rgb(255 255 255 / 90%);
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/* Botones del universo */
+#universe .planet-message button,
+#universe #continue-to-letter {
+  min-height: 44px;
+  padding: 11px 20px;
+  border: 1px solid rgb(231 211 255 / 45%);
+  border-radius: 999px;
+
+  color: #fff;
+  background: linear-gradient(135deg, rgb(132 83 197 / 95%), rgb(83 57 146 / 95%));
+
+  box-shadow: 0 0 18px rgb(150 94 222 / 15%);
+  font: inherit;
+  cursor: pointer;
+
+  transition: transform 200ms ease, box-shadow 200ms ease, background 200ms ease;
+}
+
+#universe .planet-message button:hover,
+#universe #continue-to-letter:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, rgb(158 103 223 / 98%), rgb(101 71 170 / 98%));
+  box-shadow: 0 0 24px rgb(176 119 255 / 28%);
+}
+
+#universe .planet-message button:focus-visible,
+#universe #continue-to-letter:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+
+#universe #continue-to-letter[hidden],
+#universe #continue-from-planet[hidden] {
+  display: none !important;
+}
+
+#universe #continue-to-letter {
+  margin-top: 8px;
+}
+
+/* ========================================
+   ANIMACIONES
+======================================== */
+
+@keyframes universe-stars-twinkle {
+  from { opacity: 0.42; }
+  to { opacity: 0.82; }
+}
+
+@keyframes universe-sun-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 10px rgb(255 224 148 / 90%),
+      0 0 23px rgb(255 164 74 / 75%),
+      0 0 48px rgb(255 104 76 / 45%),
+      0 0 85px rgb(186 77 255 / 24%);
+  }
+
+  50% {
+    box-shadow:
+      0 0 15px rgb(255 239 176 / 100%),
+      0 0 32px rgb(255 164 74 / 95%),
+      0 0 61px rgb(255 104 76 / 62%),
+      0 0 105px rgb(186 77 255 / 35%);
+  }
+}
+
+@keyframes universe-message-appear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 600px) {
+  #universe .universe-content {
+    gap: 13px;
+    padding: 24px 12px 32px;
+  }
+
+  #universe .solar-system {
+    width: min(94vw, 430px);
+    margin-top: 8px;
+  }
+
+  #universe .universe-planet {
+    width: clamp(29px, 7.5vw, 36px);
+  }
+
+  #universe .planet-message {
+    padding: 20px 15px;
+    border-radius: 18px;
+  }
+
+  #universe .planet-message button,
+  #universe #continue-to-letter {
+    max-width: 100%;
+    white-space: normal;
+  }
+}
+
+/* Preferencia de movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  #universe::before,
+  #universe .solar-sun,
+  #universe .planet-message {
+    animation: none !important;
+  }
+
+  #universe .universe-planet,
+  #universe .planet-message button,
+  #universe #continue-to-letter {
+    transition: none !important;
+  }
+}
+

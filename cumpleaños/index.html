@@ -192,31 +192,162 @@
       </div>
     </section>
 
-    <!-- PANTALLA 2: UNIVERSO MÁGICO -->
-    <section
-      id="universe"
-      class="screen"
-      aria-label="Universo mágico"
-    >
-      <div class="universe-content">
+    
+<!-- PANTALLA 2: UNIVERSO DE LOS DIEZ PLANETAS -->
+<section
+  id="universe"
+  class="screen"
+  aria-label="Universo mágico de diez planetas"
+>
+  <div class="universe-content">
 
-        <p class="eyebrow">UN LUGAR HECHO PARA TI</p>
+    <p class="eyebrow">✦ UN LUGAR HECHO PARA TI ✦</p>
 
-        <h2 id="universe-title">
-          Hoy el universo tiene algo especial para ti
-        </h2>
+    <h2 id="universe-title">
+      Un pequeño universo para Gabriela
+    </h2>
 
-        <p id="universe-message">
-          Entre tantas estrellas, hoy quiero que la tuya
-          brille un poquito más. 💜
-        </p>
+    <p id="universe-message">
+      Diez mundos, diez pequeños secretos.
+      Toca cada planeta y descubre lo que guarda para ti. 💜
+    </p>
 
-        <button id="continue-to-letter" type="button">
-          Hay algo más para ti ✨
-        </button>
+    <div class="solar-system" aria-label="Sistema solar interactivo">
+<!-- Escena espacial 3D -->
+<canvas
+  id="universe-3d"
+  aria-hidden="true"
+></canvas>
 
+      <!-- Órbitas -->
+      <div class="solar-orbit orbit-one" aria-hidden="true"></div>
+      <div class="solar-orbit orbit-two" aria-hidden="true"></div>
+      <div class="solar-orbit orbit-three" aria-hidden="true"></div>
+      <div class="solar-orbit orbit-four" aria-hidden="true"></div>
+
+      <!-- Sol central -->
+      <div class="solar-sun" role="img" aria-label="Sol central">
+        <span aria-hidden="true">☀</span>
       </div>
-    </section>
+
+      <!-- Los diez planetas -->
+      <button class="universe-planet planet-one" type="button"
+        data-planet="1"
+        data-title="El planeta de la alegría"
+        data-message="Deseo que nunca te falten motivos para sonreír y que incluso los días difíciles te regalen una pequeña razón para ser feliz. 💜"
+        aria-label="Planeta 1: alegría">
+        <span>1</span>
+      </button>
+
+      <button class="universe-planet planet-two" type="button"
+        data-planet="2"
+        data-title="El planeta de los sueños"
+        data-message="Que cada sueño que guardas en tu corazón encuentre su camino y que nunca te falte valentía para perseguirlo. ✨"
+        aria-label="Planeta 2: sueños">
+        <span>2</span>
+      </button>
+
+      <button class="universe-planet planet-three" type="button"
+        data-planet="3"
+        data-title="El planeta de la ternura"
+        data-message="Que la vida te abrace con dulzura y convierta los pequeños instantes en recuerdos bonitos. 🌸"
+        aria-label="Planeta 3: ternura">
+        <span>3</span>
+      </button>
+
+      <button class="universe-planet planet-four" type="button"
+        data-planet="4"
+        data-title="El planeta de la esperanza"
+        data-message="Incluso cuando el camino parezca incierto, recuerda que siempre puede aparecer una nueva luz y una nueva oportunidad. 🌟"
+        aria-label="Planeta 4: esperanza">
+        <span>4</span>
+      </button>
+
+      <button class="universe-planet planet-five" type="button"
+        data-planet="5"
+        data-title="El planeta de los recuerdos"
+        data-message="Ojalá este nuevo año te regale momentos tan hermosos que, al recordarlos, vuelvas a sonreír. 💫"
+        aria-label="Planeta 5: recuerdos">
+        <span>5</span>
+      </button>
+
+      <button class="universe-planet planet-six" type="button"
+        data-planet="6"
+        data-title="El planeta de la fortaleza"
+        data-message="Nunca olvides todo lo que has superado, lo que has aprendido y la fuerza que llevas dentro para seguir adelante. 💜"
+        aria-label="Planeta 6: fortaleza">
+        <span>6</span>
+      </button>
+
+      <button class="universe-planet planet-seven" type="button"
+        data-planet="7"
+        data-title="El planeta de la magia"
+        data-message="Que nunca pierdas la capacidad de encontrar belleza en las pequeñas cosas, donde a veces se esconden los momentos más mágicos. ✨"
+        aria-label="Planeta 7: magia">
+        <span>7</span>
+      </button>
+
+      <button class="universe-planet planet-eight" type="button"
+        data-planet="8"
+        data-title="El planeta de los nuevos comienzos"
+        data-message="Que esta nueva vuelta al sol esté llena de oportunidades, aprendizajes y aventuras que valga la pena vivir. 🌷"
+        aria-label="Planeta 8: nuevos comienzos">
+        <span>8</span>
+      </button>
+
+      <button class="universe-planet planet-nine" type="button"
+        data-planet="9"
+        data-title="El planeta de los deseos"
+        data-message="Que esos deseos que guardas en silencio encuentren el momento perfecto para convertirse en realidad. 🌙"
+        aria-label="Planeta 9: deseos">
+        <span>9</span>
+      </button>
+
+      <button class="universe-planet planet-ten" type="button"
+        data-planet="10"
+        data-title="Un universo para ti"
+        data-message="Este pequeño universo fue preparado para recordarte que mereces cosas bonitas. Y todavía queda una carta para ti. 💌"
+        aria-label="Planeta 10: un universo para ti">
+        <span>10</span>
+      </button>
+
+    </div>
+
+    <!-- Mensaje del planeta seleccionado -->
+    <div
+      id="planet-message"
+      class="planet-message"
+      aria-live="polite"
+      hidden
+    >
+      <p class="planet-message-label">
+        ✦ UN MENSAJE DE TU UNIVERSO ✦
+      </p>
+
+      <h3 id="planet-message-title"></h3>
+
+      <p id="planet-message-text"></p>
+
+      <button id="close-planet-message" type="button">
+        Volver al universo ✨
+      </button>
+
+      <button id="continue-from-planet" type="button" hidden>
+        Descubrir tu carta 💌
+      </button>
+    </div>
+
+    <p class="universe-hint">
+      ✦ Explora los diez planetas a tu ritmo ✦
+    </p>
+
+    <button id="continue-to-letter" type="button">
+      Hay algo más para ti ✨
+    </button>
+
+  </div>
+</section>
+
 
     <!-- PANTALLA 3: CARTA ESPECIAL -->
     <section
@@ -433,13 +564,15 @@
 
   </main>
 
-  <!-- JavaScript: contenido primero -->
-  <script src="js/content.js"></script>
-  <script src="js/music.js"></script>
-  <script src="js/effects.js"></script>
-  <script src="js/interactions.js"></script>
-  <script src="js/main.js"></script>
-
+<!-- Motor gráfico 3D -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<!-- JavaScript de la página -->
+<script src="js/content.js"></script>
+<script src="js/music.js"></script>
+<script src="js/effects.js"></script>
+<script src="js/interactions.js"></script>
+<script src="js/main.js"></script>
+<script src="js/universe3d.js"></script>
 </body>
 </html>
 
