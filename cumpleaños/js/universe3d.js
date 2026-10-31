@@ -11,12 +11,10 @@
       return;
     }
 
-    // Evita inicializar la escena más de una vez.
     if (canvas.dataset.initialized === "true") return;
     canvas.dataset.initialized = "true";
 
     const THREE = window.THREE;
-
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
@@ -34,8 +32,12 @@
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
 
-    // Iluminación general y luz central cálida.
-    scene.add(new THREE.AmbientLight(0x9b8bc9, 1.8));
+    // ==========================================
+    // ILUMINACIÓN
+    // ==========================================
+
+    const ambientLight = new THREE.AmbientLight(0x9b8bc9, 1.2);
+    scene.add(ambientLight);
 
     const sunLight = new THREE.PointLight(0xffb56b, 160, 45, 1.5);
     sunLight.position.set(0, 0, 2);
@@ -45,29 +47,81 @@
     fillLight.position.set(-5, 3, 4);
     scene.add(fillLight);
 
-    // El sol 3D queda detrás de los planetas.
-    const sunGeometry = new THREE.SphereGeometry(0.48, 64, 64);
-    const sunMaterial = new THREE.MeshBasicMaterial({
-      color: 0xffbd69
-    });
+    const pinkLight = new THREE.PointLight(0xff8fcf, 18, 30);
+    pinkLight.position.set(6, -5, -3);
+    scene.add(pinkLight);
 
-    const sun = new THREE.Mesh(sunGeometry, sunMaterial);
-    sun.position.set(0, 0, 0);
-    scene.add(sun);
+    // ==========================================
+    // TEXTURA DEL SOL
+    // ==========================================
 
-    // Resplandor del sol.
-    const glowMaterial = new THREE.SpriteMaterial({
-      map: createGlowTexture(),
-      color: 0xff9b55,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
-    });
+    function createSunTexture() {
+      const textureCanvas = document.createElement("canvas");
+      textureCanvas.width = 1024;
+      textureCanvas.height = 512;
 
-    const sunGlow = new THREE.Sprite(glowMaterial);
-    sunGlow.scale.set(2.8, 2.8, 1);
-    sunGlow.position.set(0, 0, -0.1);
-    scene.add(sunGlow);
+      const ctx = textureCanvas.getContext("2d");
+      const w = textureCanvas.width;
+      const h = textureCanvas.height;
+
+      const gradient = ctx.createLinearGradient(0, 0, 0, h);
+      gradient.addColorStop(0, "#ffdc83");
+      gradient.addColorStop(0.35, "#ff9b32");
+      gradient.addColorStop(0.7, "#f45b20");
+      gradient.addColorStop(1, "#ffbd55");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, w, h);
+
+      for (let i = 0; i < 180; i++) {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const radiusX = 12 + Math.random() * 65;
+        const radiusY = 4 + Math.random() * 22;
+
+        ctx.beginPath();
+        ctx.ellipse(
+          x, y, radiusX, radiusY,
+          Math.random() * Math.PI,
+          0, Math.PI * 2
+        );
+
+        ctx.fillStyle = Math.random() > 0.5
+          ? "#fff0a6"
+          : "#d94318";
+
+        ctx.globalAlpha = 0.12 + Math.random() * 0.28;
+        ctx.fill();
+      }
+
+      for (let i = 0; i < 35; i++) {
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+
+        const glow = ctx.createRadialGradient(
+          x, y, 1,
+          x, y, 15 + Math.random() * 35
+        );
+
+        glow.addColorStop(0, "rgba(255,255,220,0.8)");
+        glow.addColorStop(1, "rgba(255,180,50,0)");
+
+        ctx.fillStyle = glow;
+        ctx.fillRect(x - 45, y - 45, 90, 90);
+      }
+
+      ctx.globalAlpha = 1;
+
+      const texture = new THREE.CanvasTexture(textureCanvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.needsUpdate = true;
+
+      return texture;
+    }
+
+    // ==========================================
+    // RESPLANDOR DEL SOL
+    // ==========================================
 
     function createGlowTexture() {
       const size = 128;
@@ -84,35 +138,76 @@
           data[index] = 255;
           data[index + 1] = 170;
           data[index + 2] = 100;
-          data[index + 3] = Math.round(Math.pow(alpha, 2.5) * 255);
+          data[index + 3] = Math.round(
+            Math.pow(alpha, 2.5) * 255
+          );
         }
       }
 
       const texture = new THREE.DataTexture(
-        data, size, size, THREE.RGBAFormat
+        data,
+        size,
+        size,
+        THREE.RGBAFormat
       );
 
       texture.needsUpdate = true;
       return texture;
     }
 
-    // Colores base de los diez mundos.
-    
-    // Colores base y texturas de los diez mundos.
+    // ==========================================
+    // CREACIÓN DEL SOL
+    // ==========================================
+
+    const sunTexture = createSunTexture();
+
+    const sunGeometry = new THREE.SphereGeometry(0.72, 96, 96);
+
+    const sunMaterial = new THREE.MeshBasicMaterial({
+      map: sunTexture,
+      color: 0xffffff
+    });
+
+    const sun = new THREE.Mesh(sunGeometry, sunMaterial);
+    sun.position.set(0, 0, 0);
+    scene.add(sun);
+
+    const glowTexture = createGlowTexture();
+
+    const glowMaterial = new THREE.SpriteMaterial({
+      map: glowTexture,
+      color: 0xff9b55,
+      transparent: true,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    const sunGlow = new THREE.Sprite(glowMaterial);
+    sunGlow.scale.set(4.2, 4.2, 1);
+    sunGlow.position.set(0, 0, -0.1);
+    scene.add(sunGlow);
+
+    // ==========================================
+    // COLORES DE LOS PLANETAS
+    // ==========================================
+
     const planetColors = [
-      0xaaa0a5, // Mercurio
-      0xe6b875, // Venus
-      0x268bd2, // Tierra
-      0xc65f45, // Marte
-      0xd1a17c, // Júpiter
-      0xd9c18f, // Saturno
-      0x76dbe3, // Urano
-      0x285fe0, // Neptuno
-      0xb8a6a1, // Plutón
-      0xb879ed  // Mundo violeta
+      0xaaa0a5,
+      0xe6b875,
+      0x268bd2,
+      0xc65f45,
+      0xd1a17c,
+      0xd9c18f,
+      0x76dbe3,
+      0x285fe0,
+      0xb8a6a1,
+      0xb879ed
     ];
 
-    // Genera mapas de superficie sin descargar imágenes externas.
+    // ==========================================
+    // TEXTURAS PROCEDURALES DE LOS PLANETAS
+    // ==========================================
+
     function createPlanetTexture(index) {
       const textureCanvas = document.createElement("canvas");
       textureCanvas.width = 1024;
@@ -123,36 +218,36 @@
       const h = textureCanvas.height;
 
       const palettes = [
-        ["#29262e", "#a6a1a5", "#625c65"], // Mercurio
-        ["#8f6046", "#e7c18a", "#b98259"], // Venus
-        ["#06366e", "#1476b8", "#42c8ec"], // Tierra
-        ["#5a211b", "#d56a48", "#f0a078"], // Marte
-        ["#a76b42", "#e6c49a", "#f2dfc0"], // Júpiter
-        ["#a18a62", "#ead7a8", "#c5ad7d"], // Saturno
-        ["#347f9a", "#a6e9ed", "#d0ffff"], // Urano
-        ["#102b80", "#2369e8", "#67baff"], // Neptuno
-        ["#62565c", "#c4b7ae", "#eee0d4"], // Plutón
-        ["#492276", "#bd73f4", "#f0c8ff"]  // Mundo violeta
+        ["#29262e", "#a6a1a5", "#625c65"],
+        ["#8f6046", "#e7c18a", "#b98259"],
+        ["#06366e", "#1476b8", "#42c8ec"],
+        ["#5a211b", "#d56a48", "#f0a078"],
+        ["#a76b42", "#e6c49a", "#f2dfc0"],
+        ["#a18a62", "#ead7a8", "#c5ad7d"],
+        ["#347f9a", "#a6e9ed", "#d0ffff"],
+        ["#102b80", "#2369e8", "#67baff"],
+        ["#62565c", "#c4b7ae", "#eee0d4"],
+        ["#492276", "#bd73f4", "#f0c8ff"]
       ];
 
       const colors = palettes[index] || palettes[9];
 
-      // Base con variaciones de luz y color.
       const gradient = ctx.createLinearGradient(0, 0, 0, h);
       gradient.addColorStop(0, colors[1]);
       gradient.addColorStop(0.5, colors[0]);
       gradient.addColorStop(1, colors[2]);
+
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, w, h);
 
-      // Variaciones superficiales reproducibles.
       let seed = (index + 1) * 7919;
+
       function random() {
         seed = (seed * 16807) % 2147483647;
         return (seed - 1) / 2147483646;
       }
 
-      // Bandas atmosféricas de gigantes gaseosos y mundos helados.
+      // Bandas atmosféricas.
       if ([1, 4, 5, 6, 7, 9].includes(index)) {
         for (let i = 0; i < 42; i++) {
           const y = random() * h;
@@ -162,10 +257,11 @@
           ctx.fillStyle = random() > 0.5 ? colors[2] : colors[0];
           ctx.fillRect(0, y, w, bandHeight);
         }
+
         ctx.globalAlpha = 1;
       }
 
-      // Continentes estilizados para la Tierra.
+      // Continentes de la Tierra.
       if (index === 2) {
         for (let i = 0; i < 34; i++) {
           const x = random() * w;
@@ -179,13 +275,18 @@
             random() * Math.PI,
             0, Math.PI * 2
           );
-          ctx.fillStyle = random() > 0.35 ? "#53b86a" : "#b3bd70";
+
+          ctx.fillStyle = random() > 0.35
+            ? "#53b86a"
+            : "#b3bd70";
+
           ctx.globalAlpha = 0.65 + random() * 0.3;
           ctx.fill();
         }
+
         ctx.globalAlpha = 1;
 
-        // Nubes blancas sobre los océanos y continentes.
+        // Nubes.
         for (let i = 0; i < 150; i++) {
           ctx.beginPath();
           ctx.ellipse(
@@ -196,14 +297,16 @@
             random() * 0.4,
             0, Math.PI * 2
           );
+
           ctx.fillStyle = "#ffffff";
           ctx.globalAlpha = 0.08 + random() * 0.24;
           ctx.fill();
         }
+
         ctx.globalAlpha = 1;
       }
 
-      // Cráteres para Mercurio, Marte y Plutón.
+      // Cráteres de Mercurio, Marte y Plutón.
       if ([0, 3, 8].includes(index)) {
         const count = index === 0 ? 170 : 90;
 
@@ -223,17 +326,20 @@
             x - radius * 0.2,
             y - radius * 0.2,
             radius * 0.72,
-            Math.PI, Math.PI * 2
+            Math.PI,
+            Math.PI * 2
           );
+
           ctx.strokeStyle = "#fff0d9";
           ctx.lineWidth = 1.5;
           ctx.globalAlpha = 0.22;
           ctx.stroke();
         }
+
         ctx.globalAlpha = 1;
       }
 
-      // Tormentas y remolinos atmosféricos de Júpiter.
+      // Tormentas de Júpiter.
       if (index === 4) {
         for (let i = 0; i < 9; i++) {
           const x = random() * w;
@@ -241,17 +347,21 @@
 
           ctx.beginPath();
           ctx.ellipse(
-            x, y, 20 + random() * 35, 7 + random() * 13,
+            x, y,
+            20 + random() * 35,
+            7 + random() * 13,
             0, 0, Math.PI * 2
           );
+
           ctx.fillStyle = i % 2 ? "#9b4934" : "#f0d0a1";
           ctx.globalAlpha = 0.65;
           ctx.fill();
         }
+
         ctx.globalAlpha = 1;
       }
 
-      // Bruma luminosa para el planeta romántico violeta.
+      // Bruma del mundo violeta.
       if (index === 9) {
         for (let i = 0; i < 100; i++) {
           ctx.beginPath();
@@ -261,10 +371,12 @@
             2 + random() * 13,
             0, Math.PI * 2
           );
+
           ctx.fillStyle = "#f9dfff";
           ctx.globalAlpha = 0.05 + random() * 0.18;
           ctx.fill();
         }
+
         ctx.globalAlpha = 1;
       }
 
@@ -276,10 +388,32 @@
       return texture;
     }
 
+    // ==========================================
+    // CREACIÓN DE LOS DIEZ PLANETAS
+    // ==========================================
+
     const planets = [];
 
     const planetButtons = [
       ...system.querySelectorAll(".universe-planet")
+    ];
+
+    const rotationSpeeds = [
+      0.0018,
+      0.0012,
+      0.0024,
+      0.0015,
+      0.0020,
+      0.0011,
+      0.0017,
+      0.0022,
+      0.0013,
+      0.0019
+    ];
+
+    const inclinations = [
+      0.02, -0.04, 0.06, -0.03, 0.05,
+      -0.06, 0.03, -0.02, 0.04, -0.05
     ];
 
     planetButtons.forEach((button, index) => {
@@ -288,7 +422,7 @@
 
       const material = new THREE.MeshStandardMaterial({
         map: texture,
-        color: 0xffffff,
+        color: planetColors[index] || 0xffffff,
         roughness: 0.88,
         metalness: 0.02
       });
@@ -307,7 +441,11 @@
       let ring = null;
 
       if (index === 5) {
-        const ringGeometry = new THREE.RingGeometry(1.25, 1.85, 128);
+        const ringGeometry = new THREE.RingGeometry(
+          1.25,
+          1.85,
+          128
+        );
 
         const ringMaterial = new THREE.MeshStandardMaterial({
           color: 0xe2d0ad,
@@ -326,12 +464,16 @@
         mesh,
         button,
         index,
-        phase: index * 0.63,
-        speed: index % 2 === 0 ? 0.16 : -0.12,
+        rotationSpeed: rotationSpeeds[index] || 0.0015,
+        inclination: inclinations[index] || 0,
+        texture,
         ring
       });
     });
 
+    // ==========================================
+    // AJUSTE DEL TAMAÑO DE LA ESCENA
+    // ==========================================
 
     function resize() {
       const width = Math.max(system.clientWidth, 1);
@@ -349,90 +491,118 @@
 
     const clock = new THREE.Clock();
 
-   
-function animate() {
-  requestAnimationFrame(animate);
+    // ==========================================
+    // ANIMACIÓN PRINCIPAL
+    // ==========================================
 
-  const elapsed = clock.getElapsedTime();
+    function animate() {
+      requestAnimationFrame(animate);
 
-  const width = system.clientWidth;
-  const height = system.clientHeight;
+      const delta = Math.min(clock.getDelta(), 0.05);
+      const elapsed = clock.elapsedTime;
 
-  if (!width || !height) return;
+      const width = system.clientWidth;
+      const height = system.clientHeight;
 
-  // Mantiene las esferas dentro de la misma zona
-  // que utiliza el sistema solar HTML.
-  const baseRadius = Math.min(width, height) * 0.50;
+      if (!width || !height) return;
 
-  // Conversión aproximada de píxeles CSS a unidades 3D.
-  const visibleHeight =
-    2 * Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)) *
-    camera.position.z;
+      const visibleHeight =
+        2 * Math.tan(
+          THREE.MathUtils.degToRad(camera.fov / 2)
+        ) * camera.position.z;
 
-  const worldPerPixel = visibleHeight / height;
+      const worldPerPixel = visibleHeight / height;
 
-  planets.forEach((planet) => {
-    const button = planet.button;
+      planets.forEach((planet) => {
+        const button = planet.button;
 
-    // Lee las posiciones calculadas por interactions.js.
-    const orbitX = parseFloat(
-      button.style.getPropertyValue("--orbit-x")
-    ) || 0;
+        const orbitX = parseFloat(
+          button.style.getPropertyValue("--orbit-x")
+        ) || 0;
 
-    const orbitY = parseFloat(
-      button.style.getPropertyValue("--orbit-y")
-    ) || 0;
+        const orbitY = parseFloat(
+          button.style.getPropertyValue("--orbit-y")
+        ) || 0;
 
-    planet.mesh.position.set(
-      orbitX * worldPerPixel,
-      -orbitY * worldPerPixel,
-      0
-    );
+        const orbitZ = parseFloat(
+          button.style.getPropertyValue("--orbit-z")
+        ) || 0;
 
-    // Giro suave y ligeramente distinto para cada planeta.
-const direction = planet.index % 2 === 0 ? 1 : -1;
-planet.mesh.rotation.y += 0.0025 * direction;
-planet.mesh.rotation.x += 0.00025;
+        // Posición tridimensional.
+        planet.mesh.position.set(
+          orbitX * worldPerPixel,
+          -orbitY * worldPerPixel,
+          orbitZ * worldPerPixel
+        );
 
+        // Rotación individual.
+        planet.mesh.rotation.y +=
+          planet.rotationSpeed * delta * 60;
 
-    // Escala proporcional al tamaño del botón.
-    const buttonSize = button.getBoundingClientRect().width;
-    const radius = Math.max(
-      0.12,
-      buttonSize * worldPerPixel * 0.5
-    );
+        planet.mesh.rotation.x = planet.inclination;
 
-    planet.mesh.scale.setScalar(radius);
+        // Tamaño proporcional al botón.
+        const buttonSize = button.getBoundingClientRect().width;
 
-    // El planeta puede rotar, pero no cambia de órbita.
-    planet.mesh.visible = button.isConnected;
-  });
+        const radius = Math.max(
+          0.12,
+          buttonSize * worldPerPixel * 0.5
+        );
 
-  sun.rotation.y += 0.001;
+        planet.mesh.scale.setScalar(radius);
 
-  renderer.render(scene, camera);
-}
+        planet.mesh.visible = button.isConnected;
+      });
 
+      // Rotación del sol.
+      sun.rotation.y += 0.0018 * delta * 60;
+      sun.rotation.x = Math.sin(elapsed * 0.2) * 0.025;
+
+      // Pulsación del resplandor.
+      const pulse = 1 + Math.sin(elapsed * 1.8) * 0.055;
+
+      sunGlow.scale.set(
+        4.2 * pulse,
+        4.2 * pulse,
+        1
+      );
+
+      // Variación suave de la luz.
+      sunLight.intensity =
+        160 + Math.sin(elapsed * 2) * 12;
+
+      renderer.render(scene, camera);
+    }
 
     animate();
 
-    // Permite limpiar los recursos si se necesita reiniciar.
+    // ==========================================
+    // LIMPIEZA DE RECURSOS
+    // ==========================================
+
     canvas.universe3dCleanup = () => {
       resizeObserver.disconnect();
       renderer.dispose();
 
-      planets.forEach(({ mesh }) => {
+      planets.forEach(({ mesh, texture, ring }) => {
         mesh.geometry.dispose();
         mesh.material.dispose();
+        texture.dispose();
+
+        if (ring) {
+          ring.geometry.dispose();
+          ring.material.dispose();
+        }
       });
 
       sunGeometry.dispose();
       sunMaterial.dispose();
-      glowMaterial.map.dispose();
+      sunTexture.dispose();
+      glowTexture.dispose();
       glowMaterial.dispose();
     };
 
-    console.info("Universo 3D inicializado.");
+    console.info("Universo 3D inicializado correctamente.");
   }
 
   if (document.readyState === "loading") {

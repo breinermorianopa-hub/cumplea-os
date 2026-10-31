@@ -20,17 +20,18 @@ document.addEventListener("DOMContentLoaded", () => {
   // Cada planeta tendrá su propia órbita.
 
 
+
 const planetOrbits = [
-  { radius: 0.18, speed: 0.34, angle: 0.1 },
-  { radius: 0.28, speed: -0.27, angle: 1.2 },
-  { radius: 0.38, speed: 0.23, angle: 2.4 },
-  { radius: 0.48, speed: -0.19, angle: 3.5 },
-  { radius: 0.58, speed: 0.16, angle: 4.6 },
-  { radius: 0.66, speed: -0.14, angle: 5.4 },
-  { radius: 0.74, speed: 0.12, angle: 0.8 },
-  { radius: 0.82, speed: -0.105, angle: 2.0 },
-  { radius: 0.90, speed: 0.09, angle: 3.8 },
-  { radius: 0.98, speed: -0.075, angle: 5.0 }
+  { radius: 0.18, speed: 0.34, angle: 0.1, flatten: 0.92, tilt: 0.05 },
+  { radius: 0.28, speed: -0.27, angle: 1.2, flatten: 0.78, tilt: 0.35 },
+  { radius: 0.38, speed: 0.23, angle: 2.4, flatten: 0.88, tilt: -0.25 },
+  { radius: 0.48, speed: -0.19, angle: 3.5, flatten: 0.72, tilt: 0.48 },
+  { radius: 0.58, speed: 0.16, angle: 4.6, flatten: 0.90, tilt: -0.35 },
+  { radius: 0.66, speed: -0.14, angle: 5.4, flatten: 0.76, tilt: 0.25 },
+  { radius: 0.74, speed: 0.12, angle: 0.8, flatten: 0.86, tilt: -0.42 },
+  { radius: 0.82, speed: -0.105, angle: 2.0, flatten: 0.70, tilt: 0.32 },
+  { radius: 0.90, speed: 0.09, angle: 3.8, flatten: 0.84, tilt: -0.18 },
+  { radius: 0.98, speed: -0.075, angle: 5.0, flatten: 0.74, tilt: 0.40 }
 ];
 
 
@@ -44,28 +45,53 @@ const planetOrbits = [
   ).matches;
 
 
-  function positionPlanets(time = 0) {
-    if (!solarSystem || planets.length === 0) return;
+ 
+function positionPlanets(time = 0) {
+  if (!solarSystem || planets.length === 0) return;
 
-    const width = solarSystem.clientWidth;
-    const height = solarSystem.clientHeight;
+  const width = solarSystem.clientWidth;
+  const height = solarSystem.clientHeight;
 
-    // Si el universo está oculto, esperamos a que sea visible.
-    if (!width || !height) return;
+  if (!width || !height) return;
 
-    const baseRadius = Math.min(width, height) * 0.50;
+  const baseRadius = Math.min(width, height) * 0.50;
 
-    planets.forEach((planet, index) => {
-      const orbit = planetOrbits[index % planetOrbits.length];
-      const angle = orbit.angle + time * orbit.speed;
+  planets.forEach((planet, index) => {
+    const orbit = planetOrbits[index % planetOrbits.length];
 
-      const x = Math.cos(angle) * baseRadius * orbit.radius;
-      const y = Math.sin(angle) * baseRadius * orbit.radius;
+    // Ángulo de recorrido de cada planeta.
+    const angle = orbit.angle + time * orbit.speed;
 
-      planet.style.setProperty("--orbit-x", `${x}px`);
-      planet.style.setProperty("--orbit-y", `${y}px`);
-    });
-  }
+    // Trayectoria elíptica.
+    const ellipseX = Math.cos(angle) * baseRadius * orbit.radius;
+    const ellipseY =
+      Math.sin(angle) *
+      baseRadius *
+      orbit.radius *
+      orbit.flatten;
+
+    // Inclinación de la órbita.
+    const x =
+      ellipseX * Math.cos(orbit.tilt) -
+      ellipseY * Math.sin(orbit.tilt);
+
+    const y =
+      ellipseX * Math.sin(orbit.tilt) +
+      ellipseY * Math.cos(orbit.tilt);
+// Profundidad de la órbita.
+// Los valores positivos acercan el planeta al observador.
+const z = Math.sin(angle) *
+  baseRadius *
+  orbit.radius *
+  0.28;
+
+planet.style.setProperty("--orbit-z", `${z}px`);
+    planet.style.setProperty("--orbit-x", `${x}px`);
+    planet.style.setProperty("--orbit-y", `${y}px`);
+  });
+}
+
+
 
   function animatePlanets(timestamp) {
     if (!solarSystem || !solarSystem.clientWidth || !solarSystem.clientHeight) {
