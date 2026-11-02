@@ -17,25 +17,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const discoveredPlanets = new Set();
 
-  // Cada planeta tendrá su propia órbita.
-
-
-
+  /// Cada planeta tendrá su propia órbita.
 const planetOrbits = [
-  { radius: 0.18, speed: 0.34, angle: 0.1, flatten: 0.92, tilt: 0.05 },
-  { radius: 0.28, speed: -0.27, angle: 1.2, flatten: 0.78, tilt: 0.35 },
-  { radius: 0.38, speed: 0.23, angle: 2.4, flatten: 0.88, tilt: -0.25 },
-  { radius: 0.48, speed: -0.19, angle: 3.5, flatten: 0.72, tilt: 0.48 },
-  { radius: 0.58, speed: 0.16, angle: 4.6, flatten: 0.90, tilt: -0.35 },
-  { radius: 0.66, speed: -0.14, angle: 5.4, flatten: 0.76, tilt: 0.25 },
-  { radius: 0.74, speed: 0.12, angle: 0.8, flatten: 0.86, tilt: -0.42 },
-  { radius: 0.82, speed: -0.105, angle: 2.0, flatten: 0.70, tilt: 0.32 },
-  { radius: 0.90, speed: 0.09, angle: 3.8, flatten: 0.84, tilt: -0.18 },
-  { radius: 0.98, speed: -0.075, angle: 5.0, flatten: 0.74, tilt: 0.40 }
+  { radius: 0.32, speed: 0.045, angle: 0.00, flatten: 0.90, tilt: 0.05 },
+  { radius: 0.38, speed: 0.045, angle: 3.14, flatten: 0.90, tilt: -0.05 },
+  { radius: 0.44, speed: 0.045, angle: 1.57, flatten: 0.90, tilt: 0.05 },
+  { radius: 0.50, speed: 0.045, angle: 4.71, flatten: 0.90, tilt: -0.05 },
+  { radius: 0.56, speed: 0.045, angle: 0.78, flatten: 0.90, tilt: 0.05 },
+  { radius: 0.62, speed: 0.045, angle: 3.92, flatten: 0.90, tilt: -0.05 },
+  { radius: 0.68, speed: 0.045, angle: 2.35, flatten: 0.90, tilt: 0.05 },
+  { radius: 0.74, speed: 0.045, angle: 5.49, flatten: 0.90, tilt: -0.05 },
+  { radius: 0.80, speed: 0.045, angle: 1.17, flatten: 0.90, tilt: 0.05 },
+  { radius: 0.86, speed: 0.045, angle: 4.31, flatten: 0.90, tilt: -0.05 }
 ];
-
-
-
   let animationFrame = null;
   let lastAnimationTime = 0;
   let animationElapsed = 0;
@@ -44,60 +38,63 @@ const planetOrbits = [
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
+  function positionPlanets(time = 0) {
+    if (!solarSystem || planets.length === 0) return;
 
- 
-function positionPlanets(time = 0) {
-  if (!solarSystem || planets.length === 0) return;
+    const width = solarSystem.clientWidth;
+    const height = solarSystem.clientHeight;
 
-  const width = solarSystem.clientWidth;
-  const height = solarSystem.clientHeight;
+    if (!width || !height) return;
 
-  if (!width || !height) return;
+    // Radio ajustado para conservar margen en los bordes.
+    const baseRadius = Math.min(width, height) * 0.40;
 
-  const baseRadius = Math.min(width, height) * 0.50;
+    planets.forEach((planet, index) => {
+      const orbit = planetOrbits[index % planetOrbits.length];
 
-  planets.forEach((planet, index) => {
-    const orbit = planetOrbits[index % planetOrbits.length];
+      const angle = orbit.angle + time * orbit.speed;
 
-    // Ángulo de recorrido de cada planeta.
-    const angle = orbit.angle + time * orbit.speed;
+      // Trayectoria elíptica.
+      const ellipseX =
+        Math.cos(angle) * baseRadius * orbit.radius;
 
-    // Trayectoria elíptica.
-    const ellipseX = Math.cos(angle) * baseRadius * orbit.radius;
-    const ellipseY =
-      Math.sin(angle) *
-      baseRadius *
-      orbit.radius *
-      orbit.flatten;
+      const ellipseY =
+        Math.sin(angle) *
+        baseRadius *
+        orbit.radius *
+        orbit.flatten;
 
-    // Inclinación de la órbita.
-    const x =
-      ellipseX * Math.cos(orbit.tilt) -
-      ellipseY * Math.sin(orbit.tilt);
+      // Inclinación de la órbita.
+      const x =
+        ellipseX * Math.cos(orbit.tilt) -
+        ellipseY * Math.sin(orbit.tilt);
 
-    const y =
-      ellipseX * Math.sin(orbit.tilt) +
-      ellipseY * Math.cos(orbit.tilt);
-// Profundidad de la órbita.
-// Los valores positivos acercan el planeta al observador.
-const z = Math.sin(angle) *
-  baseRadius *
-  orbit.radius *
-  0.28;
+      const y =
+        ellipseX * Math.sin(orbit.tilt) +
+        ellipseY * Math.cos(orbit.tilt);
 
-planet.style.setProperty("--orbit-z", `${z}px`);
-    planet.style.setProperty("--orbit-x", `${x}px`);
-    planet.style.setProperty("--orbit-y", `${y}px`);
-  });
-}
+      // Profundidad de la órbita.
+      const z =
+        Math.sin(angle) *
+        baseRadius *
+        orbit.radius *
+        0.28;
 
+      planet.style.setProperty("--orbit-x", `${x}px`);
+      planet.style.setProperty("--orbit-y", `${y}px`);
+      planet.style.setProperty("--orbit-z", `${z}px`);
+    });
+  }
 
-
-  function animatePlanets(timestamp) {
-    if (!solarSystem || !solarSystem.clientWidth || !solarSystem.clientHeight) {
-      animationFrame = window.requestAnimationFrame(animatePlanets);
-      return;
-    }
+function animatePlanets(timestamp) {
+  if (
+    !solarSystem ||
+    !solarSystem.clientWidth ||
+    !solarSystem.clientHeight
+  ) {
+    animationFrame = window.requestAnimationFrame(animatePlanets);
+    return;
+  }
 
     if (lastAnimationTime === 0) {
       lastAnimationTime = timestamp;
@@ -113,15 +110,15 @@ planet.style.setProperty("--orbit-z", `${z}px`);
   }
 
   function startPlanetAnimation() {
-    if (!solarSystem || planets.length === 0) return;
+  if (!solarSystem || planets.length === 0) return;
 
-    positionPlanets(animationElapsed);
+  positionPlanets(animationElapsed);
 
-    if (animationFrame === null) {
-      lastAnimationTime = 0;
-      animationFrame = window.requestAnimationFrame(animatePlanets);
-    }
+  if (animationFrame === null) {
+    lastAnimationTime = 0;
+    animationFrame = window.requestAnimationFrame(animatePlanets);
   }
+}
 
   function stopPlanetAnimation() {
     if (animationFrame !== null) {
@@ -132,33 +129,30 @@ planet.style.setProperty("--orbit-z", `${z}px`);
     lastAnimationTime = 0;
   }
 
+  function updatePlanetProgress() {
+    const allDiscovered =
+      planets.length === 10 && discoveredPlanets.size === 10;
 
+    if (continueToLetter) {
+      continueToLetter.hidden = !allDiscovered;
+    }
 
-function updatePlanetProgress() {
-  const allDiscovered =
-    planets.length === 10 && discoveredPlanets.size === 10;
+    if (continueFromPlanet) {
+      continueFromPlanet.hidden = !allDiscovered;
+    }
 
-  if (continueToLetter) {
-    continueToLetter.hidden = !allDiscovered;
+    if (allDiscovered) {
+      console.log("¡Has descubierto los diez planetas! 💜✨");
+    }
   }
-
-  if (continueFromPlanet) {
-    continueFromPlanet.hidden = !allDiscovered;
-  }
-
-  if (allDiscovered) {
-    console.log("¡Has descubierto los diez planetas! 💜✨");
-  }
-}
-
-
 
   function openPlanetMessage(planet) {
     if (!planetPanel || !planetTitle || !planetText) return;
 
     const planetNumber = planet.dataset.planet;
     const title = planet.dataset.title || `Planeta ${planetNumber}`;
-    const message = planet.dataset.message ||
+    const message =
+      planet.dataset.message ||
       "Un pequeño secreto del universo te espera aquí. 💜";
 
     discoveredPlanets.add(planetNumber);
@@ -180,7 +174,6 @@ function updatePlanetProgress() {
       openPlanetMessage(planet);
     });
 
-    // Permite activar los planetas con teclado si son botones.
     if (planet.tagName !== "BUTTON") {
       planet.setAttribute("role", "button");
       planet.setAttribute("tabindex", "0");
@@ -208,7 +201,6 @@ function updatePlanetProgress() {
     });
   }
 
-  // Oculta el acceso a la carta hasta descubrir los diez planetas.
   updatePlanetProgress();
   startPlanetAnimation();
 
@@ -231,7 +223,8 @@ function updatePlanetProgress() {
     envelope.addEventListener("click", () => {
       if (!messagePanel || !messageText) return;
 
-      messageText.textContent = envelope.dataset.message ||
+      messageText.textContent =
+        envelope.dataset.message ||
         "Este pequeño mensaje está guardado para ti. 💜";
 
       messagePanel.hidden = false;
@@ -319,11 +312,12 @@ function updatePlanetProgress() {
     replayButton.addEventListener("click", () => {
       stopPlanetAnimation();
 
-      // Reinicia el progreso para volver a vivir la sorpresa.
       discoveredPlanets.clear();
       updatePlanetProgress();
 
-      if (planetPanel) planetPanel.hidden = true;
+      if (planetPanel) {
+        planetPanel.hidden = true;
+      }
 
       window.birthdayApp?.showScreen("welcome");
 

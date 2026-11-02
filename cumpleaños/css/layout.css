@@ -1725,3 +1725,73 @@ body {
   box-shadow: none !important;
 }
 
+
+/* =========================================
+   MEJORA VISUAL DEL UNIVERSO 3D
+   Planetas más grandes y mejor distribución
+========================================= */
+
+/* Sistema planetario más amplio */
+#universe .solar-system {
+  width: min(96vw, 820px);
+  margin: 20px auto 12px;
+}
+
+/* Botones invisibles, pero con mayor superficie.
+   El motor 3D utiliza sus dimensiones para calcular
+   el tamaño de cada planeta. */
+#universe .universe-planet {
+  width: clamp(46px, 6vw, 62px);
+  aspect-ratio: 1;
+  padding: 0;
+}
+
+/* Mantener el canvas alineado con el sistema */
+#universe #universe-3d {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* Más espacio para el conjunto del universo */
+#universe .universe-content {
+  max-width: 1100px;
+  gap: 18px;
+}
+
+/* Adaptación para móviles */
+@media (max-width: 600px) {
+  #universe .universe-content {
+    gap: 13px;
+    padding: 24px 10px 32px;
+  }
+
+  #universe .solar-system {
+    width: min(96vw, 460px);
+    margin: 12px auto 8px;
+  }
+
+  #universe .universe-planet {
+    width: clamp(36px, 8.5vw, 46px);
+  }
+}
+
+/* Pantallas pequeñas */
+@media (max-width: 360px) {
+  #universe .solar-system {
+    width: 94vw;
+  }
+
+  #universe .universe-planet {
+    width: 36px;
+  }
+}
+
+/* Evitar transiciones innecesarias */
+@media (prefers-reduced-motion: reduce) {
+  #universe .universe-planet {
+    transition: none !important;
+  }
+}

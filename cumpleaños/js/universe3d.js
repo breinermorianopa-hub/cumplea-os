@@ -11,10 +11,17 @@
       return;
     }
 
-    if (canvas.dataset.initialized === "true") return;
-    canvas.dataset.initialized = "true";
+    if (
+      canvas.dataset.initialized === "true" ||
+      canvas.dataset.initialized === "initializing"
+    ) {
+      return;
+    }
+
+    canvas.dataset.initialized = "initializing";
 
     const THREE = window.THREE;
+    const textureLoader = new THREE.TextureLoader();
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
@@ -27,32 +34,96 @@
       powerPreference: "high-performance"
     });
 
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.setPixelRatio(
+      Math.min(window.devicePixelRatio || 1, 1.5)
+    );
+
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
 
     // ==========================================
-    // ILUMINACIÓN
+    // CARGA DE TEXTURAS
     // ==========================================
 
-    const ambientLight = new THREE.AmbientLight(0x9b8bc9, 1.2);
+    function loadPlanetTexture(path, fallbackTexture) {
+      textureLoader.load(
+        path,
+        (loadedTexture) => {
+          fallbackTexture.image = loadedTexture.image;
+          fallbackTexture.colorSpace = THREE.SRGBColorSpace;
+          fallbackTexture.anisotropy =
+            renderer.capabilities.getMaxAnisotropy();
+          fallbackTexture.needsUpdate = true;
+
+          loadedTexture.dispose();
+
+          console.info(`Textura cargada: ${path}`);
+        },
+        undefined,
+        (error) => {
+          console.warn(
+            `No se pudo cargar ${path}. Se conservará la textura anterior.`,
+            error
+          );
+        }
+      );
+
+      return fallbackTexture;
+    }
+
+    // ==========================================
+    // ILUMINACIÓN AMBIENTAL DEL UNIVERSO
+    // ==========================================
+
+    const ambientLight = new THREE.AmbientLight(
+      0x9b83d8,
+      1.0
+    );
     scene.add(ambientLight);
 
-    const sunLight = new THREE.PointLight(0xffb56b, 160, 45, 1.5);
+    // Luz principal dorada del Sol.
+    const sunLight = new THREE.PointLight(
+      0xffc078,
+      190,
+      50,
+      1.4
+    );
     sunLight.position.set(0, 0, 2);
     scene.add(sunLight);
 
-    const fillLight = new THREE.PointLight(0x7565ff, 35, 35);
+    // Luz secundaria violeta.
+    const fillLight = new THREE.PointLight(
+      0x8065ff,
+      45,
+      40,
+      1.5
+    );
     fillLight.position.set(-5, 3, 4);
     scene.add(fillLight);
 
-    const pinkLight = new THREE.PointLight(0xff8fcf, 18, 30);
+    // Luz rosada.
+    const pinkLight = new THREE.PointLight(
+      0xff91d5,
+      28,
+      35,
+      1.5
+    );
     pinkLight.position.set(6, -5, -3);
     scene.add(pinkLight);
 
+    // Luz azul lavanda.
+    const lavenderLight = new THREE.PointLight(
+      0xb6a0ff,
+      18,
+      32,
+      1.5
+    );
+    lavenderLight.position.set(0, 6, -5);
+    scene.add(lavenderLight);
+
     // ==========================================
-    // TEXTURA DEL SOL
+    // TEXTURA PROCEDURAL DEL SOL (RESPALDO)
     // ==========================================
 
     function createSunTexture() {
@@ -65,6 +136,7 @@
       const h = textureCanvas.height;
 
       const gradient = ctx.createLinearGradient(0, 0, 0, h);
+
       gradient.addColorStop(0, "#ffdc83");
       gradient.addColorStop(0.35, "#ff9b32");
       gradient.addColorStop(0.7, "#f45b20");
@@ -81,9 +153,13 @@
 
         ctx.beginPath();
         ctx.ellipse(
-          x, y, radiusX, radiusY,
+          x,
+          y,
+          radiusX,
+          radiusY,
           Math.random() * Math.PI,
-          0, Math.PI * 2
+          0,
+          Math.PI * 2
         );
 
         ctx.fillStyle = Math.random() > 0.5
@@ -156,12 +232,160 @@
     }
 
     // ==========================================
+    // NEBULOSAS MÁGICAS
+    // ==========================================
+
+    function createNebulaTexture() {
+      const textureCanvas = document.createElement("canvas");
+      textureCanvas.width = 512;
+      textureCanvas.height = 512;
+
+      const ctx = textureCanvas.getContext("2d");
+
+      const gradient = ctx.createRadialGradient(
+        256, 256, 10,
+        256, 256, 250
+      );
+
+      gradient.addColorStop(0, "rgba(190, 115, 255, 0.48)");
+      gradient.addColorStop(0.35, "rgba(126, 75, 220, 0.30)");
+      gradient.addColorStop(0.68, "rgba(244, 125, 205, 0.14)");
+      gradient.addColorStop(1, "rgba(100, 60, 180, 0)");
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, 512, 512);
+
+      // Pequeñas nubes luminosas.
+      for (let i = 0; i < 90; i++) {
+        const x = Math.random() * 512;
+        const y = Math.random() * 512;
+        const radius = 8 + Math.random() * 45;
+
+        const cloud = ctx.createRadialGradient(
+          x, y, 1,
+          x, y, radius
+        );
+
+        cloud.addColorStop(
+          0,
+          i % 2 === 0
+            ? "rgba(255, 190, 245, 0.16)"
+            : "rgba(160, 130, 255, 0.17)"
+        );
+
+        cloud.addColorStop(1, "rgba(130, 90, 220, 0)");
+
+        ctx.fillStyle = cloud;
+        ctx.fillRect(
+          x - radius,
+          y - radius,
+          radius * 2,
+          radius * 2
+        );
+      }
+
+      const texture = new THREE.CanvasTexture(textureCanvas);
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.needsUpdate = true;
+
+      return texture;
+    }
+
+    // ==========================================
+    // CREAR CAPAS DE NEBULOSAS
+    // ==========================================
+
+    const nebulaTexture = createNebulaTexture();
+
+    const nebulaPositions = [
+      { x: -5.5, y: 3.5, scale: 8 },
+      { x: 5.5, y: -3.5, scale: 9 },
+      { x: 4.5, y: 4.5, scale: 7 },
+      { x: -4.5, y: -4.5, scale: 8 }
+    ];
+
+    const nebulas = [];
+
+    nebulaPositions.forEach((position, index) => {
+      const material = new THREE.SpriteMaterial({
+        map: nebulaTexture,
+        color: index % 2 === 0 ? 0xc59aff : 0xffa6df,
+        transparent: true,
+        opacity: 0.12,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+
+      const sprite = new THREE.Sprite(material);
+
+      sprite.position.set(
+        position.x,
+        position.y,
+        -7 - index * 0.2
+      );
+
+      sprite.scale.set(
+        position.scale,
+        position.scale,
+        1
+      );
+
+      scene.add(sprite);
+      nebulas.push(sprite);
+    });
+
+    // ==========================================
+    // CAMPO DE ESTRELLAS
+    // ==========================================
+
+    const starCount = 900;
+    const starPositions = new Float32Array(starCount * 3);
+
+    for (let i = 0; i < starCount; i++) {
+      starPositions[i * 3] =
+        (Math.random() - 0.5) * 28;
+
+      starPositions[i * 3 + 1] =
+        (Math.random() - 0.5) * 20;
+
+      starPositions[i * 3 + 2] =
+        -2 - Math.random() * 12;
+    }
+
+    const starGeometry = new THREE.BufferGeometry();
+
+    starGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(starPositions, 3)
+    );
+
+    const starMaterial = new THREE.PointsMaterial({
+      color: 0xf3ddff,
+      size: 0.055,
+      transparent: true,
+      opacity: 0.85,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false,
+      sizeAttenuation: true
+    });
+
+    const starField = new THREE.Points(
+      starGeometry,
+      starMaterial
+    );
+
+    scene.add(starField);
+
+    // ==========================================
     // CREACIÓN DEL SOL
     // ==========================================
 
-    const sunTexture = createSunTexture();
+    const sunTexture = loadPlanetTexture(
+      "assets/textures/sun.jpg",
+      createSunTexture()
+    );
 
-    const sunGeometry = new THREE.SphereGeometry(0.72, 96, 96);
+    const sunGeometry = new THREE.SphereGeometry(0.72, 64, 64);
 
     const sunMaterial = new THREE.MeshBasicMaterial({
       map: sunTexture,
@@ -188,6 +412,26 @@
     scene.add(sunGlow);
 
     // ==========================================
+    // HALO MÁGICO DEL SOL
+    // ==========================================
+
+    const sunHaloMaterial = new THREE.SpriteMaterial({
+      map: glowTexture,
+      color: 0xb99aff,
+      transparent: true,
+      opacity: 0.28,
+      blending: THREE.AdditiveBlending,
+      depthWrite: false
+    });
+
+    const sunHalo = new THREE.Sprite(sunHaloMaterial);
+
+    sunHalo.scale.set(6.2, 6.2, 1);
+    sunHalo.position.set(0, 0, -0.15);
+
+    scene.add(sunHalo);
+
+    // ==========================================
     // COLORES DE LOS PLANETAS
     // ==========================================
 
@@ -205,7 +449,7 @@
     ];
 
     // ==========================================
-    // TEXTURAS PROCEDURALES DE LOS PLANETAS
+    // TEXTURAS PROCEDURALES DE RESPALDO
     // ==========================================
 
     function createPlanetTexture(index) {
@@ -286,7 +530,7 @@
 
         ctx.globalAlpha = 1;
 
-        // Nubes.
+        // Nubes procedurales de respaldo.
         for (let i = 0; i < 150; i++) {
           ctx.beginPath();
           ctx.ellipse(
@@ -382,7 +626,8 @@
 
       const texture = new THREE.CanvasTexture(textureCanvas);
       texture.colorSpace = THREE.SRGBColorSpace;
-      texture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      texture.anisotropy =
+        renderer.capabilities.getMaxAnisotropy();
       texture.needsUpdate = true;
 
       return texture;
@@ -396,6 +641,29 @@
 
     const planetButtons = [
       ...system.querySelectorAll(".universe-planet")
+    ];
+
+    if (planetButtons.length !== 10) {
+      console.warn(
+        `Universo 3D: se esperaban 10 planetas y se encontraron ${planetButtons.length}.`
+      );
+
+      renderer.dispose();
+      canvas.dataset.initialized = "false";
+      return;
+    }
+
+    const planetTexturePaths = [
+      "assets/textures/mercury.jpg",
+      "assets/textures/venu.jpg",
+      "assets/textures/Tierra.jpg",
+      "assets/textures/mars.jpg",
+      "assets/textures/jupiter.jpg",
+      "assets/textures/saturn.jpg",
+      "assets/textures/uranus.jpg",
+      "assets/textures/neptune.jpg",
+      null,
+      null
     ];
 
     const rotationSpeeds = [
@@ -417,8 +685,16 @@
     ];
 
     planetButtons.forEach((button, index) => {
-      const geometry = new THREE.SphereGeometry(1, 96, 96);
-      const texture = createPlanetTexture(index);
+      const geometry = new THREE.SphereGeometry(1, 64, 64);
+
+      const fallbackTexture = createPlanetTexture(index);
+
+      const texture = planetTexturePaths[index]
+        ? loadPlanetTexture(
+            planetTexturePaths[index],
+            fallbackTexture
+          )
+        : fallbackTexture;
 
       const material = new THREE.MeshStandardMaterial({
         map: texture,
@@ -429,6 +705,52 @@
 
       const mesh = new THREE.Mesh(geometry, material);
 
+      // ==========================================
+      // CAPA INDEPENDIENTE DE NUBES DE LA TIERRA
+      // ==========================================
+
+      let cloudMesh = null;
+      let cloudTexture = null;
+
+      if (index === 2) {
+        cloudTexture = textureLoader.load(
+          "assets/textures/nubes.jpg",
+          (loadedTexture) => {
+            loadedTexture.colorSpace = THREE.SRGBColorSpace;
+            loadedTexture.anisotropy =
+              renderer.capabilities.getMaxAnisotropy();
+          },
+          undefined,
+          (error) => {
+            console.warn("No se pudo cargar nubes.jpg", error);
+          }
+        );
+
+        cloudTexture.colorSpace = THREE.SRGBColorSpace;
+
+        const cloudGeometry = new THREE.SphereGeometry(
+          1.018,
+          64,
+          64
+        );
+
+        const cloudMaterial = new THREE.MeshStandardMaterial({
+          map: cloudTexture,
+          transparent: true,
+          opacity: 0.35,
+          depthWrite: false,
+          roughness: 1,
+          metalness: 0
+        });
+
+        cloudMesh = new THREE.Mesh(
+          cloudGeometry,
+          cloudMaterial
+        );
+
+        mesh.add(cloudMesh);
+      }
+
       mesh.rotation.set(
         Math.random() * 0.5,
         Math.random() * Math.PI,
@@ -437,28 +759,54 @@
 
       scene.add(mesh);
 
-      // Anillos de Saturno.
+      // ==========================================
+      // ANILLOS DE SATURNO
+      // ==========================================
+
       let ring = null;
+      let ringTexture = null;
 
       if (index === 5) {
+        ringTexture = textureLoader.load(
+          "assets/textures/ring_alpha.png",
+          (loadedTexture) => {
+            loadedTexture.colorSpace = THREE.SRGBColorSpace;
+            loadedTexture.anisotropy =
+              renderer.capabilities.getMaxAnisotropy();
+          },
+          undefined,
+          (error) => {
+            console.warn("No se pudo cargar ring_alpha.png", error);
+          }
+        );
+
+        ringTexture.colorSpace = THREE.SRGBColorSpace;
+
         const ringGeometry = new THREE.RingGeometry(
           1.25,
-          1.85,
-          128
+          1.95,
+          160
         );
 
         const ringMaterial = new THREE.MeshStandardMaterial({
-          color: 0xe2d0ad,
+          map: ringTexture,
           side: THREE.DoubleSide,
           transparent: true,
-          opacity: 0.88,
-          roughness: 0.92
+          alphaTest: 0.08,
+          opacity: 0.95,
+          roughness: 0.9,
+          metalness: 0,
+          depthWrite: false
         });
 
         ring = new THREE.Mesh(ringGeometry, ringMaterial);
         ring.rotation.x = Math.PI * 0.34;
         mesh.add(ring);
       }
+
+      // ==========================================
+      // GUARDAR PLANETAS
+      // ==========================================
 
       planets.push({
         mesh,
@@ -467,7 +815,10 @@
         rotationSpeed: rotationSpeeds[index] || 0.0015,
         inclination: inclinations[index] || 0,
         texture,
-        ring
+        ring,
+        ringTexture,
+        cloudMesh,
+        cloudTexture
       });
     });
 
@@ -490,13 +841,14 @@
     resize();
 
     const clock = new THREE.Clock();
+    let animationFrameId;
 
     // ==========================================
     // ANIMACIÓN PRINCIPAL
     // ==========================================
 
     function animate() {
-      requestAnimationFrame(animate);
+      animationFrameId = requestAnimationFrame(animate);
 
       const delta = Math.min(clock.getDelta(), 0.05);
       const elapsed = clock.elapsedTime;
@@ -513,6 +865,10 @@
 
       const worldPerPixel = visibleHeight / height;
 
+      // ==========================================
+      // MOVIMIENTO DE LOS PLANETAS
+      // ==========================================
+
       planets.forEach((planet) => {
         const button = planet.button;
 
@@ -528,7 +884,6 @@
           button.style.getPropertyValue("--orbit-z")
         ) || 0;
 
-        // Posición tridimensional.
         planet.mesh.position.set(
           orbitX * worldPerPixel,
           -orbitY * worldPerPixel,
@@ -540,6 +895,12 @@
           planet.rotationSpeed * delta * 60;
 
         planet.mesh.rotation.x = planet.inclination;
+
+        // Rotación independiente de las nubes terrestres.
+        if (planet.cloudMesh) {
+          planet.cloudMesh.rotation.y +=
+            0.00035 * delta * 60;
+        }
 
         // Tamaño proporcional al botón.
         const buttonSize = button.getBoundingClientRect().width;
@@ -554,12 +915,48 @@
         planet.mesh.visible = button.isConnected;
       });
 
-      // Rotación del sol.
+      // ==========================================
+      // ROTACIÓN DEL SOL
+      // ==========================================
+
       sun.rotation.y += 0.0018 * delta * 60;
       sun.rotation.x = Math.sin(elapsed * 0.2) * 0.025;
 
-      // Pulsación del resplandor.
-      const pulse = 1 + Math.sin(elapsed * 1.8) * 0.055;
+      // ==========================================
+      // ANIMACIÓN AMBIENTAL DEL UNIVERSO
+      // ==========================================
+
+      // Movimiento sutil de las nebulosas.
+      nebulas.forEach((nebula, index) => {
+        nebula.rotation.z =
+          Math.sin(elapsed * 0.08 + index) * 0.08;
+
+        nebula.material.opacity =
+          0.12 + Math.sin(elapsed * 0.4 + index) * 0.025;
+      });
+
+      // Brillo respirante de las estrellas.
+      starMaterial.opacity =
+        0.75 + Math.sin(elapsed * 0.8) * 0.1;
+
+      starField.rotation.z = elapsed * 0.001;
+
+      // Pulsación lenta del halo mágico.
+      const haloPulse =
+        1 + Math.sin(elapsed * 0.8) * 0.035;
+
+      sunHalo.scale.set(
+        6.2 * haloPulse,
+        6.2 * haloPulse,
+        1
+      );
+
+      sunHaloMaterial.opacity =
+        0.24 + Math.sin(elapsed * 0.9) * 0.05;
+
+      // Pulsación del resplandor solar.
+      const pulse =
+        1 + Math.sin(elapsed * 1.8) * 0.055;
 
       sunGlow.scale.set(
         4.2 * pulse,
@@ -567,13 +964,14 @@
         1
       );
 
-      // Variación suave de la luz.
+      // Variación suave de la luz solar.
       sunLight.intensity =
-        160 + Math.sin(elapsed * 2) * 12;
+        190 + Math.sin(elapsed * 2) * 12;
 
       renderer.render(scene, camera);
     }
 
+    canvas.dataset.initialized = "true";
     animate();
 
     // ==========================================
@@ -581,25 +979,68 @@
     // ==========================================
 
     canvas.universe3dCleanup = () => {
+      cancelAnimationFrame(animationFrameId);
       resizeObserver.disconnect();
-      renderer.dispose();
 
-      planets.forEach(({ mesh, texture, ring }) => {
+      // Liberar recursos de los planetas.
+      planets.forEach(({
+        mesh,
+        texture,
+        ring,
+        ringTexture,
+        cloudMesh,
+        cloudTexture
+      }) => {
         mesh.geometry.dispose();
         mesh.material.dispose();
         texture.dispose();
 
+        // Liberar recursos de las nubes.
+        if (cloudMesh) {
+          cloudMesh.geometry.dispose();
+          cloudMesh.material.dispose();
+        }
+
+        if (cloudTexture) {
+          cloudTexture.dispose();
+        }
+
+        // Liberar recursos de los anillos.
         if (ring) {
           ring.geometry.dispose();
           ring.material.dispose();
         }
+
+        if (ringTexture) {
+          ringTexture.dispose();
+        }
       });
 
+      // Liberar recursos del Sol.
       sunGeometry.dispose();
       sunMaterial.dispose();
       sunTexture.dispose();
+
       glowTexture.dispose();
       glowMaterial.dispose();
+      sunHaloMaterial.dispose();
+
+      // Liberar recursos de las nebulosas.
+      nebulas.forEach((nebula) => {
+        nebula.material.dispose();
+      });
+
+      nebulaTexture.dispose();
+
+      // Liberar recursos del campo de estrellas.
+      starGeometry.dispose();
+      starMaterial.dispose();
+
+      // Liberar el renderizador.
+      renderer.dispose();
+
+      canvas.dataset.initialized = "false";
+      delete canvas.universe3dCleanup;
     };
 
     console.info("Universo 3D inicializado correctamente.");
