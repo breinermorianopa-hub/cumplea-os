@@ -1136,6 +1136,7 @@ body {
     radial-gradient(ellipse at 48% 85%, rgb(146 58 177 / 11%), transparent 42%);
 
   filter: blur(18px);
+    animation: nebulaBreath 18s ease-in-out infinite alternate;
 }
 
 /* Contenido por encima del fondo */
@@ -1793,5 +1794,123 @@ body {
 @media (prefers-reduced-motion: reduce) {
   #universe .universe-planet {
     transition: none !important;
+  }
+}
+
+
+/* =========================================
+   FONDO PRINCIPAL DEL UNIVERSO
+   Textura de nebulosa azul y púrpura
+========================================= */
+
+#universe {
+  width: 100%;
+  max-width: none;
+
+  background-color: #050511;
+
+  background-image:
+    linear-gradient(
+      180deg,
+      rgb(4 5 18 / 12%) 0%,
+      rgb(8 5 25 / 8%) 48%,
+      rgb(4 3 15 / 20%) 100%
+    ),
+    url("../assets/textures/galaxia.png");
+
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: scroll;
+
+}
+/* Estrellas sutiles sobre la textura */
+/* Estrellas animadas sobre la galaxia */
+#universe::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(2px 2px at 15% 20%, #ffffff 70%, transparent 100%),
+    radial-gradient(2px 2px at 75% 35%, #e5caff 70%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 45% 70%, #ffffff 70%, transparent 100%),
+    radial-gradient(2px 2px at 85% 80%, #f6c9ff 70%, transparent 100%),
+    radial-gradient(1px 1px at 30% 90%, #ffffff 70%, transparent 100%);
+
+  background-size: 350px 350px;
+  opacity: 0.45;
+  mix-blend-mode: screen;
+  animation: starsTwinkle 5s ease-in-out infinite alternate;
+}
+/* Luz ambiental azul y violeta */
+/* Nebulosas con movimiento y luz */
+#universe::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 20% 35%,
+      rgb(145 75 255 / 22%),
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 78% 48%,
+      rgb(65 125 255 / 20%),
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 50% 85%,
+      rgb(220 100 230 / 17%),
+      transparent 45%
+    );
+
+  opacity: 0.75;
+  filter: blur(25px);
+  animation: nebulaBreath 18s ease-in-out infinite alternate;
+}
+
+/* Adaptación para móviles */
+@media (max-width: 600px) {
+  #universe {
+    background-position: center center;
+    background-size: cover;
+    
+  }
+}
+
+@keyframes nebulaBreath {
+  0% {
+    opacity: 0.65;
+    filter: blur(18px) brightness(0.9);
+  }
+
+  50% {
+    opacity: 0.95;
+    filter: blur(23px) brightness(1.3);
+  }
+
+  100% {
+    opacity: 0.7;
+    filter: blur(20px) brightness(1.05);
+  }
+}
+@keyframes starsTwinkle {
+  0% {
+    opacity: 0.25;
+  }
+
+  50% {
+    opacity: 0.65;
+  }
+
+  100% {
+    opacity: 0.35;
   }
 }

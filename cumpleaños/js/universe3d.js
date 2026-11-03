@@ -662,6 +662,7 @@
       "assets/textures/saturn.jpg",
       "assets/textures/uranus.jpg",
       "assets/textures/neptune.jpg",
+      "assets/textures/pluton.jpg",
       null,
       null
     ];
@@ -925,6 +926,12 @@
       // ==========================================
       // ANIMACIÓN AMBIENTAL DEL UNIVERSO
       // ==========================================
+// ==========================================
+// MOVIMIENTO DE LA GALAXIA ESPIRAL
+// ==========================================
+
+
+
 
       // Movimiento sutil de las nebulosas.
       nebulas.forEach((nebula, index) => {
