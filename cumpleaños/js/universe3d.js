@@ -24,6 +24,13 @@
     const textureLoader = new THREE.TextureLoader();
     const scene = new THREE.Scene();
 
+    // ==========================================
+    // GRUPO PRINCIPAL DEL UNIVERSO
+    // ==========================================
+
+    const universeGroup = new THREE.Group();
+    scene.add(universeGroup);
+
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
     camera.position.set(0, 0, 16);
 
@@ -76,10 +83,7 @@
     // ILUMINACIÓN AMBIENTAL DEL UNIVERSO
     // ==========================================
 
-    const ambientLight = new THREE.AmbientLight(
-      0x9b83d8,
-      1.0
-    );
+    const ambientLight = new THREE.AmbientLight(0x9b83d8, 1.0);
     scene.add(ambientLight);
 
     // Luz principal dorada del Sol.
@@ -89,8 +93,9 @@
       50,
       1.4
     );
+
     sunLight.position.set(0, 0, 2);
-    scene.add(sunLight);
+    universeGroup.add(sunLight);
 
     // Luz secundaria violeta.
     const fillLight = new THREE.PointLight(
@@ -99,6 +104,7 @@
       40,
       1.5
     );
+
     fillLight.position.set(-5, 3, 4);
     scene.add(fillLight);
 
@@ -109,6 +115,7 @@
       35,
       1.5
     );
+
     pinkLight.position.set(6, -5, -3);
     scene.add(pinkLight);
 
@@ -119,6 +126,7 @@
       32,
       1.5
     );
+
     lavenderLight.position.set(0, 6, -5);
     scene.add(lavenderLight);
 
@@ -152,6 +160,7 @@
         const radiusY = 4 + Math.random() * 22;
 
         ctx.beginPath();
+
         ctx.ellipse(
           x,
           y,
@@ -311,7 +320,7 @@
         map: nebulaTexture,
         color: index % 2 === 0 ? 0xc59aff : 0xffa6df,
         transparent: true,
-        opacity: 0.12,
+        opacity: 0.055,
         blending: THREE.AdditiveBlending,
         depthWrite: false
       });
@@ -330,8 +339,12 @@
         1
       );
 
-      scene.add(sprite);
-      nebulas.push(sprite);
+// Nebulosa desactivada temporalmente para comprobar
+// si está generando el cuadro borroso.
+sprite.visible = false;
+
+scene.add(sprite);
+nebulas.push(sprite);
     });
 
     // ==========================================
@@ -394,7 +407,7 @@
 
     const sun = new THREE.Mesh(sunGeometry, sunMaterial);
     sun.position.set(0, 0, 0);
-    scene.add(sun);
+    universeGroup.add(sun);
 
     const glowTexture = createGlowTexture();
 
@@ -409,8 +422,9 @@
     const sunGlow = new THREE.Sprite(glowMaterial);
     sunGlow.scale.set(4.2, 4.2, 1);
     sunGlow.position.set(0, 0, -0.1);
-    scene.add(sunGlow);
-
+    
+    universeGroup.add(sunGlow);
+sunGlow.visible = false;
     // ==========================================
     // HALO MÁGICO DEL SOL
     // ==========================================
@@ -425,11 +439,6 @@
     });
 
     const sunHalo = new THREE.Sprite(sunHaloMaterial);
-
-    sunHalo.scale.set(6.2, 6.2, 1);
-    sunHalo.position.set(0, 0, -0.15);
-
-    scene.add(sunHalo);
 
     // ==========================================
     // COLORES DE LOS PLANETAS
@@ -514,6 +523,7 @@
           const ry = 8 + random() * 28;
 
           ctx.beginPath();
+
           ctx.ellipse(
             x, y, rx, ry,
             random() * Math.PI,
@@ -533,6 +543,7 @@
         // Nubes procedurales de respaldo.
         for (let i = 0; i < 150; i++) {
           ctx.beginPath();
+
           ctx.ellipse(
             random() * w,
             random() * h,
@@ -561,11 +572,13 @@
 
           ctx.beginPath();
           ctx.arc(x, y, radius, 0, Math.PI * 2);
+
           ctx.fillStyle = "#17151b";
           ctx.globalAlpha = 0.08 + random() * 0.22;
           ctx.fill();
 
           ctx.beginPath();
+
           ctx.arc(
             x - radius * 0.2,
             y - radius * 0.2,
@@ -590,6 +603,7 @@
           const y = random() * h;
 
           ctx.beginPath();
+
           ctx.ellipse(
             x, y,
             20 + random() * 35,
@@ -609,6 +623,7 @@
       if (index === 9) {
         for (let i = 0; i < 100; i++) {
           ctx.beginPath();
+
           ctx.arc(
             random() * w,
             random() * h,
@@ -663,7 +678,6 @@
       "assets/textures/uranus.jpg",
       "assets/textures/neptune.jpg",
       "assets/textures/pluton.jpg",
-      null,
       null
     ];
 
@@ -758,7 +772,7 @@
         Math.random() * 0.3
       );
 
-      scene.add(mesh);
+      universeGroup.add(mesh);
 
       // ==========================================
       // ANILLOS DE SATURNO
@@ -845,6 +859,66 @@
     let animationFrameId;
 
     // ==========================================
+    // CONTROLES DE ROTACIÓN DEL UNIVERSO
+    // ==========================================
+
+    let isDragging = false;
+
+    let previousPointerX = 0;
+    let previousPointerY = 0;
+
+    let targetRotationX = 0;
+    let targetRotationY = 0;
+
+    // Iniciar el arrastre.
+    system.addEventListener("pointerdown", (event) => {
+      // No interferir con los botones de los planetas.
+      if (event.target.closest(".universe-planet")) return;
+
+      if (event.pointerType === "mouse" && event.button !== 0) return;
+
+      isDragging = true;
+
+      previousPointerX = event.clientX;
+      previousPointerY = event.clientY;
+
+      system.setPointerCapture(event.pointerId);
+    });
+
+    // Girar el universo mientras arrastramos.
+    system.addEventListener("pointermove", (event) => {
+      if (!isDragging) return;
+
+      const deltaX = event.clientX - previousPointerX;
+      const deltaY = event.clientY - previousPointerY;
+
+      targetRotationY += deltaX * 0.006;
+      targetRotationX += deltaY * 0.006;
+
+      // Limitar la inclinación vertical.
+      targetRotationX = THREE.MathUtils.clamp(
+        targetRotationX,
+        -0.8,
+        0.8
+      );
+
+      previousPointerX = event.clientX;
+      previousPointerY = event.clientY;
+    });
+
+    // Finalizar el arrastre.
+    function stopUniverseDrag(event) {
+      isDragging = false;
+
+      if (system.hasPointerCapture(event.pointerId)) {
+        system.releasePointerCapture(event.pointerId);
+      }
+    }
+
+    system.addEventListener("pointerup", stopUniverseDrag);
+    system.addEventListener("pointercancel", stopUniverseDrag);
+
+    // ==========================================
     // ANIMACIÓN PRINCIPAL
     // ==========================================
 
@@ -853,6 +927,13 @@
 
       const delta = Math.min(clock.getDelta(), 0.05);
       const elapsed = clock.elapsedTime;
+
+      // Aplicar suavemente la rotación del universo.
+      universeGroup.rotation.x +=
+        (targetRotationX - universeGroup.rotation.x) * 0.08;
+
+      universeGroup.rotation.y +=
+        (targetRotationY - universeGroup.rotation.y) * 0.08;
 
       const width = system.clientWidth;
       const height = system.clientHeight;
@@ -891,7 +972,10 @@
           orbitZ * worldPerPixel
         );
 
-        // Rotación individual.
+        // ==========================================
+        // ROTACIÓN INDIVIDUAL DEL PLANETA
+        // ==========================================
+
         planet.mesh.rotation.y +=
           planet.rotationSpeed * delta * 60;
 
@@ -903,7 +987,10 @@
             0.00035 * delta * 60;
         }
 
-        // Tamaño proporcional al botón.
+        // ==========================================
+        // TAMAÑO PROPORCIONAL DEL PLANETA
+        // ==========================================
+
         const buttonSize = button.getBoundingClientRect().width;
 
         const radius = Math.max(
@@ -913,8 +1000,31 @@
 
         planet.mesh.scale.setScalar(radius);
 
+        // ==========================================
+        // SINCRONIZAR EL BOTÓN CON EL PLANETA 3D
+        // ==========================================
+
+        const screenPosition = new THREE.Vector3();
+
+        planet.mesh.getWorldPosition(screenPosition);
+        screenPosition.project(camera);
+
+        // Convertir la posición 3D a coordenadas de pantalla.
+        const screenX =
+          (screenPosition.x * 0.5 + 0.5) * width;
+
+        const screenY =
+          (-screenPosition.y * 0.5 + 0.5) * height;
+
+        // Posicionar el botón HTML exactamente sobre el planeta.
+        button.style.left = `${screenX}px`;
+        button.style.top = `${screenY}px`;
+
+        // Mantener el botón centrado sobre su planeta.
+        button.style.transform = "translate(-50%, -50%)";
+
         planet.mesh.visible = button.isConnected;
-      });
+      }); // CORRECCIÓN: aquí se cierra planets.forEach().
 
       // ==========================================
       // ROTACIÓN DEL SOL
@@ -926,12 +1036,6 @@
       // ==========================================
       // ANIMACIÓN AMBIENTAL DEL UNIVERSO
       // ==========================================
-// ==========================================
-// MOVIMIENTO DE LA GALAXIA ESPIRAL
-// ==========================================
-
-
-
 
       // Movimiento sutil de las nebulosas.
       nebulas.forEach((nebula, index) => {
@@ -939,7 +1043,7 @@
           Math.sin(elapsed * 0.08 + index) * 0.08;
 
         nebula.material.opacity =
-          0.12 + Math.sin(elapsed * 0.4 + index) * 0.025;
+          0.055 + Math.sin(elapsed * 0.4 + index) * 0.012;
       });
 
       // Brillo respirante de las estrellas.
