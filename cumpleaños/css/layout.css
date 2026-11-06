@@ -1791,7 +1791,6 @@ outline: none;
 }
 
 
-
 /* =========================================
    FONDO PRINCIPAL DEL UNIVERSO
 ========================================= */
@@ -1829,30 +1828,18 @@ outline: none;
   z-index: 0;
   pointer-events: none;
 
- 
-background:
-  radial-gradient(
-    ellipse at 50% 48%,
-    rgb(170 105 255 / 30%) 0%,
-    rgb(145 85 235 / 22%) 22%,
-    rgb(110 65 195 / 12%) 45%,
-    transparent 72%
-  ),
-  radial-gradient(
-    ellipse at 22% 38%,
-    rgb(125 75 220 / 14%),
-    transparent 55%
-  ),
-  radial-gradient(
-    ellipse at 80% 60%,
-    rgb(100 75 220 / 11%),
-    transparent 55%
-  );
-
-  animation: nebulaBreath 18s ease-in-out infinite alternate;
+  background: radial-gradient(
+  ellipse 130% 110% at 50% 48%,
+  rgb(170 105 255 / 28%) 0%,
+  rgb(145 85 235 / 20%) 45%,
+  rgb(110 65 195 / 10%) 85%,
+  transparent 120%
+);
 }
 
-/* Adaptación para móviles */
+/* =========================================
+   ADAPTACIÓN PARA MÓVILES
+========================================= */
 
 @media (max-width: 600px) {
   #universe {
@@ -1862,24 +1849,9 @@ background:
   }
 }
 
-/* Movimiento de la nebulosa */
-
-@keyframes nebulaBreath {
-  0% {
-    opacity: 0.75;
-    filter: blur(18px) brightness(1);
-  }
-
- 50% {
-  opacity: 0.9;
-  filter: blur(23px) brightness(1.05);
-}
-
-  100% {
-    opacity: 0.8;
-    filter: blur(20px) brightness(1.05);
-  }
-}
+/* =========================================
+   PARPADEO DE ESTRELLAS
+========================================= */
 
 @keyframes starsTwinkle {
   0% {
@@ -1895,6 +1867,10 @@ background:
   }
 }
 
+/* =========================================
+   MOVIMIENTO DE LA GALAXIA
+========================================= */
+
 @keyframes galaxyDrift {
   0% {
     transform: translate3d(-1.5%, 0, 0) scale(1);
@@ -1908,3 +1884,4 @@ background:
     transform: translate3d(-1.5%, 0, 0) scale(1);
   }
 }
+

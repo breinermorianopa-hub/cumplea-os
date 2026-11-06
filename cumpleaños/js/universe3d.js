@@ -306,24 +306,30 @@
 
     const nebulaTexture = createNebulaTexture();
 
-    const nebulaPositions = [
-      { x: -5.5, y: 3.5, scale: 8 },
-      { x: 5.5, y: -3.5, scale: 9 },
-      { x: 4.5, y: 4.5, scale: 7 },
-      { x: -4.5, y: -4.5, scale: 8 }
-    ];
+   const nebulaPositions = [
+  // Nebulosas laterales: conservamos el resultado actual
+  { x: -4.5, y: 3.0, scale: 4.5 },
+  { x: 4.5, y: -3.0, scale: 4.5 },
+  { x: 3.5, y: 3.8, scale: 4.0 },
+  { x: -3.5, y: -3.8, scale: 4.0 },
 
+  // Refuerzo más intenso en la zona central
+{ x: -1.2, y: 0.8, scale: 4.2 },
+{ x: 1.2, y: -0.8, scale: 4.2 }
+
+   ]
     const nebulas = [];
 
     nebulaPositions.forEach((position, index) => {
-      const material = new THREE.SpriteMaterial({
-        map: nebulaTexture,
-        color: index % 2 === 0 ? 0xc59aff : 0xffa6df,
-        transparent: true,
-        opacity: 0.055,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      });
+     const material = new THREE.SpriteMaterial({
+  map: nebulaTexture,
+  color: index % 2 === 0 ? 0xc59aff : 0xffa6df,
+  transparent: true,
+  opacity: 0.018,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+  depthTest: false
+});
 
       const sprite = new THREE.Sprite(material);
 
@@ -341,7 +347,7 @@
 
 // Nebulosa desactivada temporalmente para comprobar
 // si está generando el cuadro borroso.
-sprite.visible = false;
+sprite.visible = true;
 
 scene.add(sprite);
 nebulas.push(sprite);
@@ -406,7 +412,13 @@ nebulas.push(sprite);
     });
 
     const sun = new THREE.Mesh(sunGeometry, sunMaterial);
-    sun.position.set(0, 0, 0);
+    const sunSurfaceOffset = 0.745;
+
+sun.position.set(
+  0,
+  Math.sin(1.05) * sunSurfaceOffset,
+  -2.48 + Math.cos(1.05) * sunSurfaceOffset
+);
     universeGroup.add(sun);
 
     const glowTexture = createGlowTexture();
@@ -421,10 +433,10 @@ nebulas.push(sprite);
 
     const sunGlow = new THREE.Sprite(glowMaterial);
     sunGlow.scale.set(4.2, 4.2, 1);
-    sunGlow.position.set(0, 0, -0.1);
+    sunGlow.position.set(0, 0, -2.58);
     
     universeGroup.add(sunGlow);
-sunGlow.visible = false;
+sunGlow.visible = true;
     // ==========================================
     // HALO MÁGICO DEL SOL
     // ==========================================
@@ -438,8 +450,178 @@ sunGlow.visible = false;
       depthWrite: false
     });
 
-    const sunHalo = new THREE.Sprite(sunHaloMaterial);
+  const sunHalo = new THREE.Sprite(sunHaloMaterial);
+sunHalo.position.set(0, 0, -2.58);
+universeGroup.add(sunHalo);
 
+// ==========================================
+// GRAN PLANO ORBITAL 3D
+// ==========================================
+
+// Geometría de un anillo circular.
+const orbitGeometry = new THREE.RingGeometry(
+  0.975,
+  1,
+  256
+);
+
+// Material luminoso violeta y blanco.
+const orbitMaterial = new THREE.MeshBasicMaterial({
+  color: 0x9b6bff,
+  transparent: true,
+  opacity: 0.22,
+  blending: THREE.NormalBlending,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+  depthTest: true
+});
+
+// Crear el anillo orbital.
+const orbitalRing = new THREE.Mesh(
+  orbitGeometry,
+  orbitMaterial
+);
+
+// Inclinación sutil para dar perspectiva 3D.
+orbitalRing.rotation.x = -1.05;
+
+// Situarlo detrás del Sol y de los planetas.
+orbitalRing.position.set(0, 0, -2.5);
+
+universeGroup.add(orbitalRing);
+// ==========================================
+// SUPERFICIE DEL PLANO ORBITAL
+// ==========================================
+// ==========================================
+// TEXTURA CÓSMICA DEL PLANO ORBITAL
+// ==========================================
+
+function createOrbitPlaneTexture() {
+  const textureCanvas = document.createElement("canvas");
+  textureCanvas.width = 1024;
+  textureCanvas.height = 1024;
+
+  const ctx = textureCanvas.getContext("2d");
+
+  // Base espacial oscura.
+  ctx.fillStyle = "#160b2d";
+  ctx.fillRect(0, 0, 1024, 1024);
+
+  // Nubes violetas y rosadas.
+  for (let i = 0; i < 180; i++) {
+    const x = Math.random() * 1024;
+    const y = Math.random() * 1024;
+    const radius = 20 + Math.random() * 100;
+
+    const gradient = ctx.createRadialGradient(
+      x, y, 1,
+      x, y, radius
+    );
+
+    gradient.addColorStop(
+      0,
+      i % 2 === 0
+        ? "rgba(174, 105, 255, 0.20)"
+        : "rgba(255, 130, 210, 0.13)"
+    );
+
+    gradient.addColorStop(1, "rgba(30, 10, 60, 0)");
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(
+      x - radius,
+      y - radius,
+      radius * 2,
+      radius * 2
+    );
+  }
+
+  // Pequeñas partículas luminosas.
+  for (let i = 0; i < 450; i++) {
+    const x = Math.random() * 1024;
+    const y = Math.random() * 1024;
+    const radius = 0.5 + Math.random() * 1.5;
+
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+
+    ctx.fillStyle = "rgba(220, 190, 255, 0.45)";
+    ctx.fill();
+  }
+
+  const texture = new THREE.CanvasTexture(textureCanvas);
+  texture.colorSpace = THREE.SRGBColorSpace;
+  texture.needsUpdate = true;
+
+  return texture;
+}
+
+const orbitPlaneTexture = createOrbitPlaneTexture();
+
+const orbitPlaneGeometry = new THREE.CircleGeometry(0.975, 256);
+
+const orbitPlaneMaterial = new THREE.MeshBasicMaterial({
+  map: orbitPlaneTexture,
+  color: 0xffffff,
+  transparent: true,
+  opacity: 0.32,
+  blending: THREE.NormalBlending,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+  depthTest: true
+});
+
+const orbitPlane = new THREE.Mesh(
+  orbitPlaneGeometry,
+  orbitPlaneMaterial
+);
+
+// Mantener la misma inclinación y posición del anillo.
+orbitPlane.rotation.x = -1.05;
+orbitPlane.position.set(0, 0, -2.48);
+
+universeGroup.add(orbitPlane);
+// ==========================================
+// ÓRBITAS INTERIORES DEL COSMOS
+// ==========================================
+
+const orbitDetails = [];
+
+const orbitDetailConfigs = [
+  { radius: 0.76, color: 0x9b6bff, opacity: 0.20 },
+  { radius: 0.54, color: 0xc4a7ff, opacity: 0.15 },
+  { radius: 0.32, color: 0xf4a7c5, opacity: 0.12 }
+];
+
+orbitDetailConfigs.forEach((config) => {
+  const geometry = new THREE.RingGeometry(
+    config.radius,
+    config.radius + 0.003,
+    256
+  );
+
+  const material = new THREE.MeshBasicMaterial({
+    color: config.color,
+    transparent: true,
+    opacity: config.opacity,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+    depthTest: true
+  });
+
+  const ring = new THREE.Mesh(geometry, material);
+
+  ring.rotation.x = -1.05;
+  ring.position.set(0, 0, -2.47);
+
+  universeGroup.add(ring);
+
+ orbitDetails.push({
+  ring,
+  geometry,
+  material
+});
+});
     // ==========================================
     // COLORES DE LOS PLANETAS
     // ==========================================
@@ -966,13 +1148,49 @@ sunGlow.visible = false;
           button.style.getPropertyValue("--orbit-z")
         ) || 0;
 
-        planet.mesh.position.set(
-          orbitX * worldPerPixel,
-          -orbitY * worldPerPixel,
-          orbitZ * worldPerPixel
-        );
+// ==========================================
+// POSICIÓN SOBRE EL PLANO ORBITAL INCLINADO
+// ==========================================
 
-        // ==========================================
+const planeTilt = -1.05;
+const planeCenterZ = -2.48;
+
+// Coordenadas originales de la órbita.
+const localX = orbitX * worldPerPixel;
+const localY = -orbitY * worldPerPixel;
+
+// Calcular primero el tamaño del planeta.
+const buttonSize = button.getBoundingClientRect().width;
+
+const radius = Math.max(
+  0.12,
+  buttonSize * worldPerPixel * 0.5
+);
+
+// Elevación perpendicular según el tamaño.
+const surfaceOffset = radius + 0.025;
+
+// Transformar la posición al plano inclinado.
+const planetX = localX;
+
+const planetY =
+  localY * Math.cos(planeTilt) -
+  Math.sin(planeTilt) * surfaceOffset;
+
+const planetZ =
+  planeCenterZ +
+  localY * Math.sin(planeTilt) +
+  Math.cos(planeTilt) * surfaceOffset;
+
+// Aplicar posición y tamaño.
+planet.mesh.position.set(
+  planetX,
+  planetY,
+  planetZ
+);
+
+planet.mesh.scale.setScalar(radius);       
+ // ==========================================
         // ROTACIÓN INDIVIDUAL DEL PLANETA
         // ==========================================
 
@@ -987,19 +1205,7 @@ sunGlow.visible = false;
             0.00035 * delta * 60;
         }
 
-        // ==========================================
-        // TAMAÑO PROPORCIONAL DEL PLANETA
-        // ==========================================
-
-        const buttonSize = button.getBoundingClientRect().width;
-
-        const radius = Math.max(
-          0.12,
-          buttonSize * worldPerPixel * 0.5
-        );
-
-        planet.mesh.scale.setScalar(radius);
-
+       
         // ==========================================
         // SINCRONIZAR EL BOTÓN CON EL PLANETA 3D
         // ==========================================
@@ -1025,7 +1231,29 @@ sunGlow.visible = false;
 
         planet.mesh.visible = button.isConnected;
       }); // CORRECCIÓN: aquí se cierra planets.forEach().
+      // ==========================================
 
+// ==========================================
+// TAMAÑO DEL PLANO ORBITAL
+// ==========================================
+
+const orbitRadiusX = width * 0.36 * worldPerPixel;
+const orbitRadiusY = height * 0.42 * worldPerPixel;
+
+// El anillo permanece centrado alrededor del Sol.
+orbitalRing.scale.set(
+  orbitRadiusX,
+  orbitRadiusY,
+  1
+);
+orbitPlane.scale.set(
+  orbitRadiusX,
+  orbitRadiusY,
+  1
+);
+orbitDetails.forEach(({ ring }) => {
+  ring.scale.set(orbitRadiusX, orbitRadiusY, 1);
+});
       // ==========================================
       // ROTACIÓN DEL SOL
       // ==========================================
@@ -1135,7 +1363,15 @@ sunGlow.visible = false;
       glowTexture.dispose();
       glowMaterial.dispose();
       sunHaloMaterial.dispose();
-
+orbitGeometry.dispose();
+orbitMaterial.dispose();
+orbitPlaneGeometry.dispose();
+orbitPlaneMaterial.dispose(); // Liberar recursos de las órbitas interiores.
+orbitPlaneTexture.dispose();
+orbitDetails.forEach(({ geometry, material }) => {
+  geometry.dispose();
+  material.dispose();
+});
       // Liberar recursos de las nebulosas.
       nebulas.forEach((nebula) => {
         nebula.material.dispose();
