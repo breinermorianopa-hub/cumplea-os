@@ -4,6 +4,65 @@
 document.addEventListener("DOMContentLoaded", () => {
   const screens = document.querySelectorAll(".screen");
 
+  // =========================================================
+  // CARGAR CONTENIDO DE LA CARTA DESDE content.js
+  // =========================================================
+
+  if (typeof birthdayContent !== "undefined") {
+    const letter = birthdayContent.letter;
+
+    const letterTitle = document.getElementById("letter-title");
+    const letterGreeting = document.getElementById("letter-greeting");
+    const letterParagraphs = document.getElementById("letter-paragraphs");
+    const letterClosing = document.getElementById("letter-closing");
+
+    if (letterTitle) {
+      letterTitle.textContent = letter.title;
+    }
+
+    if (letterGreeting) {
+      letterGreeting.textContent = letter.greeting;
+    }
+
+    if (letterParagraphs) {
+      letterParagraphs.replaceChildren();
+
+      letter.paragraphs.forEach((paragraph) => {
+        const p = document.createElement("p");
+        p.textContent = paragraph;
+        letterParagraphs.appendChild(p);
+      });
+    }
+
+    if (letterClosing) {
+      letterClosing.textContent = letter.closing;
+    }
+  }
+
+  // =========================================================
+  // CARGAR LOS TRES MENSAJES SECRETOS DESDE content.js
+  // =========================================================
+
+  if (typeof birthdayContent !== "undefined") {
+    const secretEnvelopes = document.querySelectorAll(".secret-envelope");
+    const secretMessages = birthdayContent.messages.items;
+
+    secretEnvelopes.forEach((envelope, index) => {
+      const message = secretMessages[index];
+
+      if (!message) return;
+
+      const label = envelope.querySelector(".envelope-label");
+
+      if (label) {
+        label.textContent = message.title;
+      }
+
+      envelope.dataset.message = message.text;
+    });
+  }
+
+
   function showScreen(screenId) {
     const targetScreen = document.getElementById(screenId);
 

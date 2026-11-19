@@ -27,16 +27,17 @@ const birthdayContent = {
   },
 
   // Pantalla 3: Carta principal
-  letter: {
-    title: "Unas palabras para ti",
-    greeting: "Querida persona especial:",
-    paragraphs: [
-      "Hoy es un día especial porque celebramos tu vida.",
-      "Quiero que recuerdes lo valiosa que eres y todo lo bonito que mereces.",
-      "Que nunca te falten razones para sonreír, sueños por cumplir y personas que te quieran de verdad."
-    ],
-    closing: "Con mucho cariño 💜"
-  },
+letter: {
+  title: "Un pequeño deseo para ti",
+  greeting: "Querida Cristina:",
+  paragraphs: [
+    "Hoy no es un día cualquiera, hoy celebramos a una persona que merece que la vida le regale cosas maravillosas.",
+    "Deseo que este nuevo año esté lleno de momentos que te hagan sonreír, sueños que poco a poco se conviertan en realidad y personas que sepan valorar la hermosa persona que eres.",
+    "Nunca olvides que mereces tranquilidad, cariño sincero, oportunidades bonitas y muchísimas razones para ser feliz.",
+    "Ojalá, al mirar atrás, descubras que este año estuvo lleno de pequeños momentos que terminaron convirtiéndose en grandes recuerdos."
+  ],
+  closing: "Que nunca dejes de brillar, incluso en los días nublados. Feliz cumpleaños. 💜"
+},
 
   // Pantalla 4: Mensajes secretos
   messages: {

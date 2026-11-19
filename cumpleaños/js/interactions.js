@@ -146,28 +146,64 @@ function animatePlanets(timestamp) {
     }
   }
 
-  function openPlanetMessage(planet) {
-    if (!planetPanel || !planetTitle || !planetText) return;
+  
+function openPlanetMessage(planet) {
+  if (!planetPanel || !planetTitle || !planetText) return;
 
-    const planetNumber = planet.dataset.planet;
-    const title = planet.dataset.title || `Planeta ${planetNumber}`;
-    const message =
-      planet.dataset.message ||
-      "Un pequeño secreto del universo te espera aquí. 💜";
+  const planetNumber = planet.dataset.planet;
+  const title = planet.dataset.title || `Planeta ${planetNumber}`;
+  const message =
+    planet.dataset.message ||
+    "Un pequeño secreto del universo te espera aquí. 💜";
 
-    discoveredPlanets.add(planetNumber);
+  const planetSymbols = {
+    1: "☀",
+    2: "✧",
+    3: "🌸",
+    4: "☄",
+    5: "🌙",
+    6: "♜",
+    7: "✨",
+    8: "🦋",
+    9: "⭐",
+    10: "💜"
+  };
 
-    planetTitle.textContent = title;
-    planetText.textContent = message;
-    planetPanel.hidden = false;
+  const symbol = planetSymbols[planetNumber] || "✦";
 
-    updatePlanetProgress();
+  discoveredPlanets.add(planetNumber);
 
-    planetPanel.scrollIntoView({
-      behavior: reducedMotion ? "auto" : "smooth",
-      block: "nearest"
-    });
+  planetPanel.dataset.planet = planetNumber;
+
+  const numberElement = document.getElementById(
+    "planet-message-number"
+  );
+
+  const symbolElement = document.getElementById(
+    "planet-message-symbol"
+  );
+
+  if (numberElement) {
+    numberElement.textContent = String(planetNumber).padStart(2, "0");
   }
+
+  if (symbolElement) {
+    symbolElement.textContent = symbol;
+  }
+
+  planetTitle.textContent = title;
+  planetText.textContent = message;
+
+  planetPanel.hidden = false;
+
+  updatePlanetProgress();
+
+  planetPanel.scrollIntoView({
+    behavior: reducedMotion ? "auto" : "smooth",
+    block: "nearest"
+  });
+}
+
 
   planets.forEach((planet) => {
     planet.addEventListener("click", () => {
@@ -212,12 +248,39 @@ function animatePlanets(timestamp) {
   // 2. MENSAJES SECRETOS DE LOS SOBRES
   // =========================================================
 
-  const envelopes = document.querySelectorAll(".secret-envelope");
-  const messagePanel = document.getElementById("secret-message");
-  const messageText = document.getElementById("secret-message-text");
-  const closeMessageButton = document.getElementById(
-    "close-secret-message"
-  );
+ 
+const envelopes = document.querySelectorAll(".secret-envelope");
+const messagePanel = document.getElementById("secret-message");
+const messageText = document.getElementById("secret-message-text");
+const messageTitle = document.getElementById("secret-message-title");
+
+const closeMessageButton = document.getElementById(
+  "close-secret-message"
+);
+
+envelopes.forEach((envelope) => {
+  envelope.addEventListener("click", () => {
+    if (!messagePanel || !messageText) return;
+
+    const label = envelope.querySelector(".envelope-label");
+
+    messageTitle.textContent = label
+      ? label.textContent
+      : "Un pequeño secreto";
+
+    messageText.textContent =
+      envelope.dataset.message ||
+      "Este pequeño mensaje está guardado para ti. 💜";
+
+    messagePanel.hidden = false;
+
+    messagePanel.scrollIntoView({
+      behavior: reducedMotion ? "auto" : "smooth",
+      block: "nearest"
+    });
+  });
+});
+
 
   envelopes.forEach((envelope) => {
     envelope.addEventListener("click", () => {
@@ -243,10 +306,10 @@ function animatePlanets(timestamp) {
   }
 
   // =========================================================
-  // 3. VELAS DEL PASTEL
+  // 3. VELAS NUMÉRICAS DEL PASTEL: 26
   // =========================================================
 
-  const candles = document.querySelectorAll(".candle");
+  const candles = document.querySelectorAll(".candle-number");
   const blowButton = document.getElementById("blow-candles");
   const wishFeedback = document.getElementById("wish-feedback");
   const finalButton = document.getElementById("continue-to-final");
@@ -258,7 +321,7 @@ function animatePlanets(timestamp) {
     candle.setAttribute("aria-pressed", "true");
 
     const remainingCandles = document.querySelectorAll(
-      ".candle:not(.is-out)"
+      ".candle-number:not(.is-out)"
     );
 
     if (remainingCandles.length === 0) {
@@ -269,7 +332,11 @@ function animatePlanets(timestamp) {
 
       if (blowButton) blowButton.hidden = true;
       if (finalButton) finalButton.hidden = false;
-    }
+    } else {
+  if (wishFeedback) {
+    wishFeedback.textContent = candle.dataset.message;
+  }
+}
   }
 
   candles.forEach((candle) => {

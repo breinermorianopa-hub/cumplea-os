@@ -28,11 +28,40 @@
     // GRUPO PRINCIPAL DEL UNIVERSO
     // ==========================================
 
-    const universeGroup = new THREE.Group();
-    scene.add(universeGroup);
+    // ==========================================
+// GRUPO PRINCIPAL DEL UNIVERSO
+// ==========================================
 
-    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
-    camera.position.set(0, 0, 16);
+// ==========================================
+// CENTRO DE ROTACIÓN DEL UNIVERSO
+// ==========================================
+
+const universePivot = new THREE.Group();
+
+// El centro de rotación coincide con el centro del disco.
+universePivot.position.set(0, 0, -2.48);
+scene.add(universePivot);
+
+// Grupo principal del universo.
+const universeGroup = new THREE.Group();
+universeGroup.position.z = 2.48;
+universePivot.add(universeGroup);
+
+
+
+// ==========================================
+// FONDO ESPACIAL INTEGRADO AL UNIVERSO
+// ==========================================
+
+const backgroundGroup = new THREE.Group();
+
+backgroundGroup.position.set(0, 0, 0);
+
+// Integrar estrellas y nebulosas al movimiento principal.
+universePivot.add(backgroundGroup);
+
+const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100);
+camera.position.set(0, 0, 16);
 
     const renderer = new THREE.WebGLRenderer({
       canvas,
@@ -321,15 +350,17 @@
     const nebulas = [];
 
     nebulaPositions.forEach((position, index) => {
-     const material = new THREE.SpriteMaterial({
+    
+const material = new THREE.SpriteMaterial({
   map: nebulaTexture,
   color: index % 2 === 0 ? 0xc59aff : 0xffa6df,
   transparent: true,
-  opacity: 0.018,
+  opacity: 0.045,
   blending: THREE.AdditiveBlending,
   depthWrite: false,
-  depthTest: false
+  depthTest: true
 });
+
 
       const sprite = new THREE.Sprite(material);
 
@@ -349,7 +380,7 @@
 // si está generando el cuadro borroso.
 sprite.visible = true;
 
-scene.add(sprite);
+backgroundGroup.add(sprite);
 nebulas.push(sprite);
     });
 
@@ -357,43 +388,92 @@ nebulas.push(sprite);
     // CAMPO DE ESTRELLAS
     // ==========================================
 
-    const starCount = 900;
-    const starPositions = new Float32Array(starCount * 3);
+const starCount = 3500;
+const starPositions = new Float32Array(starCount * 3);
 
-    for (let i = 0; i < starCount; i++) {
-      starPositions[i * 3] =
-        (Math.random() - 0.5) * 28;
+// Distribuir las estrellas alrededor del universo
+// formando una capa esférica.
+for (let i = 0; i < starCount; i++) {
+  const theta = Math.random() * Math.PI * 2;
+  const phi = Math.acos(2 * Math.random() - 1);
 
-      starPositions[i * 3 + 1] =
-        (Math.random() - 0.5) * 20;
+  // Distancia variable para dar profundidad.
+  const radius = 35 + Math.random() * 20;
 
-      starPositions[i * 3 + 2] =
-        -2 - Math.random() * 12;
-    }
+  starPositions[i * 3] =
+    radius * Math.sin(phi) * Math.cos(theta);
+
+  starPositions[i * 3 + 1] =
+    radius * Math.sin(phi) * Math.sin(theta);
+
+  starPositions[i * 3 + 2] =
+    radius * Math.cos(phi);
+}
 
     const starGeometry = new THREE.BufferGeometry();
 
     starGeometry.setAttribute(
-      "position",
-      new THREE.BufferAttribute(starPositions, 3)
-    );
+  "position",
+  new THREE.BufferAttribute(starPositions, 3)
+);
 
-    const starMaterial = new THREE.PointsMaterial({
-      color: 0xf3ddff,
-      size: 0.055,
-      transparent: true,
-      opacity: 0.85,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false,
-      sizeAttenuation: true
-    });
+// Posiciones originales de las estrellas
+const baseStarPositions = starPositions.slice();
+
+// Movimiento individual de las estrellas
+const starPhases = new Float32Array(starCount);
+const starSpeeds = new Float32Array(starCount);
+
+for (let i = 0; i < starCount; i++) {
+  starPhases[i] = Math.random() * Math.PI * 2;
+  starSpeeds[i] = 0.5 + Math.random() * 1.5;
+}
+
+const starMaterial = new THREE.PointsMaterial({
+  color: 0xffffff,
+  size: 0.13,
+  transparent: true,
+  opacity: 1,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false,
+  sizeAttenuation: true
+});
 
     const starField = new THREE.Points(
       starGeometry,
       starMaterial
     );
 
-    scene.add(starField);
+  backgroundGroup.add(starField);
+  // Estrellas fugaces
+const shootingStars = [];
+
+for (let i = 0; i < 2; i++) {
+  const geometry = new THREE.BufferGeometry().setFromPoints([
+    new THREE.Vector3(-2, 0, 0),
+    new THREE.Vector3(2, 0, 0)
+  ]);
+
+  const material = new THREE.LineBasicMaterial({
+    color: 0xe9d5ff,
+    transparent: true,
+    opacity: 0,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+
+  const shootingStar = new THREE.Line(geometry, material);
+
+  shootingStar.rotation.z = -0.35;
+  shootingStar.visible = false;
+
+  backgroundGroup.add(shootingStar);
+  shootingStars.push({
+    object: shootingStar,
+    material,
+    offset: i * 4
+  });
+}
 
     // ==========================================
     // CREACIÓN DEL SOL
@@ -421,22 +501,58 @@ sun.position.set(
 );
     universeGroup.add(sun);
 
-    const glowTexture = createGlowTexture();
+ // ==========================================
+// NÚCLEO OSCURO INTEGRADO EN EL DISCO CÓSMICO
+// ==========================================
 
-    const glowMaterial = new THREE.SpriteMaterial({
-      map: glowTexture,
-      color: 0xff9b55,
-      transparent: true,
-      blending: THREE.AdditiveBlending,
-      depthWrite: false
-    });
+const blackHoleGeometry = new THREE.CircleGeometry(
+  0.28,
+  128
+);
+const blackHoleMaterial = new THREE.MeshBasicMaterial({
+  color: 0x080510,
+  transparent: true,
+  opacity: 0.92,
+  side: THREE.DoubleSide,
+  depthWrite: false,
+  depthTest: true
+});
 
-    const sunGlow = new THREE.Sprite(glowMaterial);
-    sunGlow.scale.set(4.2, 4.2, 1);
-    sunGlow.position.set(0, 0, -2.58);
-    
-    universeGroup.add(sunGlow);
-sunGlow.visible = true;
+const blackHoleCore = new THREE.Mesh(
+  blackHoleGeometry,
+  blackHoleMaterial
+);
+
+// Misma inclinación que el disco y las órbitas.
+blackHoleCore.rotation.x = -1.05;
+
+// Centro del disco, ligeramente hacia la cámara
+// para evitar que se superponga exactamente con el plano.
+blackHoleCore.position.set(0, 0.45, -2.465);
+
+universeGroup.add(blackHoleCore);
+blackHoleCore.visible = false;
+
+// ==========================================
+// RESPLANDOR DEL SOL
+// ==========================================
+
+const glowTexture = createGlowTexture();
+
+const glowMaterial = new THREE.SpriteMaterial({
+  map: glowTexture,
+  color: 0xff9b55,
+  transparent: true,
+  blending: THREE.AdditiveBlending,
+  depthWrite: false
+});
+
+const sunGlow = new THREE.Sprite(glowMaterial);
+
+sunGlow.scale.set(4.2, 4.2, 1);
+sunGlow.position.copy(sun.position);
+
+universeGroup.add(sunGlow);
     // ==========================================
     // HALO MÁGICO DEL SOL
     // ==========================================
@@ -451,7 +567,7 @@ sunGlow.visible = true;
     });
 
   const sunHalo = new THREE.Sprite(sunHaloMaterial);
-sunHalo.position.set(0, 0, -2.58);
+sunHalo.position.copy(sun.position);
 universeGroup.add(sunHalo);
 
 // ==========================================
@@ -556,7 +672,129 @@ function createOrbitPlaneTexture() {
   return texture;
 }
 
-const orbitPlaneTexture = createOrbitPlaneTexture();
+
+    // ==========================================
+    // TEXTURA CÓSMICA CON RECORTE CENTRAL
+    // Y BORDES SUAVES
+    // ==========================================
+
+    const orbitCanvas = document.createElement("canvas");
+    orbitCanvas.width = 1024;
+    orbitCanvas.height = 1024;
+
+    const orbitContext = orbitCanvas.getContext("2d");
+
+    const orbitPlaneTexture = new THREE.CanvasTexture(orbitCanvas);
+
+    orbitPlaneTexture.colorSpace = THREE.SRGBColorSpace;
+    orbitPlaneTexture.anisotropy =
+      renderer.capabilities.getMaxAnisotropy();
+
+    textureLoader.load(
+      "assets/textures/cosmo.png",
+      (loadedTexture) => {
+        const image = loadedTexture.image;
+
+        // Recortar un cuadrado desde el centro
+        // sin deformar las proporciones originales.
+        const sourceSize = Math.min(
+          image.width,
+          image.height
+        );
+
+        const sourceX = (image.width - sourceSize) / 2;
+        const sourceY = (image.height - sourceSize) / 2;
+
+        orbitContext.clearRect(0, 0, 1024, 1024);
+
+        orbitContext.drawImage(
+          image,
+          sourceX,
+          sourceY,
+          sourceSize,
+          sourceSize,
+          0,
+          0,
+          1024,
+          1024
+        );
+
+// ==========================================
+// PROFUNDIDAD DEL NÚCLEO CÓSMICO
+// ==========================================
+
+// Oscurecimiento radial concentrado en el centro.
+const coreShadow = orbitContext.createRadialGradient(
+  512, 512, 35,
+  512, 512, 350
+);
+
+coreShadow.addColorStop(
+  0,
+  "rgba(5, 2, 14, 0.78)"
+);
+
+coreShadow.addColorStop(
+  0.12,
+  "rgba(5, 2, 14, 0.84)"
+);
+
+coreShadow.addColorStop(
+  0.28,
+  "rgba(12, 5, 27, 0.64)"
+);
+
+coreShadow.addColorStop(
+  0.55,
+  "rgba(20, 8, 38, 0.32)"
+);
+
+coreShadow.addColorStop(
+  1,
+  "rgba(25, 10, 45, 0)"
+);
+
+orbitContext.fillStyle = coreShadow;
+orbitContext.fillRect(0, 0, 1024, 1024);
+
+
+        // Suavizar los bordes exteriores.
+        orbitContext.globalCompositeOperation = "destination-in";
+
+        const fade = orbitContext.createRadialGradient(
+          512, 512, 300,
+          512, 512, 510
+        );
+
+        fade.addColorStop(0, "rgba(255,255,255,1)");
+fade.addColorStop(0.62, "rgba(255,255,255,1)");
+fade.addColorStop(0.78, "rgba(255,255,255,0.65)");
+fade.addColorStop(0.92, "rgba(255,255,255,0.18)");
+fade.addColorStop(1, "rgba(255,255,255,0)");
+
+        orbitContext.fillStyle = fade;
+        orbitContext.fillRect(0, 0, 1024, 1024);
+
+        orbitContext.globalCompositeOperation = "source-over";
+
+        orbitPlaneTexture.needsUpdate = true;
+
+        loadedTexture.dispose();
+
+        console.info(
+          "Textura del agujero negro cargada y recortada correctamente."
+        );
+      },
+      undefined,
+      (error) => {
+        console.error("Error al cargar cosmo.png:", error);
+      }
+    );
+
+
+orbitPlaneTexture.colorSpace = THREE.SRGBColorSpace;
+orbitPlaneTexture.anisotropy =
+  renderer.capabilities.getMaxAnisotropy();
 
 const orbitPlaneGeometry = new THREE.CircleGeometry(0.975, 256);
 
@@ -564,11 +802,12 @@ const orbitPlaneMaterial = new THREE.MeshBasicMaterial({
   map: orbitPlaneTexture,
   color: 0xffffff,
   transparent: true,
-  opacity: 0.32,
+  opacity: 0.42,
   blending: THREE.NormalBlending,
   side: THREE.DoubleSide,
   depthWrite: false,
   depthTest: true
+  
 });
 
 const orbitPlane = new THREE.Mesh(
@@ -956,50 +1195,61 @@ orbitDetailConfigs.forEach((config) => {
 
       universeGroup.add(mesh);
 
-      // ==========================================
-      // ANILLOS DE SATURNO
-      // ==========================================
+      
+// ==========================================
+// ANILLOS DE SATURNO
+// ==========================================
 
-      let ring = null;
-      let ringTexture = null;
+let ring = null;
+let ringTexture = null;
+let ringColorTexture = null;
 
-      if (index === 5) {
-        ringTexture = textureLoader.load(
-          "assets/textures/ring_alpha.png",
-          (loadedTexture) => {
-            loadedTexture.colorSpace = THREE.SRGBColorSpace;
-            loadedTexture.anisotropy =
-              renderer.capabilities.getMaxAnisotropy();
-          },
-          undefined,
-          (error) => {
-            console.warn("No se pudo cargar ring_alpha.png", error);
-          }
-        );
+if (index === 5) {
+  // Textura de color de los anillos.
+  ringColorTexture = textureLoader.load(
+    "assets/textures/anillos-saturno.png",
+    (loadedTexture) => {
+      loadedTexture.colorSpace = THREE.SRGBColorSpace;
+      loadedTexture.anisotropy =
+        renderer.capabilities.getMaxAnisotropy();
+    },
+    undefined,
+    (error) => {
+      console.warn("No se pudo cargar la textura de los anillos.", error);
+    }
+  );
 
-        ringTexture.colorSpace = THREE.SRGBColorSpace;
+  // Mapa de transparencia existente.
+  ringTexture = textureLoader.load(
+    "assets/textures/ring_alpha.png",
+    undefined,
+    undefined,
+    (error) => {
+      console.warn("No se pudo cargar ring_alpha.png", error);
+    }
+  );
 
-        const ringGeometry = new THREE.RingGeometry(
-          1.25,
-          1.95,
-          160
-        );
+  const ringGeometry = new THREE.RingGeometry(
+    1.25,
+    1.95,
+    160
+  );
 
-        const ringMaterial = new THREE.MeshStandardMaterial({
-          map: ringTexture,
-          side: THREE.DoubleSide,
-          transparent: true,
-          alphaTest: 0.08,
-          opacity: 0.95,
-          roughness: 0.9,
-          metalness: 0,
-          depthWrite: false
-        });
+  const ringMaterial = new THREE.MeshBasicMaterial({
+    map: ringColorTexture,
+    alphaMap: ringTexture,
+    side: THREE.DoubleSide,
+    transparent: true,
+    alphaTest: 0.08,
+    opacity: 0.95,
+    depthWrite: false
+  });
 
-        ring = new THREE.Mesh(ringGeometry, ringMaterial);
-        ring.rotation.x = Math.PI * 0.34;
-        mesh.add(ring);
-      }
+  ring = new THREE.Mesh(ringGeometry, ringMaterial);
+  ring.rotation.x = Math.PI * 0.34;
+  mesh.add(ring);
+}
+
 
       // ==========================================
       // GUARDAR PLANETAS
@@ -1015,7 +1265,8 @@ orbitDetailConfigs.forEach((config) => {
         ring,
         ringTexture,
         cloudMesh,
-        cloudTexture
+        cloudTexture,
+        ringColorTexture
       });
     });
 
@@ -1104,211 +1355,258 @@ orbitDetailConfigs.forEach((config) => {
     // ANIMACIÓN PRINCIPAL
     // ==========================================
 
-    function animate() {
-      animationFrameId = requestAnimationFrame(animate);
+   
+function animate() {
+  animationFrameId = requestAnimationFrame(animate);
 
-      const delta = Math.min(clock.getDelta(), 0.05);
-      const elapsed = clock.elapsedTime;
+  const delta = Math.min(clock.getDelta(), 0.05);
+  const elapsed = clock.elapsedTime;
 
-      // Aplicar suavemente la rotación del universo.
-      universeGroup.rotation.x +=
-        (targetRotationX - universeGroup.rotation.x) * 0.08;
+  universePivot.rotation.x +=
+    (targetRotationX - universePivot.rotation.x) * 0.08;
 
-      universeGroup.rotation.y +=
-        (targetRotationY - universeGroup.rotation.y) * 0.08;
+  universePivot.rotation.y +=
+    (targetRotationY - universePivot.rotation.y) * 0.08;
 
-      const width = system.clientWidth;
-      const height = system.clientHeight;
+  const width = system.clientWidth;
+  const height = system.clientHeight;
 
-      if (!width || !height) return;
+  if (!width || !height) return;
 
-      const visibleHeight =
-        2 * Math.tan(
-          THREE.MathUtils.degToRad(camera.fov / 2)
-        ) * camera.position.z;
+  const visibleHeight =
+    2 * Math.tan(
+      THREE.MathUtils.degToRad(camera.fov / 2)
+    ) * camera.position.z;
 
-      const worldPerPixel = visibleHeight / height;
+  const worldPerPixel = visibleHeight / height;
 
-      // ==========================================
-      // MOVIMIENTO DE LOS PLANETAS
-      // ==========================================
+  // ==========================================
+  // MOVIMIENTO DE LOS PLANETAS
+  // ==========================================
 
-      planets.forEach((planet) => {
-        const button = planet.button;
+  planets.forEach((planet) => {
+    const button = planet.button;
 
-        const orbitX = parseFloat(
-          button.style.getPropertyValue("--orbit-x")
-        ) || 0;
+    const orbitX = parseFloat(
+      button.style.getPropertyValue("--orbit-x")
+    ) || 0;
 
-        const orbitY = parseFloat(
-          button.style.getPropertyValue("--orbit-y")
-        ) || 0;
+    const orbitY = parseFloat(
+      button.style.getPropertyValue("--orbit-y")
+    ) || 0;
 
-        const orbitZ = parseFloat(
-          button.style.getPropertyValue("--orbit-z")
-        ) || 0;
+    const orbitZ = parseFloat(
+      button.style.getPropertyValue("--orbit-z")
+    ) || 0;
 
-// ==========================================
-// POSICIÓN SOBRE EL PLANO ORBITAL INCLINADO
-// ==========================================
+    // POSICIÓN SOBRE EL PLANO ORBITAL INCLINADO
 
-const planeTilt = -1.05;
-const planeCenterZ = -2.48;
+    const planeTilt = -1.05;
+    const planeCenterZ = -2.48;
 
-// Coordenadas originales de la órbita.
-const localX = orbitX * worldPerPixel;
-const localY = -orbitY * worldPerPixel;
+    const localX = orbitX * worldPerPixel;
+    const localY = -orbitY * worldPerPixel;
 
-// Calcular primero el tamaño del planeta.
-const buttonSize = button.getBoundingClientRect().width;
+    const buttonSize = button.getBoundingClientRect().width;
 
-const radius = Math.max(
-  0.12,
-  buttonSize * worldPerPixel * 0.5
-);
+    const radius = Math.max(
+      0.12,
+      buttonSize * worldPerPixel * 0.5
+    );
 
-// Elevación perpendicular según el tamaño.
-const surfaceOffset = radius + 0.025;
+    const surfaceOffset = radius + 0.025;
 
-// Transformar la posición al plano inclinado.
-const planetX = localX;
+    const planetX = localX;
 
-const planetY =
-  localY * Math.cos(planeTilt) -
-  Math.sin(planeTilt) * surfaceOffset;
+    const planetY =
+      localY * Math.cos(planeTilt) -
+      Math.sin(planeTilt) * surfaceOffset;
 
-const planetZ =
-  planeCenterZ +
-  localY * Math.sin(planeTilt) +
-  Math.cos(planeTilt) * surfaceOffset;
+    const planetZ =
+      planeCenterZ +
+      localY * Math.sin(planeTilt) +
+      Math.cos(planeTilt) * surfaceOffset;
 
-// Aplicar posición y tamaño.
-planet.mesh.position.set(
-  planetX,
-  planetY,
-  planetZ
-);
+    planet.mesh.position.set(
+      planetX,
+      planetY,
+      planetZ
+    );
 
-planet.mesh.scale.setScalar(radius);       
- // ==========================================
-        // ROTACIÓN INDIVIDUAL DEL PLANETA
-        // ==========================================
+    planet.mesh.scale.setScalar(radius);
 
-        planet.mesh.rotation.y +=
-          planet.rotationSpeed * delta * 60;
+    // ROTACIÓN INDIVIDUAL DEL PLANETA
 
-        planet.mesh.rotation.x = planet.inclination;
+    planet.mesh.rotation.y +=
+      planet.rotationSpeed * delta * 60;
 
-        // Rotación independiente de las nubes terrestres.
-        if (planet.cloudMesh) {
-          planet.cloudMesh.rotation.y +=
-            0.00035 * delta * 60;
-        }
+    planet.mesh.rotation.x = planet.inclination;
 
-       
-        // ==========================================
-        // SINCRONIZAR EL BOTÓN CON EL PLANETA 3D
-        // ==========================================
-
-        const screenPosition = new THREE.Vector3();
-
-        planet.mesh.getWorldPosition(screenPosition);
-        screenPosition.project(camera);
-
-        // Convertir la posición 3D a coordenadas de pantalla.
-        const screenX =
-          (screenPosition.x * 0.5 + 0.5) * width;
-
-        const screenY =
-          (-screenPosition.y * 0.5 + 0.5) * height;
-
-        // Posicionar el botón HTML exactamente sobre el planeta.
-        button.style.left = `${screenX}px`;
-        button.style.top = `${screenY}px`;
-
-        // Mantener el botón centrado sobre su planeta.
-        button.style.transform = "translate(-50%, -50%)";
-
-        planet.mesh.visible = button.isConnected;
-      }); // CORRECCIÓN: aquí se cierra planets.forEach().
-      // ==========================================
-
-// ==========================================
-// TAMAÑO DEL PLANO ORBITAL
-// ==========================================
-
-const orbitRadiusX = width * 0.36 * worldPerPixel;
-const orbitRadiusY = height * 0.42 * worldPerPixel;
-
-// El anillo permanece centrado alrededor del Sol.
-orbitalRing.scale.set(
-  orbitRadiusX,
-  orbitRadiusY,
-  1
-);
-orbitPlane.scale.set(
-  orbitRadiusX,
-  orbitRadiusY,
-  1
-);
-orbitDetails.forEach(({ ring }) => {
-  ring.scale.set(orbitRadiusX, orbitRadiusY, 1);
-});
-      // ==========================================
-      // ROTACIÓN DEL SOL
-      // ==========================================
-
-      sun.rotation.y += 0.0018 * delta * 60;
-      sun.rotation.x = Math.sin(elapsed * 0.2) * 0.025;
-
-      // ==========================================
-      // ANIMACIÓN AMBIENTAL DEL UNIVERSO
-      // ==========================================
-
-      // Movimiento sutil de las nebulosas.
-      nebulas.forEach((nebula, index) => {
-        nebula.rotation.z =
-          Math.sin(elapsed * 0.08 + index) * 0.08;
-
-        nebula.material.opacity =
-          0.055 + Math.sin(elapsed * 0.4 + index) * 0.012;
-      });
-
-      // Brillo respirante de las estrellas.
-      starMaterial.opacity =
-        0.75 + Math.sin(elapsed * 0.8) * 0.1;
-
-      starField.rotation.z = elapsed * 0.001;
-
-      // Pulsación lenta del halo mágico.
-      const haloPulse =
-        1 + Math.sin(elapsed * 0.8) * 0.035;
-
-      sunHalo.scale.set(
-        6.2 * haloPulse,
-        6.2 * haloPulse,
-        1
-      );
-
-      sunHaloMaterial.opacity =
-        0.24 + Math.sin(elapsed * 0.9) * 0.05;
-
-      // Pulsación del resplandor solar.
-      const pulse =
-        1 + Math.sin(elapsed * 1.8) * 0.055;
-
-      sunGlow.scale.set(
-        4.2 * pulse,
-        4.2 * pulse,
-        1
-      );
-
-      // Variación suave de la luz solar.
-      sunLight.intensity =
-        190 + Math.sin(elapsed * 2) * 12;
-
-      renderer.render(scene, camera);
+    if (planet.cloudMesh) {
+      planet.cloudMesh.rotation.y +=
+        0.00035 * delta * 60;
     }
+
+    // SINCRONIZAR BOTÓN CON PLANETA 3D
+
+    const screenPosition = new THREE.Vector3();
+
+    planet.mesh.getWorldPosition(screenPosition);
+    screenPosition.project(camera);
+
+    const screenX =
+      (screenPosition.x * 0.5 + 0.5) * width;
+
+    const screenY =
+      (-screenPosition.y * 0.5 + 0.5) * height;
+
+    button.style.left = `${screenX}px`;
+    button.style.top = `${screenY}px`;
+    button.style.transform = "translate(-50%, -50%)";
+
+    planet.mesh.visible = button.isConnected;
+  });
+
+  // ==========================================
+  // TAMAÑO DEL PLANO ORBITAL
+  // ==========================================
+
+  const orbitRadiusX = width * 0.36 * worldPerPixel;
+  const orbitRadiusY = height * 0.42 * worldPerPixel;
+
+  orbitalRing.scale.set(
+    orbitRadiusX,
+    orbitRadiusY,
+    1
+  );
+
+  orbitPlane.scale.set(
+    orbitRadiusX,
+    orbitRadiusY,
+    1
+  );
+
+  orbitDetails.forEach(({ ring }) => {
+    ring.scale.set(orbitRadiusX, orbitRadiusY, 1);
+  });
+
+  // ==========================================
+  // ROTACIÓN DEL SOL
+  // ==========================================
+
+  sun.rotation.y += 0.0018 * delta * 60;
+  sun.rotation.x = Math.sin(elapsed * 0.2) * 0.025;
+
+  // ==========================================
+  // ANIMACIÓN AMBIENTAL
+  // ==========================================
+
+  // Movimiento de las nebulosas
+
+  nebulas.forEach((nebula, index) => {
+    nebula.rotation.z =
+      Math.sin(elapsed * 0.08 + index) * 0.08;
+
+    nebula.material.opacity =
+      0.045 + Math.sin(elapsed * 0.4 + index) * 0.008;
+  });
+
+  // ==========================================
+  // MOVIMIENTO Y BRILLO DE LAS ESTRELLAS
+  // ==========================================
+
+  const positions = starGeometry.attributes.position.array;
+
+  for (let i = 0; i < starCount; i++) {
+    const index = i * 3;
+
+    const phase =
+      elapsed * starSpeeds[i] + starPhases[i];
+
+    positions[index] =
+      baseStarPositions[index] +
+      Math.sin(phase) * 0.035;
+
+    positions[index + 1] =
+      baseStarPositions[index + 1] +
+      Math.cos(phase) * 0.035;
+  }
+
+  starGeometry.attributes.position.needsUpdate = true;
+
+  // Parpadeo general
+  starMaterial.opacity =
+    0.85 + Math.sin(elapsed * 2) * 0.15;
+
+  // Rotación lenta del campo estelar
+  starField.rotation.z = elapsed * 0.001;
+
+  // ==========================================
+  // ESTRELLAS FUGACES
+  // ==========================================
+
+  shootingStars.forEach((star) => {
+    const progress = ((elapsed + star.offset) % 8) / 8;
+    const duration = 0.22;
+
+    if (progress < duration) {
+      const movement = progress / duration;
+
+      star.object.visible = true;
+
+      star.object.position.set(
+        -22 + movement * 44,
+        10 - movement * 18,
+        -35
+      );
+
+      star.material.opacity =
+        1 - movement;
+    } else {
+      star.object.visible = false;
+      star.material.opacity = 0;
+    }
+  });
+
+  // ==========================================
+  // PULSACIÓN DEL HALO MÁGICO
+  // ==========================================
+
+  const haloPulse =
+    1 + Math.sin(elapsed * 0.8) * 0.035;
+
+  sunHalo.scale.set(
+    6.2 * haloPulse,
+    6.2 * haloPulse,
+    1
+  );
+
+  sunHaloMaterial.opacity =
+    0.24 + Math.sin(elapsed * 0.9) * 0.05;
+
+  // ==========================================
+  // RESPLANDOR SOLAR
+  // ==========================================
+
+  const pulse =
+    1 + Math.sin(elapsed * 1.8) * 0.055;
+
+  sunGlow.scale.set(
+    4.2 * pulse,
+    4.2 * pulse,
+    1
+  );
+
+  sunLight.intensity =
+    190 + Math.sin(elapsed * 2) * 12;
+
+  // ==========================================
+  // RENDERIZADO
+  // ==========================================
+
+  renderer.render(scene, camera);
+}
+
 
     canvas.dataset.initialized = "true";
     animate();
@@ -1323,13 +1621,14 @@ orbitDetails.forEach(({ ring }) => {
 
       // Liberar recursos de los planetas.
       planets.forEach(({
-        mesh,
-        texture,
-        ring,
-        ringTexture,
-        cloudMesh,
-        cloudTexture
-      }) => {
+  mesh,
+  texture,
+  ring,
+  ringTexture,
+  ringColorTexture,
+  cloudMesh,
+  cloudTexture
+}) => {
         mesh.geometry.dispose();
         mesh.material.dispose();
         texture.dispose();
@@ -1351,15 +1650,21 @@ orbitDetails.forEach(({ ring }) => {
         }
 
         if (ringTexture) {
-          ringTexture.dispose();
-        }
+  ringTexture.dispose();
+}
+
+if (ringColorTexture) {
+  ringColorTexture.dispose();
+}
       });
 
       // Liberar recursos del Sol.
       sunGeometry.dispose();
       sunMaterial.dispose();
       sunTexture.dispose();
-
+// Liberar recursos del núcleo oscuro.
+blackHoleGeometry.dispose();
+blackHoleMaterial.dispose();
       glowTexture.dispose();
       glowMaterial.dispose();
       sunHaloMaterial.dispose();
@@ -1380,9 +1685,14 @@ orbitDetails.forEach(({ geometry, material }) => {
       nebulaTexture.dispose();
 
       // Liberar recursos del campo de estrellas.
-      starGeometry.dispose();
-      starMaterial.dispose();
+starGeometry.dispose();
+starMaterial.dispose();
 
+// Liberar recursos de las estrellas fugaces.
+shootingStars.forEach((star) => {
+  star.object.geometry.dispose();
+  star.material.dispose();
+});
       // Liberar el renderizador.
       renderer.dispose();
 

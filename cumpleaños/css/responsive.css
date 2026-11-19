@@ -118,3 +118,1675 @@
   }
 }
 
+/* ==========================================
+   PLANTILLA 3 — CARTA CELESTIAL
+   Papel perlado, rosa y lavanda
+========================================== */
+
+/* Fondo espacial */
+#letter {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      ellipse at 15% 20%,
+      rgb(180 111 255 / 22%),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 85% 75%,
+      rgb(255 130 205 / 17%),
+      transparent 40%
+    ),
+    linear-gradient(
+      145deg,
+      #100b27,
+      #25143f 50%,
+      #130d2b
+    );
+}
+
+/* Estrellas del fondo */
+#letter::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(2px 2px at 10% 15%, #ffffff 90%, transparent),
+    radial-gradient(2px 2px at 25% 75%, #ffd9f4 90%, transparent),
+    radial-gradient(2px 2px at 45% 25%, #ffffff 90%, transparent),
+    radial-gradient(3px 3px at 75% 18%, #e4c5ff 90%, transparent),
+    radial-gradient(2px 2px at 90% 65%, #ffffff 90%, transparent),
+    radial-gradient(2px 2px at 65% 85%, #ffd6ed 90%, transparent),
+    radial-gradient(2px 2px at 35% 45%, #ffffff 90%, transparent);
+
+  background-size: 280px 280px;
+  opacity: 0.85;
+
+  animation: letter-stars-glow 5s ease-in-out infinite alternate;
+}
+
+/* Resplandor ambiental */
+#letter::after {
+  content: "";
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  top: 50%;
+  left: 50%;
+  z-index: -1;
+  pointer-events: none;
+
+  transform: translate(-50%, -50%);
+
+  background: radial-gradient(
+    circle,
+    rgb(194 135 255 / 13%),
+    rgb(255 151 220 / 7%) 40%,
+    transparent 72%
+  );
+
+  filter: blur(15px);
+}
+
+/* Contenedor principal */
+#letter .letter-container {
+  position: relative;
+  z-index: 1;
+
+  width: min(92%, 760px);
+  margin-inline: auto;
+  padding: 35px 0 45px;
+
+  text-align: center;
+}
+
+/* Sobre flotante */
+#letter .letter-decoration {
+  position: relative;
+  display: inline-block;
+
+  margin-bottom: 12px;
+
+  font-size: clamp(3.5rem, 8vw, 5.5rem);
+
+  filter:
+    drop-shadow(0 0 12px rgb(255 170 225 / 65%))
+    drop-shadow(0 0 28px rgb(185 130 255 / 45%));
+
+  animation: letter-envelope-float 4s ease-in-out infinite;
+}
+
+/* Texto superior */
+#letter .eyebrow {
+  color: #f6c9ed;
+
+  text-shadow:
+    0 0 10px rgb(255 165 225 / 45%),
+    0 0 20px rgb(190 135 255 / 25%);
+
+  letter-spacing: 3px;
+}
+
+/* Tarjeta de papel */
+#letter .letter-card {
+  position: relative;
+  overflow: hidden;
+
+  margin: 22px auto 30px;
+  padding: clamp(25px, 5vw, 48px);
+
+  border: 2px solid #f4c8ed;
+  border-radius: 25px;
+
+  background:
+    radial-gradient(
+      ellipse at 10% 5%,
+      rgb(255 255 255 / 95%),
+      transparent 48%
+    ),
+    linear-gradient(
+      145deg,
+      #fffdfd 0%,
+      #fff0f7 48%,
+      #f0e3ff 100%
+    );
+
+  box-shadow:
+    0 20px 55px rgb(0 0 0 / 40%),
+    0 0 18px rgb(255 157 225 / 35%),
+    0 0 40px rgb(180 130 255 / 20%),
+    inset 0 0 25px rgb(255 255 255 / 85%);
+}
+
+/* Detalle decorativo interior */
+#letter .letter-card::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+
+  border: 1px solid rgb(183 126 201 / 45%);
+  border-radius: 17px;
+
+  pointer-events: none;
+}
+
+/* Brillo superior */
+#letter .letter-card::after {
+  content: "✦";
+  position: absolute;
+  top: 20px;
+  right: 25px;
+
+  color: #d59ad8;
+  font-size: 25px;
+
+  text-shadow: 0 0 12px rgb(225 155 220 / 70%);
+}
+
+/* Título de la carta */
+#letter #letter-title {
+  position: relative;
+
+  margin-bottom: 28px;
+
+  color: #704080;
+
+  font-family: Georgia, serif;
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+
+  text-shadow:
+    0 1px 1px #ffffff,
+    0 2px 8px rgb(193 132 202 / 25%);
+}
+
+/* Saludo */
+#letter #letter-greeting {
+  position: relative;
+
+  margin-bottom: 22px;
+
+  color: #a34f8c;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  font-style: italic;
+}
+
+/* Separador decorativo */
+#letter #letter-greeting::after {
+  content: "✧  ─────  ♥  ─────  ✧";
+
+  display: block;
+  margin-top: 17px;
+
+  color: #c58bc5;
+  font-size: 0.9rem;
+  letter-spacing: 2px;
+}
+
+/* Párrafos */
+#letter #letter-paragraphs {
+  position: relative;
+
+  color: #493452;
+
+  font-size: 1.04rem;
+  line-height: 1.9;
+  text-align: left;
+}
+
+/* Espaciado entre párrafos */
+#letter #letter-paragraphs p {
+  margin: 0 0 19px;
+  color: #493452;
+}
+
+/* Cierre de la carta */
+#letter #letter-closing {
+  position: relative;
+
+  margin-top: 30px;
+  padding-top: 20px;
+
+  border-top: 1px solid rgb(173 117 183 / 35%);
+
+  color: #9a5798;
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  font-style: italic;
+}
+
+/* Botón para continuar */
+#letter #continue-to-messages {
+  position: relative;
+
+  padding: 14px 28px;
+
+  border: 1px solid #ffe6fb;
+  border-radius: 30px;
+
+  background: linear-gradient(
+    135deg,
+    #f5b8df,
+    #c99be9 55%,
+    #956bc4
+  );
+
+  color: #321c48;
+  font-weight: 700;
+
+  box-shadow:
+    0 8px 22px rgb(0 0 0 / 30%),
+    0 0 20px rgb(225 156 255 / 35%),
+    inset 0 1px 3px rgb(255 255 255 / 75%);
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    background 0.3s ease;
+}
+
+/* Efecto hover */
+#letter #continue-to-messages:hover {
+  transform: translateY(-4px);
+
+  background: linear-gradient(
+    135deg,
+    #ffe2f5,
+    #e0b9f4 55%,
+    #b18ce0
+  );
+
+  box-shadow:
+    0 12px 28px rgb(0 0 0 / 35%),
+    0 0 30px rgb(255 174 230 / 65%),
+    inset 0 1px 4px #ffffff;
+}
+
+/* Animaciones */
+@keyframes letter-envelope-float {
+  0%, 100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+
+  50% {
+    transform: translateY(-12px) rotate(3deg);
+  }
+}
+
+@keyframes letter-stars-glow {
+  from {
+    opacity: 0.55;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Adaptación para celulares */
+@media (max-width: 600px) {
+  #letter .letter-container {
+    width: 91%;
+    padding: 25px 0 35px;
+  }
+
+  #letter .letter-card {
+    padding: 30px 23px;
+    border-radius: 20px;
+  }
+
+  #letter #letter-paragraphs {
+    font-size: 0.98rem;
+    line-height: 1.8;
+  }
+
+  #letter .letter-decoration {
+    margin-bottom: 8px;
+  }
+
+  #letter #continue-to-messages {
+    max-width: 100%;
+  }
+}
+
+/* ==========================================
+   CARTA CELESTIAL — DETALLES ESPECIALES
+   Sin modificar tamaño ni distribución
+========================================== */
+
+/* Destellos decorativos en las esquinas */
+#letter .letter-card {
+  background-image:
+    radial-gradient(circle at 8% 12%,
+      rgb(255 190 235 / 75%) 0 2px,
+      transparent 4px),
+    radial-gradient(circle at 92% 18%,
+      rgb(192 153 255 / 80%) 0 2px,
+      transparent 4px),
+    radial-gradient(circle at 12% 88%,
+      rgb(255 190 235 / 75%) 0 2px,
+      transparent 4px),
+    radial-gradient(circle at 90% 85%,
+      rgb(192 153 255 / 80%) 0 2px,
+      transparent 4px),
+    radial-gradient(
+      ellipse at 10% 5%,
+      rgb(255 255 255 / 95%),
+      transparent 48%
+    ),
+    linear-gradient(
+      145deg,
+      #fffdfd 0%,
+      #fff0f7 48%,
+      #f0e3ff 100%
+    );
+}
+
+/* Sello de corazón */
+#letter #letter-closing::after {
+  content: "♥";
+  display: block;
+
+  width: 42px;
+  height: 42px;
+  margin: 18px auto 0;
+
+  border: 1px solid rgb(255 255 255 / 85%);
+  border-radius: 50%;
+
+  background: linear-gradient(
+    145deg,
+    #ffb8df,
+    #d69bea 55%,
+    #a77bd2
+  );
+
+  color: #ffffff;
+  font-size: 20px;
+  line-height: 40px;
+  font-style: normal;
+
+  text-shadow: 0 0 8px rgb(255 255 255 / 80%);
+
+  box-shadow:
+    0 0 12px rgb(255 151 220 / 55%),
+    0 0 25px rgb(181 130 255 / 35%),
+    inset 0 1px 3px rgb(255 255 255 / 70%);
+
+  animation: letter-heart-glow 3s ease-in-out infinite;
+}
+
+/* Destello del título */
+#letter #letter-title {
+  animation: letter-title-glow 4s ease-in-out infinite;
+}
+
+/* Aparición suave de la tarjeta */
+#letter .letter-card {
+  animation: letter-card-appear 1.2s ease both;
+}
+
+/* Aparición del sobre */
+#letter .letter-decoration {
+  animation:
+    letter-envelope-float 4s ease-in-out infinite,
+    letter-envelope-appear 1s ease both;
+}
+
+/* Animaciones */
+@keyframes letter-heart-glow {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow:
+      0 0 12px rgb(255 151 220 / 45%),
+      0 0 20px rgb(181 130 255 / 25%);
+  }
+
+  50% {
+    transform: scale(1.1);
+    box-shadow:
+      0 0 20px rgb(255 151 220 / 75%),
+      0 0 35px rgb(181 130 255 / 55%);
+  }
+}
+
+@keyframes letter-title-glow {
+  0%, 100% {
+    text-shadow:
+      0 1px 1px #ffffff,
+      0 2px 8px rgb(193 132 202 / 25%);
+  }
+
+  50% {
+    text-shadow:
+      0 1px 1px #ffffff,
+      0 2px 15px rgb(221 143 221 / 65%);
+  }
+}
+
+@keyframes letter-card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes letter-envelope-appear {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Respeto por usuarios que reducen animaciones */
+@media (prefers-reduced-motion: reduce) {
+  #letter .letter-card,
+  #letter .letter-decoration,
+  #letter #letter-title,
+  #letter #letter-closing::after {
+    animation: none;
+  }
+}
+
+/* ==========================================
+   SELLO DE CERA — CARTA CELESTIAL
+========================================== */
+
+#letter .letter-card {
+  overflow: visible;
+}
+
+#letter .letter-card::after {
+  content: "♥";
+
+  position: absolute;
+  top: auto;
+  right: 28px;
+  bottom: -25px;
+
+  display: grid;
+  place-items: center;
+
+  width: 54px;
+  height: 54px;
+
+  border: 2px solid #ffd9ef;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      #ffdaee,
+      #e77db9 45%,
+      #a83e86 100%
+    );
+
+  color: #fff4fb;
+  font-size: 25px;
+
+  text-shadow:
+    0 1px 3px rgb(100 20 70 / 50%);
+
+  box-shadow:
+    0 5px 12px rgb(40 10 45 / 30%),
+    0 0 18px rgb(255 130 205 / 45%),
+    inset 0 2px 5px rgb(255 255 255 / 45%);
+
+  animation: wax-seal-glow 3s ease-in-out infinite;
+}
+
+@keyframes wax-seal-glow {
+  0%, 100% {
+    filter: brightness(1);
+    transform: rotate(-8deg);
+  }
+
+  50% {
+    filter: brightness(1.2);
+    transform: rotate(8deg);
+  }
+}
+
+/* ==========================================
+   DETALLE MÁGICO — TÍTULO DE LA CARTA
+========================================== */
+
+#letter #letter-title::after {
+  content: "";
+  display: block;
+
+  width: 105px;
+  height: 3px;
+
+  margin: 14px auto 0;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #d879c6,
+    #a77bea,
+    #d879c6,
+    transparent
+  );
+
+  box-shadow:
+    0 0 7px rgb(218 121 198 / 75%),
+    0 0 16px rgb(167 123 234 / 55%);
+
+  animation: title-line-glow 3s ease-in-out infinite;
+}
+
+@keyframes title-line-glow {
+  0%, 100% {
+    opacity: 0.65;
+    transform: scaleX(0.85);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scaleX(1.15);
+  }
+}
+
+/* ==========================================
+   MENSAJES SECRETOS — UNIVERSO CELESTIAL
+   Sobres mágicos rosa, violeta y azul
+========================================== */
+
+/* Fondo de la pantalla */
+#messages {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      ellipse at 15% 20%,
+      rgb(173 112 255 / 24%),
+      transparent 40%
+    ),
+    radial-gradient(
+      ellipse at 85% 75%,
+      rgb(255 126 208 / 20%),
+      transparent 42%
+    ),
+    linear-gradient(
+      145deg,
+      #100b29,
+      #251342 52%,
+      #100b2b
+    );
+}
+
+/* Estrellas del fondo */
+#messages::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+
+  background-image:
+    radial-gradient(2px 2px at 10% 20%, #ffffff 90%, transparent),
+    radial-gradient(2px 2px at 25% 80%, #ffc9ec 90%, transparent),
+    radial-gradient(3px 3px at 50% 15%, #ffffff 90%, transparent),
+    radial-gradient(2px 2px at 75% 35%, #d8bdff 90%, transparent),
+    radial-gradient(2px 2px at 90% 75%, #ffffff 90%, transparent),
+    radial-gradient(2px 2px at 40% 55%, #ffc9ec 90%, transparent);
+
+  background-size: 300px 300px;
+  opacity: 0.8;
+
+  animation: messages-stars 5s ease-in-out infinite alternate;
+}
+
+/* Contenedor */
+#messages .messages-container {
+  position: relative;
+  z-index: 1;
+
+  width: min(92%, 950px);
+  margin-inline: auto;
+  padding: 35px 0 45px;
+
+  text-align: center;
+}
+
+/* Texto superior */
+#messages .eyebrow {
+  color: #ffd0f0;
+
+  letter-spacing: 3px;
+
+  text-shadow:
+    0 0 10px rgb(255 160 225 / 65%),
+    0 0 22px rgb(190 135 255 / 35%);
+}
+
+/* Título */
+#messages h2 {
+  color: #fff1ff;
+
+  font-family: Georgia, serif;
+  font-size: clamp(1.9rem, 4vw, 2.8rem);
+
+  text-shadow:
+    0 0 12px rgb(225 160 255 / 65%),
+    0 0 28px rgb(255 130 215 / 30%);
+}
+
+/* Introducción */
+#messages .messages-intro {
+  max-width: 550px;
+  margin: 16px auto 35px;
+
+  color: #eadbff;
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+/* Distribución de los sobres */
+#messages .envelopes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 25px;
+
+  width: 100%;
+  margin: 0 auto 35px;
+}
+
+
+/* ==========================================
+   SOBRES MÁGICOS — DISEÑO ORGÁNICO
+========================================== */
+
+#messages .envelopes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 30px;
+  width: 100%;
+  margin: 0 auto 35px;
+}
+
+#messages .secret-envelope {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 225px;
+  padding: 28px 18px;
+
+  border: 2px solid rgb(255 255 255 / 75%);
+  border-radius: 48% 48% 35% 35% / 27% 27% 18% 18%;
+
+  color: white;
+  cursor: pointer;
+
+  box-shadow:
+    0 15px 30px rgb(0 0 0 / 35%),
+    inset 0 2px 8px rgb(255 255 255 / 45%),
+    0 0 22px rgb(220 160 255 / 20%);
+
+  transition: transform 0.4s ease, filter 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+/* Tonos individuales */
+#messages .secret-envelope:nth-child(1) {
+  background: linear-gradient(145deg, #ffc5e8, #df79ba 55%, #994d9d);
+}
+
+#messages .secret-envelope:nth-child(2) {
+  background: linear-gradient(145deg, #edceff, #ae88e7 55%, #7051b8);
+}
+
+#messages .secret-envelope:nth-child(3) {
+  background: linear-gradient(145deg, #c9edff, #82afe9 55%, #5968bd);
+}
+
+/* Marco luminoso */
+#messages .secret-envelope::before {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  z-index: -1;
+
+  border: 1px solid rgb(255 255 255 / 55%);
+  border-radius: inherit;
+
+  pointer-events: none;
+}
+
+/* Corazón decorativo */
+#messages .secret-envelope::after {
+  content: "♥";
+  position: absolute;
+  top: 15px;
+  right: 22px;
+
+  color: #fff5fc;
+  font-size: 23px;
+
+  text-shadow:
+    0 0 8px #ffffff,
+    0 0 18px #ffb7e5;
+
+  animation: envelope-heart 3s ease-in-out infinite;
+}
+
+/* Icono */
+#messages .envelope-icon {
+  font-size: 3.9rem;
+  margin-bottom: 13px;
+
+  filter:
+    drop-shadow(0 5px 5px rgb(60 20 80 / 35%))
+    drop-shadow(0 0 12px rgb(255 255 255 / 55%));
+
+  transition: transform 0.4s ease;
+}
+
+/* Texto */
+#messages .envelope-label {
+  color: #ffffff;
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  text-shadow: 0 2px 6px rgb(50 20 70 / 50%);
+}
+
+#messages .envelope-hint {
+  margin-top: 12px;
+  color: #fff5ff;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+
+/* Movimiento */
+#messages .secret-envelope:hover {
+  transform: translateY(-10px) scale(1.035);
+  filter: brightness(1.12);
+
+  box-shadow:
+    0 20px 38px rgb(0 0 0 / 40%),
+    0 0 30px rgb(239 170 255 / 55%),
+    inset 0 2px 8px #ffffff;
+}
+
+#messages .secret-envelope:hover .envelope-icon {
+  transform: scale(1.15) rotate(-6deg);
+}
+
+@keyframes envelope-heart {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Móviles */
+@media (max-width: 650px) {
+  #messages .envelopes-grid {
+    grid-template-columns: 1fr;
+    max-width: 340px;
+    gap: 22px;
+  }
+
+  #messages .secret-envelope {
+    min-height: 190px;
+  }
+}
+
+/* Colores individuales */
+#messages .secret-envelope:nth-child(1) {
+  background:
+    radial-gradient(circle at 50% 0%, rgb(255 255 255 / 55%), transparent 55%),
+    linear-gradient(145deg, #ffb8df, #d76eb4 55%, #914b9d);
+}
+
+#messages .secret-envelope:nth-child(2) {
+  background:
+    radial-gradient(circle at 50% 0%, rgb(255 255 255 / 55%), transparent 55%),
+    linear-gradient(145deg, #e4c3ff, #a47cdb 55%, #644aab);
+}
+
+#messages .secret-envelope:nth-child(3) {
+  background:
+    radial-gradient(circle at 50% 0%, rgb(255 255 255 / 55%), transparent 55%),
+    linear-gradient(145deg, #bdeaff, #779ee8 55%, #5362b4);
+}
+
+/* Brillo interior */
+#messages .secret-envelope::before {
+  content: "";
+  position: absolute;
+  inset: 9px;
+  z-index: -1;
+
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 15px;
+
+  pointer-events: none;
+}
+
+/* Destello */
+#messages .secret-envelope::after {
+  content: "✦";
+  position: absolute;
+  top: 15px;
+  right: 18px;
+
+  color: #ffffff;
+  font-size: 22px;
+
+  text-shadow: 0 0 12px #ffffff;
+
+  animation: envelope-sparkle 3s ease-in-out infinite;
+}
+
+/* Icono */
+#messages .envelope-icon {
+  display: block;
+  margin-bottom: 15px;
+
+  font-size: 3.8rem;
+
+  filter:
+    drop-shadow(0 4px 5px rgb(55 20 75 / 35%))
+    drop-shadow(0 0 12px rgb(255 255 255 / 65%));
+
+  transition: transform 0.35s ease;
+}
+
+/* Nombre del sobre */
+#messages .envelope-label {
+  color: #ffffff;
+
+  font-family: Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+
+  text-shadow:
+    0 2px 5px rgb(50 20 70 / 45%);
+}
+
+/* Instrucción */
+#messages .envelope-hint {
+  margin-top: 12px;
+
+  color: #fff2ff;
+  font-size: 0.82rem;
+  letter-spacing: 1px;
+}
+
+/* Interacción */
+#messages .secret-envelope:hover {
+  transform: translateY(-9px) scale(1.025);
+
+  filter: brightness(1.12);
+
+  box-shadow:
+    0 18px 35px rgb(0 0 0 / 40%),
+    0 0 25px rgb(229 165 255 / 55%),
+    inset 0 1px 6px #ffffff;
+}
+
+#messages .secret-envelope:hover .envelope-icon {
+  transform: scale(1.13) rotate(-5deg);
+}
+
+#messages .secret-envelope:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 5px;
+}
+
+/* Tarjeta del mensaje secreto */
+#messages #secret-message {
+  position: relative;
+
+  width: min(90%, 620px);
+  margin: 30px auto;
+
+  padding: 32px;
+
+  border: 2px solid #f7c9ed;
+  border-radius: 23px;
+
+  background:
+    radial-gradient(circle at 10% 5%, #ffffff, transparent 50%),
+    linear-gradient(145deg, #fffdfd, #ffedf7 55%, #eadfff);
+
+  box-shadow:
+    0 18px 45px rgb(0 0 0 / 40%),
+    0 0 25px rgb(255 157 225 / 35%),
+    inset 0 0 20px rgb(255 255 255 / 85%);
+
+  animation: secret-message-appear 0.5s ease both;
+}
+
+/* Texto del mensaje */
+#messages #secret-message-text {
+  color: #52365f;
+
+  font-family: Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.9;
+
+  text-align: center;
+}
+
+/* Botón guardar */
+#messages #close-secret-message {
+  margin-top: 20px;
+  padding: 13px 25px;
+
+  border: 1px solid #ffffff;
+  border-radius: 28px;
+
+  background: linear-gradient(
+    135deg,
+    #f5b8df,
+    #c99be9 55%,
+    #956bc4
+  );
+
+  color: #321c48;
+  font-weight: 700;
+
+  box-shadow:
+    0 6px 18px rgb(100 50 130 / 25%),
+    inset 0 1px 3px #ffffff;
+
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#messages #close-secret-message:hover {
+  transform: translateY(-3px);
+}
+
+/* Botón continuar */
+#messages #continue-to-birthday {
+  padding: 14px 28px;
+
+  border: 1px solid #ffe4fa;
+  border-radius: 30px;
+
+  background: linear-gradient(
+    135deg,
+    #f6b8df,
+    #c69be9 55%,
+    #926bc5
+  );
+
+  color: #321c48;
+  font-weight: 700;
+
+  box-shadow:
+    0 8px 22px rgb(0 0 0 / 30%),
+    0 0 20px rgb(225 156 255 / 35%),
+    inset 0 1px 3px #ffffff;
+
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#messages #continue-to-birthday:hover {
+  transform: translateY(-4px);
+
+  box-shadow:
+    0 12px 28px rgb(0 0 0 / 35%),
+    0 0 30px rgb(255 174 230 / 65%);
+}
+
+/* Animaciones */
+@keyframes messages-stars {
+  from { opacity: 0.45; }
+  to { opacity: 1; }
+}
+
+@keyframes envelope-sparkle {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(0.8) rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(25deg);
+  }
+}
+
+@keyframes secret-message-appear {
+  from {
+    opacity: 0;
+    transform: translateY(15px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Adaptación móvil */
+@media (max-width: 650px) {
+  #messages .messages-container {
+    width: 92%;
+    padding: 25px 0 35px;
+  }
+
+  #messages .envelopes-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    max-width: 380px;
+  }
+
+  #messages .secret-envelope {
+    min-height: 175px;
+    padding: 20px;
+  }
+
+  #messages .envelope-icon {
+    font-size: 3.2rem;
+  }
+
+  #messages #secret-message {
+    width: 95%;
+    padding: 25px 20px;
+  }
+
+  #messages #secret-message-text {
+    font-size: 1.02rem;
+  }
+
+  #messages #continue-to-birthday {
+    max-width: 100%;
+  }
+}
+
+/* Respeto por movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  #messages::before,
+  #messages .secret-envelope::after,
+  #messages #secret-message {
+    animation: none;
+  }
+
+  #messages .secret-envelope,
+  #messages .envelope-icon,
+  #messages #continue-to-birthday {
+    transition: none;
+  }
+}
+
+/* ==========================================
+   CARTA DE LOS PLANETAS
+   CRISTAL CELESTIAL — ACABADO PREMIUM
+========================================== */
+
+#universe #planet-message {
+  position: relative;
+  isolation: isolate;
+  overflow: visible;
+
+  width: min(90%, 680px);
+  margin: 35px auto 30px;
+  padding: 3px;
+
+  border: 1px solid rgb(255 225 255 / 85%);
+  border-radius: 30px;
+
+  background: linear-gradient(
+    135deg,
+    #fff0fc,
+    #d9a8ff 20%,
+    #8c61d9 48%,
+    #f5a9e2 75%,
+    #fff0fc
+  );
+
+  box-shadow:
+    0 18px 45px rgb(0 0 0 / 40%),
+    0 0 18px rgb(223 155 255 / 65%),
+    0 0 42px rgb(177 116 255 / 35%);
+
+  animation: planet-crystal-appear 0.8s ease both;
+}
+
+/* Evitar que la carta aparezca cuando está oculta */
+#universe #planet-message[hidden] {
+  display: none !important;
+}
+
+/* Superficie interior de cristal */
+#universe .planet-card-inner {
+  position: relative;
+  overflow: hidden;
+
+  padding: clamp(27px, 5vw, 43px);
+
+  border: 1px solid rgb(255 255 255 / 45%);
+  border-radius: 26px;
+
+  background:
+    radial-gradient(
+      circle at 12% 8%,
+      rgb(255 193 241 / 25%),
+      transparent 35%
+    ),
+    radial-gradient(
+      circle at 90% 90%,
+      rgb(143 125 255 / 25%),
+      transparent 38%
+    ),
+    linear-gradient(
+      145deg,
+      #38205e 0%,
+      #251744 48%,
+      #45235f 100%
+    );
+
+  box-shadow:
+    inset 0 1px 12px rgb(255 255 255 / 20%),
+    inset 0 0 35px rgb(196 139 255 / 12%);
+}
+
+/* Brillo diagonal */
+#universe .planet-card-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+
+  background: linear-gradient(
+    125deg,
+    transparent 20%,
+    rgb(255 255 255 / 8%) 42%,
+    transparent 58%
+  );
+
+  pointer-events: none;
+}
+
+/* Destellos */
+#universe .planet-card-stars {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+#universe .planet-card-stars span {
+  position: absolute;
+
+  color: #ffeaff;
+  text-shadow:
+    0 0 8px #ffffff,
+    0 0 17px #e9aaff,
+    0 0 28px #bd82ff;
+
+  animation: planet-stars-twinkle 3s ease-in-out infinite;
+}
+
+#universe .planet-card-stars span:nth-child(1) {
+  top: 13%;
+  left: 8%;
+  font-size: 22px;
+}
+
+#universe .planet-card-stars span:nth-child(2) {
+  top: 27%;
+  right: 9%;
+  font-size: 27px;
+  animation-delay: 0.8s;
+}
+
+#universe .planet-card-stars span:nth-child(3) {
+  bottom: 19%;
+  left: 12%;
+  font-size: 19px;
+  animation-delay: 1.4s;
+}
+
+#universe .planet-card-stars span:nth-child(4) {
+  top: 55%;
+  right: 7%;
+  font-size: 23px;
+  animation-delay: 0.5s;
+}
+
+#universe .planet-card-stars span:nth-child(5) {
+  bottom: 10%;
+  right: 20%;
+  font-size: 26px;
+  animation-delay: 1.8s;
+}
+
+/* Emblema central */
+#universe .planet-card-emblem {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  place-items: center;
+
+  width: 82px;
+  height: 82px;
+  margin: 0 auto 22px;
+
+  border: 2px solid #ffe3fa;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle at 30% 25%,
+      #fff4ff,
+      #e7a9f1 28%,
+      #a66bd5 65%,
+      #62439f
+    );
+
+  box-shadow:
+    0 0 12px rgb(255 220 255 / 75%),
+    0 0 28px rgb(214 147 255 / 65%),
+    inset 0 2px 8px rgb(255 255 255 / 75%);
+
+  animation: planet-emblem-glow 4s ease-in-out infinite;
+}
+
+#universe #planet-message-symbol {
+  color: #ffffff;
+  font-size: 2.5rem;
+
+  filter: drop-shadow(0 2px 5px rgb(80 35 120 / 55%));
+}
+
+#universe .planet-card-number {
+  position: absolute;
+  right: -9px;
+  bottom: -5px;
+
+  display: grid;
+  place-items: center;
+
+  width: 29px;
+  height: 29px;
+
+  border: 2px solid #fff0ff;
+  border-radius: 50%;
+
+  background: linear-gradient(145deg, #ffbce9, #b47be3);
+
+  color: #432052;
+  font-size: 0.75rem;
+  font-weight: 800;
+
+  box-shadow: 0 0 12px rgb(255 181 235 / 65%);
+}
+
+/* Etiqueta superior */
+#universe .planet-message-label {
+  position: relative;
+  z-index: 2;
+
+  margin: 0 0 12px;
+
+  color: #f8cafa;
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+
+  text-shadow: 0 0 12px rgb(255 165 235 / 45%);
+}
+
+/* Título */
+#universe #planet-message-title {
+  position: relative;
+  z-index: 2;
+
+  margin: 0 auto 18px;
+
+  color: #fff3ff;
+  font-family: Georgia, serif;
+  font-size: clamp(1.65rem, 4vw, 2.25rem);
+  line-height: 1.3;
+
+  text-align: center;
+
+  text-shadow:
+    0 2px 3px rgb(35 12 55 / 45%),
+    0 0 15px rgb(240 175 255 / 45%);
+}
+
+/* Separador */
+#universe .planet-card-divider {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 13px;
+
+  margin: 0 auto 24px;
+
+  color: #ffd7fa;
+  font-size: 1.2rem;
+}
+
+#universe .planet-card-divider span:first-child,
+#universe .planet-card-divider span:last-child {
+  width: 65px;
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #f6b9ef,
+    #ffffff
+  );
+}
+
+#universe .planet-card-divider span:last-child {
+  transform: rotate(180deg);
+}
+
+/* Papel interior del mensaje */
+#universe .planet-card-paper {
+  position: relative;
+  z-index: 2;
+
+  padding: 25px 24px;
+
+  border: 1px solid #ffffff;
+  border-radius: 19px;
+
+  background:
+    radial-gradient(
+      circle at 10% 10%,
+      #ffffff,
+      transparent 55%
+    ),
+    linear-gradient(
+      145deg,
+      #fffaff,
+      #fceafa 55%,
+      #e9ddff
+    );
+
+  box-shadow:
+    0 8px 22px rgb(0 0 0 / 22%),
+    inset 0 1px 8px #ffffff;
+}
+
+#universe #planet-message-text {
+  margin: 0;
+
+  color: #49305f;
+  font-family: Georgia, serif;
+  font-size: 1.08rem;
+  font-weight: 500;
+  line-height: 1.9;
+
+  text-align: center;
+}
+
+/* Frase inferior */
+#universe .planet-card-footer {
+  position: relative;
+  z-index: 2;
+
+  margin: 23px 0 0;
+
+  color: #f4d5ff;
+  font-family: Georgia, serif;
+  font-size: 0.91rem;
+  font-style: italic;
+  letter-spacing: 0.5px;
+
+  text-align: center;
+}
+
+#universe .planet-card-footer span {
+  color: #ffd8f5;
+  text-shadow: 0 0 10px #ffb7ed;
+}
+
+/* Botones */
+#universe .planet-card-actions {
+  position: relative;
+  z-index: 2;
+
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 13px;
+
+  margin-top: 25px;
+}
+
+#universe .planet-card-actions button {
+  min-height: 47px;
+  padding: 12px 23px;
+
+  border: 1px solid #ffeaff;
+  border-radius: 30px;
+
+  background: linear-gradient(
+    135deg,
+    #ffe0f5,
+    #d9a8f3 55%,
+    #ad85e9
+  );
+
+  color: #39204f;
+  font-size: 0.92rem;
+  font-weight: 800;
+
+  box-shadow:
+    0 6px 18px rgb(0 0 0 / 25%),
+    0 0 15px rgb(235 169 255 / 30%),
+    inset 0 1px 4px #ffffff;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    filter 0.3s ease;
+}
+
+#universe .planet-card-actions button:hover {
+  transform: translateY(-4px);
+  filter: brightness(1.12);
+
+  box-shadow:
+    0 9px 23px rgb(0 0 0 / 30%),
+    0 0 24px rgb(255 183 239 / 65%),
+    inset 0 1px 5px #ffffff;
+}
+
+#universe .planet-card-actions button:focus-visible {
+  outline: 3px solid #ffffff;
+  outline-offset: 4px;
+}
+
+/* Animaciones */
+@keyframes planet-crystal-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes planet-stars-twinkle {
+  0%, 100% {
+    opacity: 0.45;
+    transform: scale(0.8) rotate(0deg);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.2) rotate(25deg);
+  }
+}
+
+@keyframes planet-emblem-glow {
+  0%, 100% {
+    box-shadow:
+      0 0 12px rgb(255 220 255 / 65%),
+      0 0 25px rgb(214 147 255 / 45%),
+      inset 0 2px 8px rgb(255 255 255 / 75%);
+  }
+
+  50% {
+    box-shadow:
+      0 0 20px rgb(255 220 255 / 90%),
+      0 0 38px rgb(214 147 255 / 75%),
+      inset 0 2px 10px #ffffff;
+  }
+}
+
+/* Adaptación para móviles */
+@media (max-width: 600px) {
+  #universe #planet-message {
+    width: 94%;
+    border-radius: 24px;
+  }
+
+  #universe .planet-card-inner {
+    padding: 27px 19px;
+    border-radius: 20px;
+  }
+
+  #universe .planet-card-emblem {
+    width: 70px;
+    height: 70px;
+  }
+
+  #universe #planet-message-title {
+    font-size: 1.55rem;
+  }
+
+  #universe .planet-card-paper {
+    padding: 21px 17px;
+  }
+
+  #universe #planet-message-text {
+    font-size: 0.98rem;
+    line-height: 1.8;
+  }
+
+  #universe .planet-card-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #universe .planet-card-actions button {
+    width: 100%;
+  }
+}
+
+/* Movimiento reducido */
+@media (prefers-reduced-motion: reduce) {
+  #universe #planet-message,
+  #universe .planet-card-stars span,
+  #universe .planet-card-emblem {
+    animation: none;
+  }
+
+  #universe .planet-card-actions button {
+    transition: none;
+  }
+}
+
+/* ==========================================
+   CARTA ESPECIAL — PERGAMINO ELEGANTE
+========================================== */
+
+#letter .letter-card {
+  border-radius: 45px 45px 35px 35px / 35px 35px 28px 28px;
+  overflow: visible;
+}
+
+/* Marco interior */
+#letter .letter-card::before {
+  border-radius: 32px 32px 25px 25px;
+}
+
+/* Sello de corazón */
+#letter .letter-card::after {
+  right: 28px;
+  bottom: -25px;
+}
+
+@media (max-width: 600px) {
+  #letter .letter-card {
+    border-radius: 32px 32px 27px 27px;
+  }
+
+  #letter .letter-card::before {
+    border-radius: 23px 23px 19px 19px;
+  }
+
+  #letter .letter-card::after {
+    right: 20px;
+    bottom: -22px;
+  }
+}
+
+@media (max-width: 600px) {
+  .cake-candles {
+    gap: 18px;
+    height: 108px;
+  }
+
+  .candle-number {
+    width: 76px;
+    height: 100px;
+  }
+
+  .candle-digit {
+    font-size: 5.8rem;
+  }
+
+  .candle-number .flame {
+    width: 11px;
+    height: 18px;
+  }
+}

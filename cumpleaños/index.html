@@ -314,20 +314,53 @@
     </div>
 
     <!-- Mensaje del planeta seleccionado -->
-    <div
-      id="planet-message"
-      class="planet-message"
-      aria-live="polite"
-      hidden
-    >
-      <p class="planet-message-label">
-        ✦ UN MENSAJE DE TU UNIVERSO ✦
-      </p>
+    
+<div
+  id="planet-message"
+  class="planet-message"
+  aria-live="polite"
+  data-planet="1"
+  hidden
+>
+  <div class="planet-card-stars" aria-hidden="true">
+    <span>✦</span>
+    <span>✧</span>
+    <span>✦</span>
+    <span>·</span>
+    <span>✧</span>
+  </div>
 
-      <h3 id="planet-message-title"></h3>
+  <div class="planet-card-inner">
 
+    <div class="planet-card-emblem">
+      <span id="planet-message-symbol">☀</span>
+      <span class="planet-card-number" id="planet-message-number">01</span>
+    </div>
+
+    <p class="planet-message-label">
+      UN SECRETO DE ESTE UNIVERSO
+    </p>
+
+    <h3 id="planet-message-title">
+      El planeta de la alegría
+    </h3>
+
+    <div class="planet-card-divider" aria-hidden="true">
+      <span></span>
+      <span>✧</span>
+      <span></span>
+    </div>
+
+    <div class="planet-card-paper">
       <p id="planet-message-text"></p>
+    </div>
 
+    <p class="planet-card-footer">
+      Un deseo escrito entre las estrellas
+      <span aria-hidden="true"> ✦</span>
+    </p>
+
+    <div class="planet-card-actions">
       <button id="close-planet-message" type="button">
         Volver al universo ✨
       </button>
@@ -336,6 +369,10 @@
         Descubrir tu carta 💌
       </button>
     </div>
+
+  </div>
+</div>
+
 
     <p class="universe-hint">
       ✦ Explora los diez planetas a tu ritmo ✦
@@ -442,12 +479,43 @@
 
         </div>
 
-        <div id="secret-message" class="secret-message" hidden>
+        
+<div id="secret-message" class="secret-message" hidden>
+  <div class="parchment-card">
+
+    <div class="parchment-decoration parchment-decoration-top">
+      ✧ ─────── 💜 ─────── ✧
+    </div>
+
+    <p class="parchment-eyebrow">UN MENSAJE PARA TI</p>
+
+    <h3 id="secret-message-title">Un pequeño secreto</h3>
+
+    <div class="parchment-divider">
+      <span>✦</span>
+    </div>
+
+    <p id="secret-message-text"></p>
+
+    <div class="parchment-signature">
+      Con cariño, para ti
+      <span>♡</span>
+    </div>
+
+    <div class="parchment-decoration parchment-decoration-bottom">
+      ✧ ───────────── ✧
+    </div>
+
+    <button id="close-secret-message" type="button">
+      Guardar mensaje 💜
+    </button>
+
+  </div>
+</div>
+
           <p id="secret-message-text"></p>
 
-          <button id="close-secret-message" type="button">
-            Guardar mensaje 💜
-          </button>
+          
         </div>
 
         <button id="continue-to-birthday" type="button">
@@ -476,21 +544,33 @@
 
         <div class="cake-scene">
 
-          <div class="cake-candles" aria-label="Velas de cumpleaños">
+ 
+<div class="cake-candles" aria-label="Velas de cumpleaños">
 
-            <button class="candle" type="button" aria-label="Apagar vela 1">
-              <span class="flame"></span>
-            </button>
+  <button
+    class="candle candle-number"
+    type="button"
+    data-message="Que nunca te falten motivos para sonreír y personas que iluminen tus días. 💜"
+    aria-label="Apagar las llamas del número 2"
+  >
+    <span class="candle-digit">2</span>
+    <span class="flame flame-one"></span>
+    <span class="flame flame-two"></span>
+  </button>
 
-            <button class="candle" type="button" aria-label="Apagar vela 2">
-              <span class="flame"></span>
-            </button>
+  <button
+    class="candle candle-number"
+    type="button"
+    data-message="Que tus sueños encuentren su camino y que este nuevo año te regale momentos inolvidables. ✨"
+    aria-label="Apagar las llamas del número 6"
+  >
+    <span class="candle-digit">6</span>
+    <span class="flame flame-one"></span>
+    <span class="flame flame-two"></span>
+  </button>
 
-            <button class="candle" type="button" aria-label="Apagar vela 3">
-              <span class="flame"></span>
-            </button>
+</div>
 
-          </div>
 
           <div class="cake">
             <div class="cake-top"></div>
