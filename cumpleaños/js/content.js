@@ -45,19 +45,20 @@ letter: {
     subtitle: "Hay detalles que merecen descubrirse despacito.",
     items: [
       {
-        title: "Un recordatorio",
-        text: "Nunca olvides lo especial que eres."
+        title: "Algo que nunca debes olvidar",
+        text: "Cristina, nunca dudes de lo valiosa que eres. Tienes una forma única de hacer especial este mundo, y mereces que la vida te devuelva toda esa belleza en forma de momentos felices. 💜"
       },
       {
-        title: "Un deseo",
-        text: "Que la vida te sorprenda con momentos preciosos."
+        title: "Un deseo de corazón",
+        text: "Deseo que tus 26 años estén llenos de sueños cumplidos, caminos bonitos, nuevas oportunidades y personas que hagan que cada día valga la pena. Que la felicidad te encuentre incluso en los momentos más inesperados. ✨"
       },
       {
-        title: "Algo para guardar",
-        text: "Mereces una felicidad que te abrace el alma."
+        title: "Un mensaje para guardar",
+        text: "Si algún día las cosas no salen como esperabas, recuerda que todavía quedan muchas historias bonitas por vivir. No tengas miedo de comenzar de nuevo, de soñar en grande ni de buscar todo aquello que te haga feliz. 🌷"
       }
     ]
   },
+
 
   // Pantalla 5: Pastel de cumpleaños
   birthday: {

@@ -305,6 +305,8 @@ envelopes.forEach((envelope) => {
     });
   }
 
+ 
+ 
   // =========================================================
   // 3. VELAS NUMÉRICAS DEL PASTEL: 26
   // =========================================================
@@ -313,6 +315,104 @@ envelopes.forEach((envelope) => {
   const blowButton = document.getElementById("blow-candles");
   const wishFeedback = document.getElementById("wish-feedback");
   const finalButton = document.getElementById("continue-to-final");
+
+  function showCakeSparkles() {
+    const cakeScene = document.querySelector(".cake-scene");
+    if (!cakeScene) return;
+
+    const cake = cakeScene.querySelector(".celestial-cake");
+    if (!cake) return;
+
+    const oldSparkles = cakeScene.querySelector(".wish-sparkles");
+    if (oldSparkles) oldSparkles.remove();
+
+    const sceneRect = cakeScene.getBoundingClientRect();
+    const cakeRect = cake.getBoundingClientRect();
+
+    const layer = document.createElement("div");
+    layer.className = "wish-sparkles";
+
+    Object.assign(layer.style, {
+      position: "absolute",
+      inset: "0",
+      width: "100%",
+      height: "100%",
+      zIndex: "20",
+      pointerEvents: "none",
+      overflow: "visible"
+    });
+
+    cakeScene.appendChild(layer);
+
+    // Centro del pastel respecto a la escena.
+    const centerX =
+      cakeRect.left - sceneRect.left + cakeRect.width / 2;
+
+    const centerY =
+      cakeRect.top - sceneRect.top + cakeRect.height / 2;
+
+    // Radio exterior para rodear los dos pisos.
+    const radiusX = cakeRect.width / 2 + 35;
+    const radiusY = cakeRect.height / 2 + 28;
+
+    const symbols = ["✦", "✧", "✨", "✦", "✧", "✦"];
+
+    // Distribución alrededor de todo el pastel.
+    for (let i = 0; i < 16; i++) {
+      const angle = (Math.PI * 2 * i) / 16;
+
+      const x = centerX + Math.cos(angle) * radiusX;
+      const y = centerY + Math.sin(angle) * radiusY;
+
+      const star = document.createElement("span");
+      star.textContent = symbols[i % symbols.length];
+
+      Object.assign(star.style, {
+        position: "absolute",
+        left: `${x}px`,
+        top: `${y}px`,
+        display: "block",
+        color: "#fff0b5",
+        fontSize: i % 3 === 0 ? "2.5rem" : "1.8rem",
+        textShadow:
+          "0 0 10px #ffffff, 0 0 20px #f5c5ff, 0 0 35px #c99aff",
+        transform: "translate(-50%, -50%) scale(0.1)",
+        opacity: "0",
+        animation: "none",
+        pointerEvents: "none"
+      });
+
+      layer.appendChild(star);
+
+      star.animate(
+        [
+          {
+            opacity: 0,
+            transform: "translate(-50%, -50%) scale(0.1) rotate(0deg)"
+          },
+          {
+            opacity: 1,
+            transform: "translate(-50%, -50%) scale(1.5) rotate(45deg)",
+            offset: 0.35
+          },
+          {
+            opacity: 0,
+            transform: "translate(-50%, -50%) scale(0.3) rotate(120deg)"
+          }
+        ],
+        {
+          duration: 1800,
+          delay: i * 55,
+          easing: "ease-out",
+          fill: "forwards"
+        }
+      );
+    }
+
+    setTimeout(() => {
+      layer.remove();
+    }, 3000);
+  }
 
   function extinguishCandle(candle) {
     if (candle.classList.contains("is-out")) return;
@@ -330,15 +430,28 @@ envelopes.forEach((envelope) => {
           "¡Que ese deseo tan bonito encuentre su camino! 💜✨";
       }
 
-      if (blowButton) blowButton.hidden = true;
-      if (finalButton) finalButton.hidden = false;
-    } else {
-  if (wishFeedback) {
-    wishFeedback.textContent = candle.dataset.message;
+      if (blowButton) {
+        blowButton.hidden = true;
+      }
+
+      showCakeSparkles();
+
+      setTimeout(() => {
+  if (finalButton) {
+    finalButton.hidden = false;
+    console.log("Botón de carta final mostrado:", finalButton);
+  } else {
+    console.log("No se encontró el botón continue-to-final");
   }
-}
+}, 2000);
+    } else {
+      if (wishFeedback) {
+        wishFeedback.textContent = candle.dataset.message || "";
+      }
+    }
   }
 
+  // Apagar cada número al tocarlo.
   candles.forEach((candle) => {
     candle.setAttribute("aria-pressed", "false");
 
@@ -347,11 +460,15 @@ envelopes.forEach((envelope) => {
     });
   });
 
+  // Apagar las dos velas con el botón.
   if (blowButton) {
     blowButton.addEventListener("click", () => {
-      candles.forEach((candle) => extinguishCandle(candle));
+      candles.forEach((candle) => {
+        extinguishCandle(candle);
+      });
     });
   }
+
 
   // =========================================================
   // 4. NAVEGACIÓN DE LA SORPRESA

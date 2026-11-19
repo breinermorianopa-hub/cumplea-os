@@ -739,17 +739,47 @@ body {
    9. PASTEL DE CUMPLEAÑOS
 ======================================== */
 
+
 #birthday {
-  background:
-    radial-gradient(
-      circle at 50% 35%,
-      rgb(196 167 255 / 20%),
-      transparent 45%
-    ),
-    var(--gradient-main);
+  position: relative;
+  background-color: #100821;
+
+  background-image:
+    /* Estrellas pequeñas */
+    radial-gradient(2px 2px at 5% 12%, #ffffff 99%, transparent),
+    radial-gradient(2px 2px at 13% 65%, #f9d8ff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 20% 28%, #ffffff 99%, transparent),
+    radial-gradient(2px 2px at 28% 85%, #eacaff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 35% 18%, #ffffff 99%, transparent),
+    radial-gradient(2px 2px at 43% 58%, #fbdcff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 52% 12%, #ffffff 99%, transparent),
+    radial-gradient(2px 2px at 61% 82%, #eacaff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 70% 32%, #ffffff 99%, transparent),
+    radial-gradient(2px 2px at 78% 70%, #f9d8ff 99%, transparent),
+    radial-gradient(1.5px 1.5px at 88% 15%, #ffffff 99%, transparent),
+    radial-gradient(2px 2px at 96% 55%, #eacaff 99%, transparent),
+
+    /* Destellos grandes */
+    radial-gradient(5px 5px at 18% 42%, #ffffff 40%, transparent 100%),
+    radial-gradient(4px 4px at 82% 25%, #fff0b5 35%, transparent 100%),
+    radial-gradient(5px 5px at 72% 88%, #ffffff 35%, transparent 100%),
+    radial-gradient(4px 4px at 9% 88%, #fbdcff 35%, transparent 100%),
+
+    /* Nebulosas de colores */
+    radial-gradient(ellipse at 10% 25%, rgb(137 69 202 / 42%), transparent 48%),
+    radial-gradient(ellipse at 90% 30%, rgb(216 104 190 / 34%), transparent 45%),
+    radial-gradient(ellipse at 50% 85%, rgb(111 65 190 / 38%), transparent 50%),
+    radial-gradient(ellipse at 50% 40%, rgb(91 49 147 / 30%), transparent 58%),
+
+    /* Luz central */
+    radial-gradient(ellipse at 50% 50%, rgb(173 113 255 / 12%), transparent 65%),
+
+    /* Fondo base */
+    linear-gradient(145deg, #100821 0%, #21103b 45%, #160b2c 100%);
 
   overflow-y: auto;
 }
+
 
 .birthday-container {
   display: flex;
@@ -777,20 +807,26 @@ body {
   line-height: 1.8;
 }
 
-/* ESCENA DEL PASTEL */
+/* ========================================
+   ESCENA DEL PASTEL
+======================================== */
 
 .cake-scene {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
 
   width: 100%;
-  min-height: 310px;
+  min-height: 330px;
   padding-top: 25px;
+  overflow: visible;
 }
 
-/* VELAS NUMÉRICAS 26 */
+/* ========================================
+   VELAS NUMÉRICAS 26
+======================================== */
 
 .cake-candles {
   display: flex;
@@ -799,7 +835,7 @@ body {
   gap: 24px;
 
   height: 120px;
-  z-index: 2;
+  z-index: 6;
 }
 
 .candle-number {
@@ -913,63 +949,309 @@ body {
   opacity: 0.75;
 }
 
-/* PASTEL */
+/* ========================================
+   PASTEL CELESTIAL DE DOS PISOS
+======================================== */
 
-.cake {
+.cake.celestial-cake {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: min(300px, 85vw);
+  justify-content: flex-end;
+
+  width: min(440px, 90vw);
+  height: 260px;
+  margin: 0 auto;
+
+  filter: drop-shadow(0 15px 22px rgb(25 8 65 / 30%));
 }
 
-.cake-top {
+/* PISO SUPERIOR */
+
+.cake-upper {
+  position: relative;
+  z-index: 3;
+
+  width: 48%;
+  height: 105px;
+  margin-bottom: -5px;
+}
+
+.cake-upper-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 25px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    135deg,
+    #fff1fb,
+    #dcb8f5 55%,
+    #f8d5ef
+  );
+
+  border: 2px solid rgb(255 255 255 / 85%);
+
+  box-shadow:
+    inset 0 -4px 8px rgb(151 83 190 / 20%);
+}
+
+.cake-upper-body {
+  position: absolute;
+  top: 12px;
+  left: 2%;
+
+  width: 96%;
+  height: 85px;
+
+  border-radius: 10px 10px 18px 18px;
+
+  background: linear-gradient(
+    90deg,
+    #9c70d0,
+    #e7b9ed 28%,
+    #f6d4ef 55%,
+    #b58ade
+  );
+
+  border: 2px solid rgb(255 255 255 / 65%);
+
+  box-shadow:
+    inset 8px 0 12px rgb(255 255 255 / 25%),
+    inset -9px 0 15px rgb(74 31 122 / 20%),
+    0 7px 12px rgb(45 17 81 / 20%);
+
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  overflow: hidden;
+}
+
+.cake-star,
+.cake-moon,
+.cake-heart {
+  color: #fff3bd;
+  font-size: 1.35rem;
+  text-shadow: 0 0 9px rgb(255 231 160 / 90%);
+}
+
+.cake-moon {
+  font-size: 1.65rem;
+}
+
+.cake-heart {
+  color: #fff0fa;
+}
+
+/* PISO INFERIOR */
+
+.cake-lower {
+  position: relative;
+  z-index: 2;
+
+  width: 100%;
+  height: 115px;
+}
+
+.cake-lower-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+
   width: 100%;
   height: 30px;
-  border: 3px solid #EAA1C6;
+
   border-radius: 50%;
-  background: #FAD4E5;
-  z-index: 1;
+
+  background: linear-gradient(
+    135deg,
+    #fff0fa,
+    #d9b5f1 50%,
+    #f8d5ed
+  );
+
+  border: 2px solid rgb(255 255 255 / 90%);
+
+  box-shadow:
+    inset 0 -5px 8px rgb(147 87 184 / 20%);
 }
 
-.cake-body {
+.cake-lower-body {
+  position: absolute;
+  top: 14px;
+  left: 1%;
+
+  width: 98%;
+  height: 92px;
+
+  border-radius: 12px 12px 25px 25px;
+
+  background: linear-gradient(
+    90deg,
+    #7544b4,
+    #bd8cdb 20%,
+    #f0c9ed 50%,
+    #c08bdf 80%,
+    #7849b7
+  );
+
+  border: 2px solid rgb(255 255 255 / 70%);
+
+  box-shadow:
+    inset 10px 0 15px rgb(255 255 255 / 18%),
+    inset -10px 0 18px rgb(54 19 103 / 25%),
+    0 9px 14px rgb(35 10 76 / 25%);
+
   display: flex;
-  justify-content: space-evenly;
   align-items: center;
-
-  width: 95%;
-  min-height: 95px;
-  margin-top: -8px;
-
-  border-radius: 0 0 20px 20px;
-  border-bottom: 8px solid #8757B3;
-
-  background: linear-gradient(135deg, #E9A5FF, #A879D8);
-  color: var(--color-pink-light);
-  font-size: 1.5rem;
+  justify-content: space-evenly;
+  overflow: hidden;
 }
+
+.cake-decoration {
+  color: #fff0c2;
+  font-size: 1.5rem;
+  text-shadow: 0 0 8px rgb(255 230 158 / 80%);
+}
+
+/* GLASEADO ONDULADO */
+
+.cake-drip {
+  position: absolute;
+  z-index: 4;
+  left: 0;
+
+  width: 100%;
+  pointer-events: none;
+}
+
+.upper-drip {
+  top: 18px;
+  height: 22px;
+
+  background:
+    radial-gradient(ellipse at 12% 0%, #fff1fb 0 48%, transparent 51%),
+    radial-gradient(ellipse at 38% 0%, #fff1fb 0 48%, transparent 51%),
+    radial-gradient(ellipse at 65% 0%, #fff1fb 0 48%, transparent 51%),
+    radial-gradient(ellipse at 90% 0%, #fff1fb 0 48%, transparent 51%);
+
+  opacity: 0.9;
+}
+
+.lower-drip {
+  top: 20px;
+  height: 28px;
+
+  background:
+    radial-gradient(ellipse at 10% 0%, #fce8fa 0 48%, transparent 51%),
+    radial-gradient(ellipse at 30% 0%, #fce8fa 0 48%, transparent 51%),
+    radial-gradient(ellipse at 53% 0%, #fce8fa 0 48%, transparent 51%),
+    radial-gradient(ellipse at 76% 0%, #fce8fa 0 48%, transparent 51%),
+    radial-gradient(ellipse at 94% 0%, #fce8fa 0 48%, transparent 51%);
+}
+
+/* PERLAS DECORATIVAS */
+
+.cake-pearls {
+  position: absolute;
+  z-index: 5;
+
+  bottom: 42px;
+  left: 5%;
+
+  width: 90%;
+
+  display: flex;
+  justify-content: space-around;
+  pointer-events: none;
+}
+
+.cake-pearls span {
+  color: #fff2cb;
+  font-size: 1.5rem;
+
+  text-shadow:
+    0 0 5px #fff,
+    0 0 10px #f6c8ff;
+}
+
+/* PLATO */
 
 .cake-plate {
+  position: absolute;
+  z-index: 1;
+
+  bottom: 0;
+  left: -5%;
+
   width: 110%;
-  height: 14px;
-  margin-top: 3px;
+  height: 19px;
 
   border-radius: 50%;
-  background: #E5D8F7;
-  box-shadow: var(--shadow-soft);
+
+  background: linear-gradient(
+    180deg,
+    #f6dafa,
+    #a77bd2 55%,
+    #68439d
+  );
+
+  border: 2px solid rgb(255 255 255 / 75%);
+
+  box-shadow:
+    0 7px 15px rgb(28 8 62 / 35%),
+    inset 0 3px 5px rgb(255 255 255 / 55%);
 }
 
-/* MENSAJE DEL DESEO */
+/* ========================================
+   MENSAJE DEL DESEO
+======================================== */
 
 #wish-feedback {
   color: var(--color-pink-light);
   line-height: 1.7;
 }
 
-/* ADAPTACIÓN PARA MÓVILES */
+/* ========================================
+   DESTELLOS MÁGICOS DEL PASTEL
+======================================== */
+
+.wish-sparkles {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.wish-sparkles span {
+  position: absolute;
+  display: block;
+  color: #fff0b5;
+  font-size: 2rem;
+
+  text-shadow:
+    0 0 8px #ffffff,
+    0 0 18px #f5c5ff,
+    0 0 30px #c99aff;
+
+  pointer-events: none;
+}
+
+/* ========================================
+   ADAPTACIÓN PARA MÓVILES
+======================================== */
 
 @media (max-width: 600px) {
   .cake-scene {
-    min-height: 290px;
+    min-height: 310px;
   }
 
   .cake-candles {
@@ -990,45 +1272,118 @@ body {
     width: 11px;
     height: 18px;
   }
+
+  .cake.celestial-cake {
+    width: min(350px, 88vw);
+    height: 235px;
+  }
+
+  .cake-upper {
+    height: 95px;
+  }
+
+  .cake-upper-body {
+    height: 77px;
+  }
+
+  .cake-lower {
+    height: 105px;
+  }
+
+  .cake-lower-body {
+    height: 83px;
+  }
+
+  .cake-pearls {
+    bottom: 38px;
+  }
 }
+
+
 
 /* ========================================
    10. FELICITACIÓN FINAL
 ======================================== */
 
 #final {
+  position: relative;
+  isolation: isolate;
+  overflow-y: auto;
+
   background:
     radial-gradient(
-      circle at 50% 20%,
-      rgb(244 167 197 / 20%),
-      transparent 40%
+      ellipse at 50% 15%,
+      rgb(244 167 197 / 24%),
+      transparent 42%
     ),
     radial-gradient(
-      circle at 15% 85%,
-      rgb(196 167 255 / 18%),
+      ellipse at 10% 80%,
+      rgb(196 167 255 / 20%),
+      transparent 38%
+    ),
+    radial-gradient(
+      ellipse at 90% 75%,
+      rgb(255 145 213 / 12%),
       transparent 35%
     ),
-    var(--gradient-main);
+    linear-gradient(
+      145deg,
+      #10091f,
+      #24113f 48%,
+      #160d2c
+    );
+}
 
-  overflow-y: auto;
+/* Destellos decorativos del fondo */
+#final::before,
+#final::after {
+  content: "✦     ·       ✧        ·      ✦";
+  position: absolute;
+  z-index: -1;
+  width: 100%;
+  left: 0;
+  color: rgb(255 226 248 / 35%);
+  text-align: center;
+  letter-spacing: 1.5rem;
+  pointer-events: none;
+  animation: gentle-float 6s ease-in-out infinite;
+}
+
+#final::before {
+  top: 12%;
+  font-size: 1.2rem;
+}
+
+#final::after {
+  bottom: 10%;
+  font-size: 1.5rem;
+  animation-delay: 2s;
 }
 
 .final-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--space-md);
 
-  width: 100%;
-  max-width: 760px;
+  width: min(100% - 2rem, 760px);
   margin: auto;
-  padding-block: var(--space-xl);
+  padding-block: clamp(2rem, 6vh, 4rem);
   text-align: center;
 }
 
 .final-decoration {
-  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  filter: drop-shadow(0 0 18px rgb(255 145 213 / 45%));
   animation: gentle-float 3s ease-in-out infinite;
+}
+
+.final-container .eyebrow {
+  color: #e8c5ff;
+  letter-spacing: 0.25rem;
+  font-size: var(--text-small);
+  text-shadow: 0 0 12px rgb(196 167 255 / 45%);
 }
 
 .final-container h2 {
@@ -1037,46 +1392,232 @@ body {
   font-weight: 400;
   line-height: 1.15;
   color: var(--color-pink-light);
-  text-shadow: var(--shadow-glow);
+  text-shadow:
+    0 0 12px rgb(255 145 213 / 55%),
+    0 0 35px rgb(196 167 255 / 30%);
 }
 
 #final-name {
-  color: var(--color-pink);
+  color: #ffd1e7;
   font-size: var(--text-large);
   font-weight: 700;
+  letter-spacing: 0.04rem;
 }
 
+/* Carta principal */
 .final-card {
+  position: relative;
   width: 100%;
-  padding: clamp(1.5rem, 5vw, 3rem);
+  padding: clamp(2rem, 6vw, 3.5rem);
 
-  border: 1px solid rgb(255 255 255 / 22%);
-  border-radius: var(--radius-large);
+  border: 1px solid rgb(255 220 245 / 35%);
+  border-radius: 24px;
 
-  background: rgb(255 240 246 / 8%);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(12px);
+  background:
+    linear-gradient(
+      145deg,
+      rgb(255 240 250 / 13%),
+      rgb(196 167 255 / 7%)
+    );
+
+  box-shadow:
+    0 0 25px rgb(196 167 255 / 12%),
+    0 15px 45px rgb(0 0 0 / 25%),
+    inset 0 0 25px rgb(255 255 255 / 4%);
+
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 }
 
+/* Pequeño detalle superior de la carta */
+.final-card::before {
+  content: "♡  ✦  ♡";
+  display: block;
+  margin-bottom: 1.5rem;
+  color: #ffc4e1;
+  font-size: 1.4rem;
+  letter-spacing: 0.5rem;
+}
+
+/* Mensaje */
 #final-message {
-  color: var(--text-primary);
-  font-size: var(--text-large);
-  line-height: 1.9;
+  max-width: 580px;
+  margin-inline: auto;
+  color: #fff2fa;
+  font-family: var(--font-title);
+  font-size: clamp(1.15rem, 3vw, 1.45rem);
+  line-height: 2;
+  letter-spacing: 0.015rem;
+  text-wrap: pretty;
 }
 
+/* Despedida */
 #final-closing {
   margin-top: var(--space-lg);
-  color: var(--color-pink);
+  padding-top: var(--space-md);
+
+  border-top: 1px solid rgb(255 220 245 / 22%);
+
+  color: #ffc4e1;
   font-family: var(--font-title);
-  font-size: 1.4rem;
+  font-size: clamp(1.35rem, 4vw, 1.7rem);
   font-style: italic;
+  line-height: 1.6;
+  text-shadow: 0 0 14px rgb(255 145 213 / 25%);
 }
 
+/* Firma */
 .final-signature {
-  color: var(--text-secondary);
+  max-width: 500px;
+  color: #d9c8eb;
   font-size: var(--text-small);
-  line-height: 1.7;
+  line-height: 1.8;
+  letter-spacing: 0.04rem;
 }
+
+/* Adaptación para móviles */
+@media (max-width: 600px) {
+  .final-container {
+    width: min(100% - 1.5rem, 760px);
+    gap: var(--space-md);
+    padding-block: 2rem;
+  }
+
+  .final-card {
+    padding: 1.8rem 1.3rem;
+    border-radius: 20px;
+  }
+
+  #final-message {
+    line-height: 1.85;
+  }
+}
+
+/* ========================================
+   CARTA CELESTIAL - DISEÑO ESPECIAL
+======================================== */
+
+.final-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+
+  width: 100%;
+  padding: clamp(2rem, 6vw, 3.5rem);
+
+  text-align: left;
+  border: 1px solid rgb(226 190 247 / 55%);
+  border-radius: 8px 28px 8px 28px;
+
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgb(255 185 220 / 13%),
+      transparent 35%
+    ),
+    linear-gradient(
+      135deg,
+      rgb(65 43 86 / 96%),
+      rgb(38 25 59 / 97%)
+    );
+
+  box-shadow:
+    0 18px 55px rgb(0 0 0 / 30%),
+    0 0 30px rgb(195 151 230 / 12%),
+    inset 0 0 35px rgb(255 255 255 / 3%);
+}
+
+/* Marco interior */
+.final-card::after {
+  content: "";
+  position: absolute;
+  inset: 10px;
+  z-index: -1;
+  border: 1px solid rgb(229 192 247 / 18%);
+  border-radius: 5px 20px 5px 20px;
+  pointer-events: none;
+}
+
+/* Sello celestial */
+.final-card::before {
+  content: "✦";
+  position: absolute;
+  top: 22px;
+  right: 24px;
+
+  display: grid;
+  place-items: center;
+
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgb(255 205 232 / 55%);
+  border-radius: 50%;
+
+  color: #ffd4eb;
+  font-size: 1.25rem;
+
+  background: rgb(255 255 255 / 6%);
+  box-shadow: 0 0 18px rgb(255 170 220 / 18%);
+}
+
+/* Mensaje como carta personal */
+#final-message {
+  max-width: 570px;
+  margin: 1rem auto 0;
+  padding-left: 1.2rem;
+
+  border-left: 2px solid rgb(226 175 221 / 65%);
+
+  color: #fff0f8;
+  font-family: var(--font-title);
+  font-size: clamp(1.12rem, 2.8vw, 1.4rem);
+  line-height: 2;
+  text-align: left;
+
+  white-space: pre-line;
+}
+
+/* Despedida */
+#final-closing {
+  margin-top: 2rem;
+  padding-top: 1.4rem;
+
+  border-top: 1px solid rgb(226 190 247 / 25%);
+
+  color: #ffc7e4;
+  font-family: var(--font-title);
+  font-size: clamp(1.3rem, 3.5vw, 1.65rem);
+  font-style: italic;
+  line-height: 1.6;
+  text-align: center;
+}
+
+/* Firma */
+.final-signature {
+  letter-spacing: 0.08rem;
+}
+
+/* Móviles */
+@media (max-width: 600px) {
+  .final-card {
+    padding: 2rem 1.4rem;
+    border-radius: 8px 22px 8px 22px;
+  }
+
+  .final-card::before {
+    top: 16px;
+    right: 17px;
+    width: 34px;
+    height: 34px;
+  }
+
+  #final-message {
+    padding-left: 0.9rem;
+    line-height: 1.85;
+  }
+}
+
+
 
 /* ========================================
    11. ANIMACIONES DEL DISEÑO
